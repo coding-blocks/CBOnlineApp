@@ -15,8 +15,7 @@ import com.codingblocks.onlineapi.models.TimeLimits
 import com.codingblocks.onlineapi.safeApiCall
 
 class CodeChallengeRepository(
-    private val codeDao: CodeChallengeDao,
-    private val libraryDao: LibraryDao
+    private val codeDao: CodeChallengeDao
 ) {
     suspend fun fetchCodeChallenge(codeId: Int, contestId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getCodeChallenge(codeId, contestId) }
 
@@ -113,5 +112,5 @@ class CodeChallengeRepository(
         }
     }
 
-    suspend fun getCodeId(ccid: String) = libraryDao.getCodeChallenge(ccid)
+    suspend fun getCodeId(ccid: String) = codeDao.getCodeChallenge(ccid)
 }

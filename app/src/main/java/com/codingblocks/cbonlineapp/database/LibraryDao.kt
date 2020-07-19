@@ -21,11 +21,8 @@ interface LibraryDao {
     """)
     fun getBookmarks(id: String): LiveData<List<BookmarkModel>>
 
-    @Query("SELECT codeUid, codeContestId FROM ContentModel WHERE ccid = :contentId")
-    suspend fun getCodeChallenge(contentId: String): CodeModel
-
     @Query("SELECT documentPdfLink, documentName FROM ContentModel WHERE ccid = :contentId")
-    fun getPDF(contentId: String): LiveData<PdfModel>
+    suspend fun getPDF(contentId: String): PdfModel
 
     @Query("""
         SELECT c.lectureUid,c.lectureName,c.lectureDuration,c.lectureDuration,c.lectureId,c.lectureSectionId,c.lectureUpdatedAt,c.isDownloaded,c.date,c.ccid as lectureContentId FROM  ContentModel c

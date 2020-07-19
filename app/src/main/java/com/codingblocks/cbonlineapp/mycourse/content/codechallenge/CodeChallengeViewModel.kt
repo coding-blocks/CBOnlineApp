@@ -24,11 +24,9 @@ class CodeChallengeViewModel(
     var codeChallenge: CodeChallenge? = null
 
     fun fetchCodeChallenge() = liveData(Dispatchers.IO) {
-        if (codeId.isNullOrEmpty()){
-            val codeModel = contentId?.let { repo.getCodeId(it) }
-            codeId = codeModel?.codeUid
-            contestId = codeModel?.codeContestId.toString()
-        }
+        val codeModel = contentId?.let { repo.getCodeId(it) }
+        codeId = codeModel?.codeUid
+        contestId = codeModel?.codeContestId.toString()
         when (val response = codeId?.toInt()?.let { repo.fetchCodeChallenge(it, contestId ?: "") }) {
             is ResultWrapper.GenericError -> {
                 setError(response.error)

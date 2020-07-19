@@ -13,8 +13,12 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.database.LibraryDao
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.jetbrains.anko.toast
 import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.receivers.DownloadBroadcastReceiver
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import es.voghdev.pdfviewpager.library.PDFViewPager
@@ -37,24 +41,23 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pdf)
-        //TODO - remove this
-        url = intent.getStringExtra("fileUrl")
-        fileName = intent.getStringExtra("fileName")
+        val contentID = intent.getStringExtra(CONTENT_ID)
+        val sectionId = intent.getStringExtra(SECTION_ID)
 
-        if (url.isNullOrEmpty() || fileName.isNullOrEmpty()) {
-            val contentID = intent.getStringExtra(CONTENT_ID)
-            if (contentID.isNullOrEmpty()){
-                Toast.makeText(this, "Error fetching document", Toast.LENGTH_SHORT).show()
-                finish()
-            }else{
-                libraryDao.getPDF(contentID).observer(this){ pdfModel->
-                    url = pdfModel.documentPdfLink
-                    fileName = pdfModel.documentName
-                    checkFile()
+        if (!contentID.isNullOrEmpty()){
+            GlobalScope.launch(Dispatchers.Main){
+                val pdfModel = libraryDao.getPDF(contentID)
+                if (pdfModel==null){
+                    toast("Error fetching document")
+                    finish()
                 }
+                url = pdfModel.documentPdfLink
+                fileName = pdfModel.documentName
+                checkFile()
             }
         }else{
-            checkFile()
+            toast("Error fetching document")
+            finish()
         }
 
         intentFilter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)

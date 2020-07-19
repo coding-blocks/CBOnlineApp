@@ -63,7 +63,8 @@ class LibraryViewFragment : BaseCBFragment() {
                             DOCUMENT ->
                                 startActivity(
                                     intentFor<PdfActivity>(
-                                        CONTENT_ID to item.contentId
+                                        CONTENT_ID to item.contentId,
+                                        SECTION_ID to item.sectionId
                                     )
                                 )
                             LECTURE ->
