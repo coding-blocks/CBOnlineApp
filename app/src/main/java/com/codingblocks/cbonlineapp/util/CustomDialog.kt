@@ -81,8 +81,8 @@ object CustomDialog {
                     "You have been logged out of this account.Please login again to Continue"
             }
             LOGIN->{
-                updateView.okBtn.text = "Log In"
-                updateView.description.text =
+                updateView.dialogPositiveBtn.text = "Log In"
+                updateView.dialogDescTv.text =
                     "Please login to use this feature."
             }
         }
