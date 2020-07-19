@@ -46,7 +46,7 @@ class DashboardHomeFragment : BaseCBFragment() {
     private val vm: DashboardViewModel by sharedViewModel()
 
     private val recentlyPlayedAdapter = RecentlyPlayedAdapter()
-    private val wishlistAdapter = CourseListAdapter("POPULAR", true)
+    private val wishlistAdapter = CourseListAdapter("WISHLIST")
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {

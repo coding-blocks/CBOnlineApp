@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.ListAdapter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.onlineapi.models.Course
 
-class CourseListAdapter(val type: String = "", val wishlist: Boolean = false) : ListAdapter<Course, CourseViewHolder>(CourseDiffUtil()) {
+class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseViewHolder>(CourseDiffUtil()) {
 
     init {
-        setHasStableIds(!wishlist)
+        setHasStableIds(type != "WISHLIST")
     }
 
     var onItemClick: ItemClickListener? = null
@@ -24,6 +24,8 @@ class CourseListAdapter(val type: String = "", val wishlist: Boolean = false) : 
                     .inflate(R.layout.item_course_card_list, parent, false)
                 "TRACKS" -> LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_track_course, parent, false)
+                "WISHLIST" ->LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_course_wishlist, parent, false)
                 else -> LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_course_card, parent, false)
             }

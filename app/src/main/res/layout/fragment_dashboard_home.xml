@@ -220,7 +220,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/margin_large"
-                android:paddingBottom="@dimen/margin_large"
+                android:paddingBottom="@dimen/margin_small"
                 android:visibility="gone">
 
                 <ImageView
@@ -293,7 +293,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/margin_xl"
-                android:paddingBottom="@dimen/margin_large"
+                android:paddingBottom="@dimen/margin_small"
                 android:layout_marginEnd="@dimen/margin_large"
                 android:gravity="center"
                 android:orientation="vertical"
