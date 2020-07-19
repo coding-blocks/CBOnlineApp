@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.ListAdapter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.onlineapi.models.Course
 
-class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseViewHolder>(CourseDiffUtil()) {
+class CourseListAdapter(val type: String = "", val wishlist: Boolean = false) : ListAdapter<Course, CourseViewHolder>(CourseDiffUtil()) {
 
     init {
-        setHasStableIds(true)
+        setHasStableIds(!wishlist)
     }
 
     var onItemClick: ItemClickListener? = null

@@ -54,10 +54,8 @@ class DashboardViewModel(
     private val repo: DashboardDoubtsRepository,
     val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
-    lateinit var wishlist : LiveData<PagedList<Wishlist>>
     init {
         checkDownloadDataWM()
-        fetchWishList()
     }
 
     var isLoggedIn: Boolean? by savedStateValue(handle, LOGGED_IN)
@@ -335,30 +333,26 @@ class DashboardViewModel(
     fun getPerformance(attemptId: String) = homeRepo.getRunStats(attemptId)
 
     var snackbar = MutableLiveData<String>()
-    var isWishlistEmpty = false
-    fun fetchWishList(): LiveData<PagedList<Wishlist>>{
-        isWishlistEmpty = false
-        val config = PagedList.Config.Builder()
-            .setPageSize(3)
-            .setEnablePlaceholders(true)
-            .build()
-        wishlist = initializedPagedListBuilder(config).build()
-        return wishlist
-    }
-
-    private fun initializedPagedListBuilder(config: PagedList.Config):
-        LivePagedListBuilder<String, Wishlist> {
-        val dataSourceFactory = object : DataSource.Factory<String, Wishlist>() {
-            override fun create(): DataSource<String, Wishlist> {
-                return WishlistDataSource(viewModelScope,"3")
+    var wishlistLiveData = MutableLiveData<List<Course>>()
+    fun fetchWishList(){
+        runIO{
+            when (val response = homeRepo.fetchWishlist()) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful){
+                        body()?.let {
+                            val wishlist = it.get()
+                            val courseList = ArrayList<Course>()
+                            for (course in wishlist!!){
+                                courseList.add(course.course!!)
+                            }
+                            wishlistLiveData.postValue(courseList)
+                        }
+                    }else
+                        setError(fetchError(code()))
+                }
             }
         }
-        return LivePagedListBuilder(dataSourceFactory, config).setBoundaryCallback(object : PagedList.BoundaryCallback<Wishlist>() {
-            override fun onZeroItemsLoaded() {
-                super.onZeroItemsLoaded()
-                isWishlistEmpty = true
-            }
-        })
     }
 
     fun changeWishlistStatus(id: String){
@@ -403,8 +397,7 @@ class DashboardViewModel(
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
                         snackbar.postValue("Course removed from Wishlist")
-                        if(::wishlist.isInitialized)
-                            wishlist.value?.dataSource?.invalidate()
+                        fetchWishList()
                     } else {
                         setError(fetchError(response.value.code()))
                     }

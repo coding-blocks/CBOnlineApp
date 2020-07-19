@@ -16,11 +16,13 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import android.content.Intent
 import android.util.TypedValue
+import android.widget.ImageView
 import androidx.core.view.ViewCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.course.CourseActivity
+import com.codingblocks.cbonlineapp.course.adapter.CourseListAdapter
 import com.codingblocks.cbonlineapp.course.adapter.WishlistListener
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
@@ -51,7 +53,7 @@ class DashboardHomeFragment : BaseCBFragment() {
     private val vm: DashboardViewModel by sharedViewModel()
 
     private val recentlyPlayedAdapter = RecentlyPlayedAdapter()
-    private val wishlistAdapter = WishlistPagedAdapter()
+    private val wishlistAdapter = CourseListAdapter("POPULAR", true)
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -71,9 +73,9 @@ class DashboardHomeFragment : BaseCBFragment() {
         }
     }
 
-    private val wishListItemClickListener: WishListItemClickListener by lazy {
-        object : WishListItemClickListener {
-            override fun onClick(id: String, name: String, logo: CircleImageView) {
+    private val wishListItemClickListener: com.codingblocks.cbonlineapp.course.adapter.ItemClickListener by lazy {
+        object : com.codingblocks.cbonlineapp.course.adapter.ItemClickListener {
+            override fun onClick(id: String, name: String, logo: ImageView) {
                 val intent = Intent(requireContext(), CourseActivity::class.java)
                 intent.putExtra(COURSE_ID, id)
                 intent.putExtra(COURSE_LOGO, name)
@@ -103,11 +105,7 @@ class DashboardHomeFragment : BaseCBFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recentPlayedRv.setRv(requireContext(), recentlyPlayedAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
-        wishRv.apply {
-            adapter = wishlistAdapter
-            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-            addItemDecoration(SpacesItemDecoration(28f.toDp()))
-        }
+        wishRv.setRv(requireContext(), wishlistAdapter, orientation = RecyclerView.HORIZONTAL, space = 20f)
         recentlyPlayedAdapter.onItemClick = itemClickListener
         wishlistAdapter.onItemClick = wishListItemClickListener
         wishlistAdapter.wishlistListener = wishlistListener
@@ -169,9 +167,10 @@ class DashboardHomeFragment : BaseCBFragment() {
                 recentlyPlayedAdapter.submitList(it)
             }
 
-            vm.fetchWishList().observer(viewLifecycleOwner){wishlist->
-                noWishListLayout.isVisible = vm.isWishlistEmpty
-                wishlistHolder.isVisible = !vm.isWishlistEmpty
+            vm.fetchWishList()
+            vm.wishlistLiveData.observer(viewLifecycleOwner){wishlist->
+                noWishListLayout.isVisible = wishlist.isEmpty()
+                wishlistHolder.isVisible = wishlist.isNotEmpty()
                 wishlistAdapter.submitList(wishlist)
             }
 
