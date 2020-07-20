@@ -15,6 +15,7 @@ import com.codingblocks.cbonlineapp.commons.SheetAdapter
 import com.codingblocks.cbonlineapp.commons.SheetItem
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
+import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
@@ -45,7 +46,8 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
                 startActivity(
                     intentFor<MyCourseActivity>(
                         RUN_ATTEMPT_ID to runAttemptId,
-                        COURSE_NAME to name
+                        COURSE_NAME to name,
+                        COURSE_ID to id
                     ).singleTop()
                 )
             }

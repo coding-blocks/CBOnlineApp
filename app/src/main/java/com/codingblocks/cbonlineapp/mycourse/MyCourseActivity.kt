@@ -23,6 +23,7 @@ import com.codingblocks.cbonlineapp.util.DIALOG_TYPE
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.TAB_POS
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.extensions.animateVisibility
@@ -68,6 +69,9 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
         }
         intent.getStringExtra(COURSE_NAME)?.let {
             viewModel.name = it
+        }
+        intent.getStringExtra(COURSE_ID)?.let {
+            viewModel.courseId = it
         }
         title = viewModel.name
 

@@ -348,6 +348,10 @@ class MyCourseRepository(
         CBOnlineLib.onlineV2JsonApi.unPauseCourse(id)
     }
 
+    suspend fun sendFeedback(id: String, experience: String, review: String, rating: Float) = safeApiCall { CBOnlineLib.api.sendFeedback(id,experience, review, rating) }
+
+    suspend fun getFeedback(id: String) = safeApiCall { CBOnlineLib.api.getFeedback(id) }
+
     suspend fun updateRunAttempt(runAttempt: RunAttempts) {
         attemptDao.updatePause(runAttempt.id, runAttempt.paused, runAttempt.pauseTimeLeft, runAttempt.lastPausedLeft)
     }
