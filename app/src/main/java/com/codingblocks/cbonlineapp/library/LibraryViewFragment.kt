@@ -67,11 +67,7 @@ class LibraryViewFragment : BaseCBFragment() {
                                         SECTION_ID to item.sectionId
                                     )
                                 )
-                            LECTURE ->
-                                startActivity(
-                                    createVideoPlayerActivityIntent(requireContext(), item.contentId, item.sectionId)
-                                )
-                            VIDEO ->
+                            LECTURE, VIDEO ->
                                 startActivity(
                                     createVideoPlayerActivityIntent(requireContext(), item.contentId, item.sectionId)
                                 )

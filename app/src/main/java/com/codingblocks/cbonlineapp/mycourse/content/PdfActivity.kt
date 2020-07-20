@@ -7,6 +7,7 @@ import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.PersistableBundle
 import android.widget.LinearLayout
 import android.widget.Toast
 import com.codingblocks.cbonlineapp.R
@@ -37,12 +38,14 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
     val libraryDao: LibraryDao by inject()
     lateinit var receiver: DownloadBroadcastReceiver
     lateinit var intentFilter: IntentFilter
+    lateinit var contentID: String
+    lateinit var sectionId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pdf)
-        val contentID = intent.getStringExtra(CONTENT_ID)
-        val sectionId = intent.getStringExtra(SECTION_ID)
+        contentID = intent.getStringExtra(CONTENT_ID)
+        sectionId = intent.getStringExtra(SECTION_ID)
 
         if (!contentID.isNullOrEmpty()){
             GlobalScope.launch(Dispatchers.Main){
@@ -84,6 +87,18 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
         }
 
         this@PdfActivity.registerReceiver(receiver, intentFilter)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        outState.putString(CONTENT_ID, intent.getStringExtra(CONTENT_ID))
+        outState.putString(SECTION_ID, intent.getStringExtra(SECTION_ID))
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        contentID = savedInstanceState.getString(CONTENT_ID).toString()
+        sectionId = savedInstanceState.getString(SECTION_ID).toString()
     }
 
     private fun checkFile(){
