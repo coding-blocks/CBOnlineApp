@@ -44,8 +44,10 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pdf)
-        contentID = intent.getStringExtra(CONTENT_ID)
-        sectionId = intent.getStringExtra(SECTION_ID)
+        if(savedInstanceState == null){
+            contentID = intent.getStringExtra(CONTENT_ID)
+            sectionId = intent.getStringExtra(SECTION_ID)
+        }
 
         if (!contentID.isNullOrEmpty()){
             GlobalScope.launch(Dispatchers.Main){
