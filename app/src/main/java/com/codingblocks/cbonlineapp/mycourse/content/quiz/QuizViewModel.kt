@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.mycourse.content.quiz
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.database.models.ContentQnaModel
@@ -144,7 +143,6 @@ class QuizViewModel(private val repo: QuizRepository) : BaseCBViewModel() {
                 is ResultWrapper.Success -> {
                     if (response.value.code() == 204) {
                         offlineSnackbar.postValue(("Removed Bookmark Successfully !"))
-                        Log.e("bookmark id", bookmark.value?.bookmarkUid?:" No found")
                         repo.deleteBookmark(uid)
                         bookmarkLiveData.postValue(false)
                     } else {

@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.mycourse.content.codechallenge
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.*
@@ -32,7 +31,6 @@ class CodeChallengeViewModel(
     val bookmarkLiveData = MutableLiveData<Boolean>()
 
     val getBookmark by lazy{
-        Log.e("TAG", "removeBookmark: ${contentId!!}")
         repo.getBookmark(contentId!!)
     }
 

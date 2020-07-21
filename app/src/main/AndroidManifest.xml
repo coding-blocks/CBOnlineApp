@@ -183,6 +183,8 @@
             android:theme="@style/NewAppTheme.Dark" />
         <activity
             android:name="com.codingblocks.cbonlineapp.mycourse.content.document.PdfActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".mycourse.MyCourseActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".mycourse.content.quiz.QuizActivity"

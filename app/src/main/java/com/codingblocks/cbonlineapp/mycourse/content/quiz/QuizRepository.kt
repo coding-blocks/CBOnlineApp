@@ -4,7 +4,6 @@ import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.onlineapi.CBOnlineLib
-import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.safeApiCall
@@ -39,6 +38,4 @@ class QuizRepository(private var contentDao: ContentDao,
     suspend fun addBookmark(bookmark: Bookmark) = safeApiCall { CBOnlineLib.onlineV2JsonApi.addBookmark(bookmark) }
 
     fun deleteBookmark(id: String) = bookmarkDao.deleteBookmark(id)
-
-
 }

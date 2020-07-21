@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.mycourse.content.codechallenge
 
-import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.CodeChallengeDao
 import com.codingblocks.cbonlineapp.database.models.CodeChallengeModel
