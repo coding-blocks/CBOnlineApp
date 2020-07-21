@@ -8,7 +8,7 @@ import android.widget.FrameLayout
 import androidx.viewpager.widget.PagerAdapter
 import cn.campusapp.router.Router
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
+import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.otherwise
 import com.codingblocks.onlineapi.models.CarouselCards

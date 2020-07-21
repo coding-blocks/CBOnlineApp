@@ -5,8 +5,8 @@ import com.codingblocks.cbonlineapp.database.PlayerDao
 import com.codingblocks.cbonlineapp.database.RunPerformanceDao
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
-import com.codingblocks.cbonlineapp.util.extensions.getDistinct
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.cbonlineapp.util.livedata.getDistinct
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.Player
 import com.codingblocks.onlineapi.models.User
@@ -50,10 +50,9 @@ class DashboardHomeRepository(
     fun getRunStats(it: String) = runPerformanceDao.getPerformance(it)
     fun getRecentlyPlayed() = playerDao.getPromotedStories()
 
-    suspend fun updatePlayerId(player: Player) = safeApiCall { Clients.onlineV2JsonApi.setPlayerId(player) }
-    suspend fun fetchLastAccessedRun() = safeApiCall { Clients.onlineV2JsonApi.getLastAccessed() }
-    suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }
-    suspend fun fetchUser() = safeApiCall { Clients.onlineV2JsonApi.getMe() }
-    suspend fun getToken(grantCode: String) = safeApiCall { Clients.api.getToken(grantCode) }
-    suspend fun refreshToken() = safeApiCall { Clients.api.refreshToken(prefs.SP_JWT_REFRESH_TOKEN) }
+    suspend fun updatePlayerId(player: Player) = safeApiCall { CBOnlineLib.onlineV2JsonApi.setPlayerId(player) }
+    suspend fun fetchLastAccessedRun() = safeApiCall { CBOnlineLib.onlineV2JsonApi.getLastAccessed() }
+    suspend fun getStats(id: String) = safeApiCall { CBOnlineLib.api.getMyStats(id) }
+    suspend fun fetchUser() = safeApiCall { CBOnlineLib.onlineV2JsonApi.getMe() }
+    suspend fun refreshToken() = safeApiCall { CBOnlineLib.api.refreshToken(prefs.SP_JWT_REFRESH_TOKEN) }
 }

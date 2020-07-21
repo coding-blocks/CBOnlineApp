@@ -13,9 +13,10 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
+import com.codingblocks.cbonlineapp.campaign.CampaignActivity
 import com.codingblocks.cbonlineapp.course.CourseActivity
-import com.codingblocks.cbonlineapp.course.CourseListAdapter
-import com.codingblocks.cbonlineapp.course.ItemClickListener
+import com.codingblocks.cbonlineapp.course.adapter.CourseListAdapter
+import com.codingblocks.cbonlineapp.course.adapter.ItemClickListener
 import com.codingblocks.cbonlineapp.course.SearchCourseActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
@@ -85,26 +86,28 @@ class DashboardExploreFragment : BaseCBFragment() {
         vm.fetchRecommendedCourses(0, 4)
         vm.fetchRecommendedCourses(4, 4)
         vm.fetchTracks()
-
+//        campaignView.setOnClickListener {
+//            startActivity(CampaignActivity.createCampaignActivityIntent(requireContext()))
+//        }
         dashboardPopularRv.setRv(requireContext(), coursePopularListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
         courseSuggestedRv.setRv(requireContext(), courseCardListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
         dashboardTracksRv.setRv(requireContext(), tracksListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
 
-        vm.suggestedCourses.observe(viewLifecycleOwner) { courses ->
+        vm.suggestedCourses.observe(thisLifecycleOwner) { courses ->
             if (courses.isNotEmpty()) {
                 courseCardListAdapter.submitList(courses)
                 dashboardPopularShimmer.hideAndStop()
                 dashboardPopularRv.isVisible = true
             }
         }
-        vm.trendingCourses.observe(viewLifecycleOwner) { courses ->
+        vm.trendingCourses.observe(thisLifecycleOwner) { courses ->
             if (courses.isNotEmpty()) {
                 coursePopularListAdapter.submitList(courses)
                 dashboardSuggestedShimmer.hideAndStop()
                 courseSuggestedRv.isVisible = true
             }
         }
-        vm.tracks.observe(viewLifecycleOwner) { tracks ->
+        vm.tracks.observe(thisLifecycleOwner) { tracks ->
             if (tracks.isNotEmpty()) {
                 tracksListAdapter.submitList(tracks)
                 dashboardTrackShimmer.hideAndStop()

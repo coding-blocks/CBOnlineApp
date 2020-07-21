@@ -152,17 +152,6 @@
             android:paddingEnd="@dimen/margin_large"
             android:paddingBottom="@dimen/margin_medium">
 
-<!--            <TextView-->
-<!--                android:id="@+id/bottomSheetInfoTv"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:fontFamily="@font/gilroy_bold"-->
-<!--                android:lines="1"-->
-<!--                android:textColor="@color/orangish"-->
-<!--                android:textSize="14sp"-->
-<!--                tools:text="This is the title of the doubt " />-->
-
             <TextView
                 android:id="@+id/bottomSheetCancelBtn"
                 android:layout_width="wrap_content"

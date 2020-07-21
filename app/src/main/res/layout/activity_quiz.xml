@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/dark"
     android:orientation="vertical"
-    android:id="@+id/quizRootLayout"
-    tools:context=".mycourse.quiz.QuizActivity">
+    tools:context=".mycourse.content.quiz.QuizActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

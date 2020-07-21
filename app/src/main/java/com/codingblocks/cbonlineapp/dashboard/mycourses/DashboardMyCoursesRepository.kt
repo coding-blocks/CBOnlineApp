@@ -12,7 +12,7 @@ import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
 import com.codingblocks.cbonlineapp.database.models.InstructorModel
 import com.codingblocks.cbonlineapp.database.models.RunAttemptModel
 import com.codingblocks.cbonlineapp.database.models.RunModel
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Instructor
@@ -30,7 +30,7 @@ class DashboardMyCoursesRepository(
 ) {
 
     suspend fun fetchMyCourses(offset: String) = safeApiCall {
-        Clients.onlineV2JsonApi.getMyCourses(offset = offset)
+        CBOnlineLib.onlineV2JsonApi.getMyCourses(offset = offset)
     }
 
     suspend fun insertCourses(runs: List<Runs>) {
@@ -110,7 +110,7 @@ class DashboardMyCoursesRepository(
     private suspend fun getInstructors(instructors: ArrayList<Instructor>, courseId: String) {
         instructors.forEach {
             if (instructorDao.getInstructorById(it.id).isNullOrEmpty())
-                when (val response = safeApiCall { Clients.onlineV2JsonApi.getInstructor(it.id) }) {
+                when (val response = safeApiCall { CBOnlineLib.onlineV2JsonApi.getInstructor(it.id) }) {
                     is ResultWrapper.Success -> {
                         if (response.value.isSuccessful)
                             response.value.body()?.let {
@@ -132,10 +132,16 @@ class DashboardMyCoursesRepository(
         return when (query) {
             "Recently Accessed" -> courseWithInstructorDao.getRecentRuns()
             "Expired Courses" -> courseWithInstructorDao.getExpiredRuns(System.currentTimeMillis() / 1000)
+            "Active" -> courseWithInstructorDao.getAllActiveRuns(System.currentTimeMillis() / 1000)
+            "Free Trials" -> courseWithInstructorDao.getTrialRuns()
+            "Premium" -> courseWithInstructorDao.getPremiumRuns()
             else -> courseWithInstructorDao.getMyRuns()
         }
     }
 
     fun getPurchasedRuns() = courseWithInstructorDao.getPurchasesRuns()
-    fun getActiveRuns() = courseWithInstructorDao.getActiveRuns(System.currentTimeMillis() / 1000)
+
+    fun getPremiumActiveRuns() = courseWithInstructorDao.getPremiumActiveRuns(System.currentTimeMillis() / 1000)
+
+    fun getActiveRuns() = courseWithInstructorDao.getAllActiveRuns(System.currentTimeMillis() / 1000)
 }

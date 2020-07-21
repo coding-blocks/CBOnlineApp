@@ -16,7 +16,7 @@
             android:id="@+id/titleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="@dimen/margin_xl"
             android:fontFamily="@font/gilroy_bold"
             android:textAlignment="center"
             android:textColor="@color/black"

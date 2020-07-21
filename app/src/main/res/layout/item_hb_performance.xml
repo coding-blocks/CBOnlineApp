@@ -44,7 +44,7 @@
                 app:strokeWidth="1dp">
 
                 <RelativeLayout
-                    android:layout_width="165dp"
+                    android:layout_width="175dp"
                     android:layout_height="145dp"
                     android:padding="@dimen/margin_medium">
 
@@ -101,7 +101,7 @@
                 app:strokeWidth="1dp">
 
                 <RelativeLayout
-                    android:layout_width="165dp"
+                    android:layout_width="175dp"
                     android:layout_height="145dp"
                     android:padding="@dimen/margin_medium">
 

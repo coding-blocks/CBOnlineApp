@@ -7,7 +7,10 @@ import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtRepository
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtsViewModel
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewRepository
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewViewModel
-import com.codingblocks.cbonlineapp.auth.onboarding.AuthViewModel
+import com.codingblocks.cbonlineapp.auth.AuthRepository
+import com.codingblocks.cbonlineapp.auth.AuthViewModel
+import com.codingblocks.cbonlineapp.campaign.CampaignRepository
+import com.codingblocks.cbonlineapp.campaign.CampaignViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.course.CourseViewModel
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutViewModel
@@ -24,15 +27,14 @@ import com.codingblocks.cbonlineapp.library.LibraryRepository
 import com.codingblocks.cbonlineapp.library.LibraryViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
-import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeRepository
-import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeViewModel
-import com.codingblocks.cbonlineapp.mycourse.document.PdfActivityRepository
-import com.codingblocks.cbonlineapp.mycourse.document.PdfViewModel
-import com.codingblocks.cbonlineapp.mycourse.leaderboard.LeaderboardViewModel
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerRepository
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerViewModel
-import com.codingblocks.cbonlineapp.mycourse.quiz.QuizRepository
-import com.codingblocks.cbonlineapp.mycourse.quiz.QuizViewModel
+import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeRepository
+import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeViewModel
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerRepository
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerViewModel
+import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizRepository
+import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizViewModel
+import com.codingblocks.cbonlineapp.mycourse.content.document.PdfActivityRepository
+import com.codingblocks.cbonlineapp.mycourse.content.document.PdfViewModel
 import com.codingblocks.cbonlineapp.notifications.NotificationViewModel
 import com.codingblocks.cbonlineapp.profile.ProfileRepository
 import com.codingblocks.cbonlineapp.profile.ProfileViewModel
@@ -40,14 +42,14 @@ import com.codingblocks.cbonlineapp.settings.SettingsViewModel
 import com.codingblocks.cbonlineapp.tracks.TrackViewModel
 import com.codingblocks.cbonlineapp.tracks.TracksRepository
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
+import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel { (handle: SavedStateHandle) -> MyCourseViewModel(handle, get()) }
-    viewModel { LeaderboardViewModel() }
+    viewModel { (handle: SavedStateHandle) -> MyCourseViewModel(handle, get(), get()) }
     viewModel { NotificationViewModel(get()) }
     viewModel { (handle: SavedStateHandle) -> VideoPlayerViewModel(handle, get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
@@ -63,28 +65,35 @@ val viewModelModule = module {
     viewModel { CheckoutViewModel() }
     viewModel { TrackViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
-    viewModel { (AuthViewModel(get())) }
-    viewModel { (handle: SavedStateHandle) -> CodeChallengeViewModel(handle,get()) }
-    viewModel { (handle: SavedStateHandle) -> PdfViewModel(handle,get()) }
+    viewModel { (handle: SavedStateHandle) -> AuthViewModel(handle, get()) }
+    viewModel { (handle: SavedStateHandle) -> CodeChallengeViewModel(handle, get()) }
+    viewModel { (handle: SavedStateHandle) -> CampaignViewModel(handle, get()) }
+    viewModel { (handle: SavedStateHandle) -> PdfViewModel(handle, get()) }
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
     single { CourseRepository() }
     single { DashboardDoubtsRepository(get(), get(), get(), get()) }
     single { DashboardMyCoursesRepository(get(), get(), get(), get(), get()) }
-    single { LibraryRepository(get(), get(), get(), get()) }
+    single { LibraryRepository(get(), get(), get(), get(),get()) }
     single { DashboardHomeRepository(get(), get(), get(), get()) }
-    single { VideoPlayerRepository(get(), get(), get(), get(), get()) }
-    single { QuizRepository(get(),get()) }
+    single { VideoPlayerRepository(get(), get(), get(), get(), get(),get()) }
+    single { QuizRepository(get(), get()) }
     single { JobRepository(get()) }
     single { MyCourseRepository(get(), get(), get(), get(), get(), get(), get(), get()) }
     single { TracksRepository() }
     single { ProfileRepository(get()) }
-    single { CodeChallengeRepository(get(),get()) }
+    single { CodeChallengeRepository(get(), get()) }
+    single { AuthRepository(get()) }
+    single { CampaignRepository(get()) }
     single { PdfActivityRepository(get()) }
 }
 val preferencesModule = module {
     single { provideSettingsPreferences(androidApplication()) }
+}
+
+val firebaseModule = module {
+    single { FirebaseFirestore.getInstance() }
 }
 
 fun provideSettingsPreferences(app: Application): PreferenceHelper = PreferenceHelper.getPrefs(app)
@@ -194,7 +203,7 @@ val databaseModule = module {
     }
 
     factory {
-        val database :AppDatabase = get ()
+        val database: AppDatabase = get()
         database.hbRankDao()
     }
 }

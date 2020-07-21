@@ -11,7 +11,7 @@ import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.KeyboardVisibilityUtil
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.safeApiCall
 import com.google.android.material.snackbar.Snackbar
@@ -62,7 +62,7 @@ class CompleteProfileActivity : BaseCBActivity() {
         val arrayAdapter: ArrayAdapter<String> =
             ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, collegeList)
         college.setAdapter(arrayAdapter)
-        college.setOnItemClickListener { _, _, position, id ->
+        college.setOnItemClickListener { _, _, position, _ ->
             val name = arrayAdapter.getItem(position)
 
             for (i in 0 until collegeArray?.length()!!) {
@@ -76,7 +76,7 @@ class CompleteProfileActivity : BaseCBActivity() {
         val arrayAdapter2: ArrayAdapter<String> =
             ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, branchList)
         branch.setAdapter(arrayAdapter2)
-        branch.setOnItemClickListener { _, _, position, id ->
+        branch.setOnItemClickListener { _, _, position, _ ->
             val name = arrayAdapter2.getItem(position)
 
             for (i in 0 until branchArray?.length()!!) {
@@ -86,10 +86,10 @@ class CompleteProfileActivity : BaseCBActivity() {
                 }
             }
         }
-        genderRadio?.setOnCheckedChangeListener { group, checkedId ->
+        genderRadio?.setOnCheckedChangeListener { _, checkedId ->
             map["gender"] = if (R.id.radioMale == checkedId) "MALE" else "FEMALE"
         }
-        apparelRadio?.setOnCheckedChangeListener { group, checkedId ->
+        apparelRadio?.setOnCheckedChangeListener { _, _ ->
             map["apparelGoodiesSize"] = "L"
         }
         proceedBtn.setOnClickListener {
@@ -98,7 +98,7 @@ class CompleteProfileActivity : BaseCBActivity() {
             proceedBtn.isEnabled = false
 
             GlobalScope.launch {
-                when (val response = safeApiCall { Clients.api.updateUser(id.toString(), map) }) {
+                when (val response = safeApiCall { CBOnlineLib.api.updateUser(id.toString(), map) }) {
                     is ResultWrapper.GenericError -> {
                         runOnUiThread {
                             proceedBtn.isEnabled = true

@@ -36,6 +36,15 @@ object FileUtils {
         }
     }
 
+    fun deleteRecursive(fileOrDirectory: File) {
+        if (fileOrDirectory.isDirectory) {
+            fileOrDirectory.listFiles()?.forEach {
+                deleteRecursive(it)
+            }
+        }
+        fileOrDirectory.delete()
+    }
+
     fun checkIfCannotDownload(context: Context): Boolean {
         val available = context.getPrefs().SP_DATA_LIMIT.times(GB_TO_KB).toInt()
         val sizeAfterDownload = getCommonPath(context)?.let { folderSize(it).div(1024).plus(FILE_THRESHOLD) }
@@ -57,7 +66,7 @@ object FileUtils {
     }
 
     fun showIfCleanDialog(context: Context, onCleanDialogListener: OnCleanDialogListener) {
-        Components.showConfirmation(context, "file") {
+        CustomDialog.showConfirmation(context, "file") {
             if (it) {
                 clearOldestDirectory(context)
                 onCleanDialogListener.onComplete()
@@ -77,14 +86,14 @@ object FileUtils {
             return if (jsonType == "array")
                 JSONArray(json)
             else
-                JSONObject(json)
+                JSONObject(json!!)
         } catch (e: Exception) {
             Log.e("JsonUtils", e.toString())
         }
         return null
     }
 
-    fun loadStringFromAsset(context: Context, assetName: String): String? {
+    private fun loadStringFromAsset(context: Context, assetName: String): String? {
         val `is`: InputStream = context.assets.open(assetName)
         val size: Int = `is`.available()
         val buffer = ByteArray(size)

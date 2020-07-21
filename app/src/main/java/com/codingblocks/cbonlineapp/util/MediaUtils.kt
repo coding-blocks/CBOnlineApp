@@ -18,17 +18,6 @@ import java.io.File
 
 object MediaUtils {
 
-    fun deleteRecursive(fileOrDirectory: File) {
-
-        if (fileOrDirectory.isDirectory) {
-            for (child in fileOrDirectory.listFiles()) {
-                deleteRecursive(child)
-            }
-        }
-
-        fileOrDirectory.delete()
-    }
-
     fun getYoutubeVideoId(videoUrl: String): String {
         var videoId: String
         val url = videoUrl.split("v=")
@@ -90,8 +79,8 @@ object MediaUtils {
     }
 
     fun getCircularBitmap(bitmap: Bitmap): Bitmap {
-        val circlebitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(circlebitmap)
+        val circleBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(circleBitmap)
         val paint = Paint()
         val rect = Rect(0, 0, bitmap.width, bitmap.height)
 
@@ -101,6 +90,6 @@ object MediaUtils {
         paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
         canvas.drawBitmap(bitmap, rect, rect, paint)
 
-        return circlebitmap
+        return circleBitmap
     }
 }

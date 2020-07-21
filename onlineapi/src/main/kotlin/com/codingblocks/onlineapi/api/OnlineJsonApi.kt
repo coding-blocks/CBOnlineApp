@@ -4,6 +4,7 @@ import com.codingblocks.onlineapi.models.Applications
 import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.CarouselCards
+import com.codingblocks.onlineapi.models.CodeChallenge
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Company
 import com.codingblocks.onlineapi.models.ContentProgress
@@ -14,7 +15,6 @@ import com.codingblocks.onlineapi.models.Instructor
 import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
-import com.codingblocks.onlineapi.models.CodeChallenge
 import com.codingblocks.onlineapi.models.Player
 import com.codingblocks.onlineapi.models.Professions
 import com.codingblocks.onlineapi.models.Project
@@ -24,6 +24,7 @@ import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Sections
+import com.codingblocks.onlineapi.models.Spins
 import com.codingblocks.onlineapi.models.User
 import com.github.jasminb.jsonapi.JSONAPIDocument
 import okhttp3.ResponseBody
@@ -96,14 +97,12 @@ interface OnlineJsonApi {
         @Path("id") id: String
     ): Response<Bookmark>
 
-
     @GET("runs")
     suspend fun getMyCourses(
         @Query("enrolled") enrolled: String = "true",
         @Query("page[offset]") offset: String = "0",
         @Query("include") include: String = "course,run_attempts"
     ): Response<JSONAPIDocument<List<Runs>>>
-
 
     @GET("instructors/{id}")
     suspend fun getInstructor(@Path("id") id: String): Response<Instructor>
@@ -124,24 +123,36 @@ interface OnlineJsonApi {
 
     @GET("courses")
     suspend fun getAllCourses(
+        @Query("page[offset]") offset: String,
+        @Query("page[limit]") limit: String = "20",
         @Query("exclude") query: String = "ratings,instructors.*,jobs,runs.*",
         @Query("filter[unlisted]") unlisted: String = "false",
-        @Query("page[offset]") offset: String,
         @Query("include") include: String = "instructors,runs",
         @Query("sort") sort: String = "difficulty"
     ): Response<JSONAPIDocument<List<Course>>>
 
     @GET("courses")
     suspend fun findCourses(
-        @Query("exclude") exclude: String = "ratings,instructors.*",
+        @Query("exclude") exclude: String = "ratings,instructors.*,jobs",
         @Query("filter[title][\$iLike]") query: String,
         @Query("filter[unlisted]") unlisted: String = "false",
         @Query("page[limit]") page: Int = 100,
-        @Query("include") include: String = "instructors,runs"): Response<List<Course>>
+        @Query("include") include: String = "instructors,runs"
+    ): Response<List<Course>>
 
-    @GET("run_attempts/{runid}")
+    @GET("run_attempts/{id}")
     suspend fun enrolledCourseById(
-        @Path("runid") id: String
+        @Path("id") id: String
+    ): Response<RunAttempts>
+
+    @PATCH("run_attempts/{id}/pause")
+    suspend fun pauseCourse(
+        @Path("id") id: String
+    ): Response<RunAttempts>
+
+    @PATCH("run_attempts/{id}/unpause")
+    suspend fun unPauseCourse(
+        @Path("id") id: String
     ): Response<RunAttempts>
 
     @GET("sections/{sectionId}/relationships/contents")
@@ -153,6 +164,19 @@ interface OnlineJsonApi {
     suspend fun getNotesByAttemptId(
         @Path("runAttemptId") id: String
     ): Response<List<Note>>
+
+    @GET("notes")
+    suspend fun getNotesForContent(
+        @Query("filter[runAttemptId]") attemptId: String,
+        @Query("filter[contentId]") contentId: String
+        ): Response<List<Note>>
+
+
+    @GET("doubts")
+    suspend fun getDoubtsForContent(
+        @Query("filter[runAttemptId]") attemptId: String,
+        @Query("filter[contentId]") contentId: String
+    ): Response<List<Doubts>>
 
     @GET("bookmarks")
     suspend fun getBookmarksByAttemptId(
@@ -174,7 +198,6 @@ interface OnlineJsonApi {
         @Path("noteid") id: String,
         @Body params: Note
     ): Response<Note>
-
 
     @POST("notes")
     suspend fun createNote(
@@ -208,7 +231,6 @@ interface OnlineJsonApi {
         @Body params: QuizAttempt
     ): Response<QuizAttempt>
 
-
     @PATCH("quiz_attempts/{id}")
     fun updateQuizAttempt(
         @Path("id") attemptId: String,
@@ -220,7 +242,6 @@ interface OnlineJsonApi {
         @Path("questionId") id: String,
         @Query("include") include: String = "choices"
     ): Call<Question>
-
 
     @GET("quiz_attempts/{id}")
     suspend fun getQuizAttemptById(
@@ -287,8 +308,7 @@ interface OnlineJsonApi {
     ): Response<CareerTracks>
 
     @GET("professions")
-    suspend fun getProfessions(
-    ): Response<List<Professions>>
+    suspend fun getProfessions(): Response<List<Professions>>
 
     @POST("career_tracks/recommend")
     @FormUrlEncoded
@@ -336,8 +356,23 @@ interface OnlineJsonApi {
     @GET("code_challenges/{codeId}/content")
     suspend fun getCodeChallenge(
         @Path("codeId") codeId: Int,
-        @Query("contest_id") include: String=""
+        @Query("contest_id") include: String = ""
     ): Response<CodeChallenge>
 
+    @GET("spins")
+    suspend fun getWinnings(
+        @Query("exclude") exclude: String = "spin_prize.*,user",
+        @Query("filter[used]") filter1: String = "true",
+        @Query("filter[won]") filter2: String = "true",
+        @Query("sort") sort: String = "-used_at",
+        @Query("include") include: String = "spin_prize"
+    ): Response<JSONAPIDocument<List<Spins>>>
 
+    @GET("spins/winners")
+    suspend fun getCampaignLeaderBoard(
+        @Query("page[offset]") offset: String?,
+        @Query("page[limit]") limit: String? = "10",
+        @Query("exclude") exclude: String = "spin_prize.*",
+        @Query("include") include: String = "user,spin_prize"
+    ): Response<JSONAPIDocument<List<Spins>>>
 }

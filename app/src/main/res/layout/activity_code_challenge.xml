@@ -7,7 +7,7 @@
     android:background="#292c33"
     android:id="@+id/codeLayout"
     android:orientation="vertical"
-    tools:context="com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeActivity">
+    tools:context="com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"

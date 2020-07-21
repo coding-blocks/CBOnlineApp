@@ -21,14 +21,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/margin_xl"
         android:orientation="horizontal" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginStart="@dimen/margin_large"
-        android:layout_marginTop="@dimen/margin_xl"
+        android:layout_marginTop="@dimen/margin_medium"
         android:layout_marginEnd="@dimen/margin_large"
         android:background="@color/veryLightPink" />
 
@@ -37,9 +36,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingStart="@dimen/margin_medium"
-        android:paddingTop="@dimen/margin_xl"
+        android:paddingTop="@dimen/margin_medium"
         android:paddingEnd="@dimen/margin_medium"
-        android:paddingBottom="@dimen/margin_xl">
+        android:paddingBottom="@dimen/margin_medium">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/browseBtn"

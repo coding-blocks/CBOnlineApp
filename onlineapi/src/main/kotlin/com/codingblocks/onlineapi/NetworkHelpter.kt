@@ -1,13 +1,12 @@
 package com.codingblocks.onlineapi
 
+import java.io.IOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import retrofit2.Response
-import java.io.IOException
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 
 suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher = Dispatchers.IO, apiCall: suspend () -> T): ResultWrapper<T> {
     return withContext(dispatcher) {
@@ -39,4 +38,3 @@ fun getMeta(meta: MutableMap<String, *>?, key: String): Int? {
     val map = meta?.get("pagination") as HashMap<String, Int>
     return map[key]
 }
-

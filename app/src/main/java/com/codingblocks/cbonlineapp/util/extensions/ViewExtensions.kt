@@ -41,9 +41,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.DividerItemDecorator
+import com.codingblocks.cbonlineapp.util.recyclerciew.DividerItemDecorator
 import com.codingblocks.cbonlineapp.util.REOPENED
 import com.codingblocks.cbonlineapp.util.RESOLVED
+import com.codingblocks.cbonlineapp.util.recyclerciew.SpacesItemDecoration
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -74,14 +75,25 @@ fun ShimmerFrameLayout.showAndStart() {
     startShimmer()
 }
 
-fun Fragment.changeViewState(recyclerView: RecyclerView, internetView: LinearLayout, emptyView: LinearLayout, shimmerView: ShimmerFrameLayout, boolean: Boolean) {
+fun Fragment.changeViewState(
+    recyclerView: RecyclerView,
+    internetView: LinearLayout,
+    emptyView: LinearLayout,
+    shimmerView: ShimmerFrameLayout,
+    boolean: Boolean
+) {
     internetView.isVisible = false
     emptyView.isVisible = boolean
     recyclerView.isVisible = !boolean
     shimmerView.hideAndStop()
 }
 
-fun Fragment.changeViewState(recyclerView: RecyclerView, emptyView: LinearLayout, shimmerView: ShimmerFrameLayout, boolean: Boolean) {
+fun Fragment.changeViewState(
+    recyclerView: RecyclerView,
+    emptyView: LinearLayout,
+    shimmerView: ShimmerFrameLayout,
+    boolean: Boolean
+) {
     emptyView.isVisible = boolean
     recyclerView.isVisible = !boolean
     shimmerView.hideAndStop()
@@ -128,7 +140,7 @@ fun AppCompatActivity.replaceFragmentSafely(
         .beginTransaction()
         .setCustomAnimations(enterAnimation, exitAnimation, popEnterAnimation, popExitAnimation)
         .replace(containerViewId, fragment, tag)
-    if (addToStack) { ft.addToBackStack(tag)}
+    if (addToStack) { ft.addToBackStack(tag) }
     if (!supportFragmentManager.isStateSaved) {
         ft.commit()
     } else if (allowStateLoss) {
@@ -162,7 +174,14 @@ fun <F : Fragment> F.replaceFragmentSafely(
     }
 }
 
-fun RecyclerView.setRv(activity: Context, listAdapter: ListAdapter<out Any, out RecyclerView.ViewHolder>, setDivider: Boolean = false, type: String = "", orientation: Int = RecyclerView.VERTICAL, space: Float = 0f) {
+fun RecyclerView.setRv(
+    activity: Context,
+    listAdapter: ListAdapter<out Any, out RecyclerView.ViewHolder>,
+    setDivider: Boolean = false,
+    type: String = "",
+    orientation: Int = RecyclerView.VERTICAL,
+    space: Float = 0f
+) {
     val dividerItemDecoration = if (type == "thick")
         DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.dividerthick)!!)
     else DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.divider)!!)
@@ -175,10 +194,17 @@ fun RecyclerView.setRv(activity: Context, listAdapter: ListAdapter<out Any, out 
 }
 
 private fun Float.toDp(): Float {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, CBOnlineApp.appContext?.displayMetrics)
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, CBOnlineApp.mInstance.displayMetrics)
 }
 
-fun View.showSnackbar(message: String, length: Int = Snackbar.LENGTH_SHORT, anchorView: BottomNavigationView? = null, action: Boolean = true, actionText: String = "Retry", callback: () -> Unit = { }): Snackbar {
+fun View.showSnackbar(
+    message: String,
+    length: Int = Snackbar.LENGTH_SHORT,
+    anchorView: BottomNavigationView? = null,
+    action: Boolean = true,
+    actionText: String = "Retry",
+    callback: () -> Unit = { }
+): Snackbar {
     val snackBarView = Snackbar.make(this, message, length)
     val params = snackBarView.view.layoutParams as ViewGroup.MarginLayoutParams
     params.setMargins(params.leftMargin,
@@ -338,7 +364,6 @@ fun View.animateVisibility(visible: Int) {
 }
 
 fun Toolbar.colouriseToolbar(context: Context, @DrawableRes toolbarDrawable: Int, @ColorInt foregroundColor: Int) {
-    if (this == null) return
     background = AppCompatResources.getDrawable(context, toolbarDrawable)
     setTitleTextColor(foregroundColor)
     setSubtitleTextColor(foregroundColor)
@@ -414,9 +439,8 @@ fun <T : RecyclerView.ViewHolder> T.listen(event: (position: Int, type: Int) -> 
 }
 
 fun Context.showHelpDialog(
-    type: String,
     cancelable: Boolean = true,
-    callback: (state: Boolean, name: String, number: String) -> Unit = { b: Boolean, s: String, s1: String -> }
+    callback: (state: Boolean, name: String, number: String) -> Unit
 ) {
 
     val dialog = AlertDialog.Builder(this).create()

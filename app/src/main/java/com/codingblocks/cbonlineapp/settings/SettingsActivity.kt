@@ -3,16 +3,14 @@ package com.codingblocks.cbonlineapp.settings
 import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
+import android.util.Log
 import android.widget.SeekBar
 import androidx.lifecycle.lifecycleScope
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
+import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.extensions.folderSize
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
-import com.codingblocks.cbonlineapp.util.extensions.readableFileSize
-import com.codingblocks.cbonlineapp.util.extensions.setToolbar
-import com.codingblocks.cbonlineapp.util.extensions.showDialog
+import com.codingblocks.cbonlineapp.util.extensions.*
 import java.io.File
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.coroutines.Dispatchers
@@ -62,7 +60,7 @@ class SettingsActivity : BaseCBActivity() {
                                 val folderFile = File(file, "/${content.contentLecture.lectureId}")
 
                                 withContext(Dispatchers.IO) {
-                                    MediaUtils.deleteRecursive(folderFile)
+                                    FileUtils.deleteRecursive(folderFile)
                                 }
                                 runOnUiThread { updateSpaceStats() }
                             }
@@ -102,6 +100,11 @@ class SettingsActivity : BaseCBActivity() {
                 it
             ).readableFileSize()
         })
+
+        val usedSpace : Double = ((file?.let { folderSize(it) }?.toDouble()?.div(1048576) ?: 0.0))
+        Log.v("usedSpace","Used Space is $usedSpace")
+        storageProgress.max = bytesAvailable.toInt() / 1048576
+        storageProgress.progress = usedSpace.toInt()
     }
 
     private fun setSeekbarProgress(progress: Int) {
@@ -110,9 +113,9 @@ class SettingsActivity : BaseCBActivity() {
         getPrefs().SP_DATA_LIMIT = size
     }
 
-    private fun setSeekbarMaxValue(){
+    private fun setSeekbarMaxValue() {
         val bytesAvailable = stat.blockSizeLong * stat.availableBlocksLong
-        val progressValue = (100*bytesAvailable/Math.pow(1024.0,3.0)).toInt()-100
-        seekbarLimit.max=progressValue
+        val progressValue = (100 * bytesAvailable / Math.pow(1024.0, 3.0)).toInt() - 100
+        seekbarLimit.max = progressValue
     }
 }

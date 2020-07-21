@@ -30,6 +30,8 @@ const val LOGO_TRANSITION_NAME = "logo_transition"
 
 const val ROLE_ID = "roleId"
 
+const val PREMIUM = "premium"
+
 const val RUN_ID = "runId"
 
 const val TYPE = "type"
@@ -103,3 +105,8 @@ const val REFRESH_TOKEN = "refresh_token"
 const val CONTEST_ID = "contestId"
 
 const val CODE_ID = "codeId"
+
+const val DELETE_DOWNLOADED_VIDEO = "deleteDownloadedVideo"
+
+const val TAB_POS: String = "tabPosition"
+

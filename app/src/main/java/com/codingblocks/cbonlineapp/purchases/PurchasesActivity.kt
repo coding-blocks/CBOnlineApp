@@ -8,7 +8,7 @@ import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.dashboard.mycourses.ItemClickListener
 import com.codingblocks.cbonlineapp.dashboard.mycourses.MyCourseListAdapter
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import kotlinx.android.synthetic.main.activity_purchases.*
@@ -36,15 +36,13 @@ class PurchasesActivity : BaseCBActivity() {
         setContentView(R.layout.activity_purchases)
         setToolbar(purchasesToolbar)
             purchasedCoursesRv.setRv(this, courseListAdapter, true)
-            viewModel.purchasedRuns.observer(this) {list ->
+            viewModel.purchasedRuns.observer(this) { list ->
                 courseListAdapter.submitList(list)
-                if(list.isNotEmpty())
-                {
+                if (list.isNotEmpty()) {
                     purchasedCoursesRv.isVisible = true
                 }
             }
             courseListAdapter.onItemClick = itemClickListener
             purchasesMyCoursesExploreBtn.setOnClickListener { finish() }
-
     }
 }

@@ -6,13 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.glide.loadImage
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.onlineapi.ErrorStatus
-import kotlinx.android.synthetic.main.activity_admin.*
 import kotlinx.android.synthetic.main.admin_overview_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -42,7 +41,7 @@ class AdminOverviewFragment : BaseCBFragment() {
 
         adminLeaderboardRv.setRv(requireContext(), leaderBoardListAdapter)
 
-        viewModel.doubtStats.observer(viewLifecycleOwner) {
+        viewModel.doubtStats.observer(thisLifecycleOwner) {
             doubtResolvedTv.text = it.totalResolvedDoubts.toString()
             userRatingTv.text = it.avgRating.toString()
             cbRatingTv.text = it.cbRating.toString()
@@ -51,14 +50,14 @@ class AdminOverviewFragment : BaseCBFragment() {
             resolutionTv.text = it.avgResolution.toString()
         }
 
-        viewModel.listLeaderboard.observer(viewLifecycleOwner) {
+        viewModel.listLeaderboard.observer(thisLifecycleOwner) {
             leaderBoardListAdapter.submitList(it)
         }
 
-        viewModel.errorLiveData.observer(viewLifecycleOwner) {
+        viewModel.errorLiveData.observer(thisLifecycleOwner) {
             when (it) {
                 ErrorStatus.UNAUTHORIZED -> {
-                    Components.showConfirmation(requireContext(), UNAUTHORIZED) {
+                    CustomDialog.showConfirmation(requireContext(), UNAUTHORIZED) {
                         requireActivity().finish()
                     }
                 }
@@ -70,14 +69,14 @@ class AdminOverviewFragment : BaseCBFragment() {
             }
         }
 
-        viewModel.nextOffSet.observer(viewLifecycleOwner) { offSet ->
+        viewModel.nextOffSet.observer(thisLifecycleOwner) { offSet ->
             nextBtn.isEnabled = offSet != -1
             nextBtn.setOnClickListener {
                 viewModel.fetchLeaderBoard(offSet)
             }
         }
 
-        viewModel.prevOffSet.observer(viewLifecycleOwner) { offSet ->
+        viewModel.prevOffSet.observer(thisLifecycleOwner) { offSet ->
             prevBtn.isEnabled = offSet != -1
             prevBtn.setOnClickListener {
                 viewModel.fetchLeaderBoard(offSet)

@@ -25,6 +25,10 @@ data class RankResponse(
     val previousOverallRank: Int
 )
 
-data class Comparision(val name: String, val lite: Boolean, val premium: Boolean, val live: Boolean, val classroom: Boolean)
-
-
+data class Comparision(
+    val name: String,
+    val lite: Boolean,
+    val premium: Boolean,
+    val live: Boolean,
+    val classroom: Boolean
+)

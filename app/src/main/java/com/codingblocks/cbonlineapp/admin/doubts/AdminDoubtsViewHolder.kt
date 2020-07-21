@@ -40,7 +40,12 @@ class AdminDoubtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
                     override fun onNothingSelected(p0: AdapterView<*>?) {
                     }
 
-                    override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
+                    override fun onItemSelected(
+                        parentView: AdapterView<*>?,
+                        selectedItemView: View?,
+                        position: Int,
+                        id: Long
+                    ) {
                         resolvBtn.isVisible = position != 0
                         when (position) {
                             1 -> doubt.status = "RESOLVED"

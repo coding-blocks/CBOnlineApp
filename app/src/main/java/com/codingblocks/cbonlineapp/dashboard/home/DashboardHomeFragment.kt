@@ -13,10 +13,10 @@ import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.glide.loadImage
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.onlineapi.models.ProgressItem
 import com.github.mikephil.charting.charts.LineChart
@@ -76,13 +76,14 @@ class DashboardHomeFragment : BaseCBFragment() {
     override fun onResume() {
         super.onResume()
         if (vm.isLoggedIn == true) {
-            vm.fetchTopRunWithStats().observe(viewLifecycleOwner, Observer { coursePair ->
+            vm.fetchTopRunWithStats().observe(thisLifecycleOwner, Observer { coursePair ->
                 dashboardProgressContainer.isVisible = coursePair != null
                 dashboardEmptyProgress.isVisible = coursePair == null
+                dashboardHomeShimmer.hideAndStop()
+                dashboardHome.isVisible = true
                 if (coursePair != null) {
                     vm.getStats(coursePair.runAttempt.attemptId)
-                    dashboardHomeShimmer.hideAndStop()
-                    dashboardHome.isVisible = true
+
                     homeCourseLogoImg.loadImage(coursePair.course.logo)
                     coursePair.getProgress().let { progress ->
                         homeProgressTv.text = getString(R.string.progress, progress.toInt())
@@ -101,7 +102,7 @@ class DashboardHomeFragment : BaseCBFragment() {
                             ))
                         }
                     }
-                    vm.getPerformance(coursePair.runAttempt.attemptId).observer(viewLifecycleOwner) {
+                    vm.getPerformance(coursePair.runAttempt.attemptId).observer(thisLifecycleOwner) {
                         homePerformanceTv.text = it.remarks
                         homePercentileTv.text = it.percentile.toString()
                         chart1.loadData(it.averageProgress, it.userProgress)
@@ -109,7 +110,7 @@ class DashboardHomeFragment : BaseCBFragment() {
                 }
             })
 
-            vm.fetchRecentlyPlayed().observer(viewLifecycleOwner) {
+            vm.fetchRecentlyPlayed().observer(thisLifecycleOwner) {
                 recentlyPlayedContainer.isVisible = it.isNotEmpty()
                 recentlyPlayedAdapter.submitList(it)
             }
@@ -136,7 +137,10 @@ fun ProgressView.setGradientColor(progress: Double) {
     }
 }
 
-fun LineChart.loadData(averageProgress: java.util.ArrayList<ProgressItem>, userProgress: java.util.ArrayList<ProgressItem>) {
+fun LineChart.loadData(
+    averageProgress: java.util.ArrayList<ProgressItem>,
+    userProgress: java.util.ArrayList<ProgressItem>
+) {
     val values: ArrayList<Entry> = ArrayList()
     averageProgress.forEachIndexed { index, progressItem ->
         values.add(Entry(index.toFloat(), progressItem.progress.toFloat()))
