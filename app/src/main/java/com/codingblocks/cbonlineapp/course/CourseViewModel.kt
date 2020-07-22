@@ -15,12 +15,16 @@ import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Project
 import com.codingblocks.onlineapi.models.Sections
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
+import com.codingblocks.onlineapi.models.User
+import com.codingblocks.onlineapi.models.Wishlist
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 
 class CourseViewModel(
-    private val repo: CourseRepository
+    private val repo: CourseRepository,
+    val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
     lateinit var id: String
     var course = MutableLiveData<Course>()
@@ -28,6 +32,7 @@ class CourseViewModel(
     val findCourses = MutableLiveData<List<Course>>()
     val projects = MutableLiveData<List<Project>>()
     val sections = MutableLiveData<List<Sections>>()
+    val snackbar = MutableLiveData<String>()
     private val allCourse = arrayListOf<Course>()
 
     var image: MutableLiveData<String> = MutableLiveData()
@@ -220,5 +225,57 @@ class CourseViewModel(
             }
         }
         return LivePagedListBuilder<String, Course>(dataSourceFactory, config)
+    }
+
+    fun changeWishlistStatus(id: String){
+        runIO {
+            when (val response = repo.checkIfWishlisted(id)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        if (response.value.body()?.id!=null){
+                            response.value.body()?.let { removeWishlist(it.id) }
+                        }else{
+                            addWishlist(id)
+                        }
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun addWishlist(id: String){
+        val wishlist = Wishlist(Course(id))
+        runIO {
+            when (val response = repo.addWishlist(wishlist)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                        snackbar.postValue("Course added to Wishlist")
+                    } else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun removeWishlist(courseSingle: String){
+        runIO {
+            when (val response = repo.removeWishlist(courseSingle)) {
+                is ResultWrapper.GenericError -> {
+                    setError(response.error)
+                }
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                        snackbar.postValue("Course removed from Wishlist")
+                    } else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
     }
 }

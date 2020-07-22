@@ -28,6 +28,7 @@ import org.jetbrains.anko.share
 
 class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var itemClickListener: ItemClickListener? = null
+    var wishlistListener: WishlistListener? = null
 
     fun bind(item: Course, type: String) = with(itemView) {
         courseLogo.loadImage(item.logo)
@@ -40,6 +41,13 @@ class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 item.id, item.logo, courseLogo
             )
         }
+        if (type != "LIST" && type != "TRACKS") {
+            course_card_like.setOnClickListener {
+                wishlistListener?.onWishListClickListener(item.id)
+            }
+        }
+        if (type == "WISHLIST")
+            ratingBar.rating = item.rating
         if (type == "TRACKS") {
             item.projects?.take(5)?.forEach {
                 projectTitle.isVisible = true
@@ -72,7 +80,7 @@ class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             if (type != "LIST") {
                 courseCover.loadImage(item.coverImage ?: "")
             }
-            if (type != "POPULAR") {
+            if (type != "POPULAR" && type != "WISHLIST") {
                 if (!item.instructors.isNullOrEmpty()) {
                     courseCardInstructorsTv.text = getSpannableStringSecondBold("", item.instructors?.first()?.name
                         ?: "")
@@ -109,7 +117,6 @@ class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     Paint.STRIKE_THRU_TEXT_FLAG
             } else {
                 if (type != "LIST") {
-
                     course_card_share.setOnClickListener {
                         context.share("https://online.codingblocks.com/app/courses/" + item.slug.toString())
                     }
