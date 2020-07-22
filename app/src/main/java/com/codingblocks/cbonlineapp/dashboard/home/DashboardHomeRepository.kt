@@ -10,6 +10,7 @@ import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.Player
 import com.codingblocks.onlineapi.models.User
+import com.codingblocks.onlineapi.models.Wishlist
 import com.codingblocks.onlineapi.safeApiCall
 
 class DashboardHomeRepository(
@@ -17,7 +18,6 @@ class DashboardHomeRepository(
     private val runPerformanceDao: RunPerformanceDao,
     val prefs: PreferenceHelper,
     val playerDao: PlayerDao
-
 ) {
     fun insertUser(user: User) {
         with(user) {
@@ -55,4 +55,8 @@ class DashboardHomeRepository(
     suspend fun getStats(id: String) = safeApiCall { CBOnlineLib.api.getMyStats(id) }
     suspend fun fetchUser() = safeApiCall { CBOnlineLib.onlineV2JsonApi.getMe() }
     suspend fun refreshToken() = safeApiCall { CBOnlineLib.api.refreshToken(prefs.SP_JWT_REFRESH_TOKEN) }
+    suspend fun addWishlist(wishList: Wishlist) = safeApiCall { CBOnlineLib.onlineV2JsonApi.addWishlist(wishList) }
+    suspend fun removeWishlist(id: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.removeWishlist(id) }
+    suspend fun checkWishlisted(s: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.checkIfWishlisted(s) }
+    suspend fun fetchWishlist() = safeApiCall { CBOnlineLib.onlineV2JsonApi.getWishlist(page = "3") }
 }

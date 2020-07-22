@@ -36,6 +36,9 @@
             android:launchMode="singleTop"
             android:parentActivityName=".mycourse.MyCourseActivity" />
         <activity
+            android:name=".dashboard.home.WishlistActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
+        <activity
             android:name=".tracks.TrackActivity"
             android:parentActivityName=".tracks.LearningTracksActivity" />
         <activity
@@ -183,6 +186,7 @@
             android:theme="@style/NewAppTheme.Dark" />
         <activity
             android:name=".mycourse.content.PdfActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".mycourse.content.quiz.QuizActivity"
