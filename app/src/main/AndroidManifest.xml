@@ -183,6 +183,7 @@
             android:theme="@style/NewAppTheme.Dark" />
         <activity
             android:name=".mycourse.content.PdfActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".mycourse.content.quiz.QuizActivity"

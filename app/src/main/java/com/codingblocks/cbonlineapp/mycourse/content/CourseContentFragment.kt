@@ -289,9 +289,8 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                                 viewModel.updateProgress(ccid)
                                 startActivity(
                                     intentFor<PdfActivity>(
-                                        "fileUrl" to contentDocument.documentPdfLink,
-                                        "fileName" to contentDocument.documentName + ".pdf"
-                                    )
+                                        CONTENT_ID to ccid,
+                                        SECTION_ID to sectionId)
                                 )
                             } else
                                 checkSection(premium)
@@ -325,9 +324,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                                 startActivity(
                                     intentFor<CodeChallengeActivity>(
                                         CONTENT_ID to ccid,
-                                        SECTION_ID to sectionId,
-                                        CONTEST_ID to contentCode.codeContestId.toString(),
-                                        CODE_ID to contentCode.codeUid
+                                        SECTION_ID to sectionId
                                     )
                                 )
                             } else
