@@ -748,3 +748,9 @@ data class UserScore(
     val updatedAt: String
 )
 
+data class SendFeedback(
+    val experience: String,
+    val review: String,
+    val value: Float
+)
+

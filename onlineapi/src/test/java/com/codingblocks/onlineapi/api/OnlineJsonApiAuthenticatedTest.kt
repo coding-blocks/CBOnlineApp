@@ -3,6 +3,8 @@ package com.codingblocks.onlineapi.api
 import com.codingblocks.onlineapi.CBOnlineCommunicator
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.Feedback
+import com.codingblocks.onlineapi.models.SendFeedback
 import junit.framework.Assert.assertNotNull
 import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.runBlocking
@@ -68,5 +70,18 @@ class OnlineJsonApiAuthenticatedTest {
         val runAttempt = runBlocking { CBOnlineLib.onlineV2JsonApi.unPauseCourse("80179").body() }
         assertNotNull(runAttempt)
         assert(!runAttempt!!.paused)
+    }
+
+    @Test
+    fun `POST sendFeedback`(){
+        val sendFeedback = runBlocking { CBOnlineLib.api.sendFeedback("45", SendFeedback("Amazing", "Amazing course",4.9F)) }
+        assertTrue(sendFeedback.code()==200)
+    }
+
+    @Test
+    fun `GET getFeedback`(){
+        val getFeedback = runBlocking { CBOnlineLib.api.getFeedback("45") }
+        assertNotNull(getFeedback.body())
+        assertTrue(getFeedback.body()?.count != null)
     }
 }

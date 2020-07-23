@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.util.livedata.observer
+import com.codingblocks.onlineapi.models.SendFeedback
 import kotlinx.android.synthetic.main.fragment_misc.*
+import kotlinx.android.synthetic.main.rating_dialog.*
 import kotlinx.android.synthetic.main.rating_dialog.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
@@ -42,14 +45,17 @@ class CourseMiscFragment : BaseCBFragment(), AnkoLogger {
             showRatingDialog()
         }
 
-        vm.getFeedback().observer(viewLifecycleOwner){
-            requireView().snackbar("Got Data")
-        }
     }
 
     private fun showRatingDialog(){
         val dialog = AlertDialog.Builder(requireContext()).create()
         val ratingDialog = requireContext().layoutInflater.inflate(R.layout.rating_dialog, null)
+        vm.getFeedback().observer(viewLifecycleOwner){
+            dialog.overallExp.setText(it?.userScore?.heading)
+            dialog.publicRev.setText(it?.userScore?.review)
+            dialog.ratingBar.rating = it?.userScore?.value?.toFloat()?:0.0f
+            dialog.progress.isVisible = false
+        }
         with(dialog){
             window?.setBackgroundDrawableResource(android.R.color.transparent)
             setView(ratingDialog)
@@ -57,8 +63,12 @@ class CourseMiscFragment : BaseCBFragment(), AnkoLogger {
             show()
             ratingDialog.dialogPositiveBtn.setOnClickListener {
                 if (ratingDialog.overallExp.text?.isNotEmpty() == true && ratingDialog.publicRev.text?.isNotEmpty() == true){
-                    vm.sendFeedback(ratingDialog.overallExp.text.toString(), ratingDialog.publicRev.text.toString(), ratingDialog.ratingBar.rating).observer(viewLifecycleOwner){
-                        requireView().snackbar("Sent")
+                    val feedback = SendFeedback(ratingDialog.overallExp.text.toString(),
+                        ratingDialog.publicRev.text.toString(),
+                        ratingDialog.ratingBar.rating)
+                    vm.sendFeedback(feedback).observer(viewLifecycleOwner){
+                        dismiss()
+                        requireView().snackbar("Feedback submitted")
                     }
                 }else{
                     toast("Cannot send empty Feedback, Fill all fields properly")

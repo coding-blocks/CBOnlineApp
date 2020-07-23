@@ -15,6 +15,14 @@
         app:cardElevation="4dp"
         card_view:cardBackgroundColor="#fff">
 
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="@dimen/margin_small"
+            style="?android:attr/progressBarStyleSmall"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

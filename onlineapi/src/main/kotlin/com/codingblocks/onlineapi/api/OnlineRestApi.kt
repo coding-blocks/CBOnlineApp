@@ -9,6 +9,7 @@ import com.codingblocks.onlineapi.models.RatingModel
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 import com.codingblocks.onlineapi.models.SpinResponse
 import com.codingblocks.onlineapi.models.Feedback
+import com.codingblocks.onlineapi.models.SendFeedback
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
@@ -23,6 +24,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Headers
 
 interface OnlineRestApi {
     @Deprecated("Progress is part of run")
@@ -151,12 +153,11 @@ interface OnlineRestApi {
     @POST("v2/runs/addOrder")
     suspend fun addOrder(): Response<JsonObject>
 
+    @Headers("Content-Type: application/json")
     @POST("v2/courses/{id}/rating")
     suspend fun sendFeedback(
         @Path("id") id: String,
-        @Query("experience") experience: String,
-        @Query("review") review: String,
-        @Query("value") value: Float
+        @Body json: SendFeedback
     ): Response<Feedback>
 
     @GET("v2/courses/{id}/rating")

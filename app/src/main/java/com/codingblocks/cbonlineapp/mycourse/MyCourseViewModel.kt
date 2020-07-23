@@ -4,7 +4,6 @@ import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -38,6 +37,7 @@ import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.ResetRunAttempt
+import com.codingblocks.onlineapi.models.SendFeedback
 import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.TimeUnit
 
@@ -279,8 +279,8 @@ class MyCourseViewModel(
         }
     }
 
-    fun sendFeedback(experience: String, review: String, rating: Float) = liveData {
-        when (val response = courseId?.let { repo.sendFeedback(it, experience, review, rating) }) {
+    fun sendFeedback(feedback: SendFeedback) = liveData {
+        when (val response = courseId?.let { repo.sendFeedback(it, feedback) }) {
             is ResultWrapper.GenericError -> {
                 setError(response.error)
             }
@@ -301,7 +301,7 @@ class MyCourseViewModel(
             }
             is ResultWrapper.Success -> with(response.value) {
                 if (isSuccessful) {
-                    emit(true)
+                    emit(body())
                 } else {
                     errorLiveData.postValue("There was some error")
                 }
