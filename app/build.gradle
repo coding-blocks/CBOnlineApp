@@ -38,18 +38,18 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 101000702
+        versionCode 101010000
         // 1 (versioning scheme)
         // 00 (major version)
         // 00 (minor version)
         // 01 (patch version)
         // 01 spare for betas/RCs
-        versionName "1.0.7"
+        versionName "1.1.0"
         signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled false
         manifestPlaceholders = [
-                onesignal_app_id               : 'a9c25bf4-445e-4f26-a465-d91e0a477530',
+                onesignal_app_id               : '01d75aac-5123-4145-b655-ba8d27c5dc13',
                 onesignal_google_project_number: 'REMOTE'
         ]
         buildConfigField "String", "YOUTUBE_KEY", '"' + YOUTUBE_KEY + '"'

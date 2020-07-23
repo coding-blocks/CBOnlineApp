@@ -26,6 +26,7 @@ import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.Spins
 import com.codingblocks.onlineapi.models.User
+import com.codingblocks.onlineapi.models.Wishlist
 import com.github.jasminb.jsonapi.JSONAPIDocument
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -375,4 +376,25 @@ interface OnlineJsonApi {
         @Query("exclude") exclude: String = "spin_prize.*",
         @Query("include") include: String = "user,spin_prize"
     ): Response<JSONAPIDocument<List<Spins>>>
+
+    @GET("user_course_wishlists")
+    suspend fun getWishlist(
+        @Query("page[offset]") offset: String? = "0",
+        @Query("exclude") exclude: String = "course.*",
+        @Query("include") include: String = "course",
+        @Query("page[limit]") page: String = "3"
+    ): Response<JSONAPIDocument<List<Wishlist>>>
+
+    @POST("user_course_wishlists")
+    suspend fun addWishlist(@Body params: Wishlist) : Response<Wishlist>
+
+    @GET("courses/{id}/relationships/user_course_wishlist")
+    suspend fun checkIfWishlisted(
+        @Path("id") id: String
+    ) : Response<Wishlist>
+
+    @DELETE("user_course_wishlists/{id}")
+    suspend fun removeWishlist(
+        @Path("id") id: String
+    ) : Response<Wishlist>
 }

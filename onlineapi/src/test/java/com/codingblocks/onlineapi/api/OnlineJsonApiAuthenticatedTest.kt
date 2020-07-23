@@ -3,8 +3,10 @@ package com.codingblocks.onlineapi.api
 import com.codingblocks.onlineapi.CBOnlineCommunicator
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Feedback
 import com.codingblocks.onlineapi.models.SendFeedback
+import com.codingblocks.onlineapi.models.Feedback
+import com.codingblocks.onlineapi.models.Course
+import com.codingblocks.onlineapi.models.Wishlist
 import junit.framework.Assert.assertNotNull
 import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.runBlocking
@@ -73,6 +75,42 @@ class OnlineJsonApiAuthenticatedTest {
     }
 
     @Test
+    fun `GET addWishlist`(){
+        //89 Course is C++ Fundamentals Course
+        val wishlistAdd = runBlocking { CBOnlineLib.onlineV2JsonApi.addWishlist(Wishlist(Course("89"))).body() }
+        assertNotNull(wishlistAdd)
+        assertTrue(wishlistAdd?.course?.id=="89")
+    }
+
+    @Test
+    fun `GET getWishlist`(){
+        //per page limit is set to 3 by default, so it is increased to 100 for all wishlist courses
+        val wishlistGet = runBlocking { CBOnlineLib.onlineV2JsonApi.getWishlist(page = "100").body()?.get() }
+        assertNotNull(wishlistGet)
+        var found = false
+        for (item in wishlistGet!!)
+            if (item.course?.id=="89"){
+                found = true
+                break
+            }
+        assertTrue(found)
+    }
+
+    @Test
+    fun `GET checkWishlist`(){
+        val wishlistCheck = runBlocking { CBOnlineLib.onlineV2JsonApi.checkIfWishlisted("89").body() }
+        assertNotNull(wishlistCheck)
+        assertTrue(wishlistCheck?.id!=null)
+    }
+
+    @Test
+    fun `GET removeWishlist`() {
+        val id = runBlocking { CBOnlineLib.onlineV2JsonApi.checkIfWishlisted("89").body()?.id }
+        val wishlistRemove = runBlocking { CBOnlineLib.onlineV2JsonApi.removeWishlist(id?:"").code() }
+        assertTrue(wishlistRemove==204)
+    }
+
+    @Test
     fun `POST sendFeedback`(){
         val sendFeedback = runBlocking { CBOnlineLib.api.sendFeedback("45", SendFeedback("Amazing", "Amazing course",4.9F)) }
         assertTrue(sendFeedback.code()==200)
@@ -84,4 +122,5 @@ class OnlineJsonApiAuthenticatedTest {
         assertNotNull(getFeedback.body())
         assertTrue(getFeedback.body()?.count != null)
     }
+
 }

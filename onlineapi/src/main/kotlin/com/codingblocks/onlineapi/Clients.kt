@@ -82,7 +82,8 @@ class Clients internal constructor(
         Player::class.java,
         CodeChallenge::class.java,
         SpinPrize::class.java,
-        Spins::class.java
+        Spins::class.java,
+        Wishlist::class.java
     )
 
     // type resolver
