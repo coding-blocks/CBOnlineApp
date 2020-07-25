@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
@@ -21,24 +22,29 @@ import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.VIDEO
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.animateVisibility
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.pageChangeCallback
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.ErrorStatus
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefreshListener {
 
     private val viewModel: MyCourseViewModel by stateViewModel()
     private val pagerAdapter by lazy { TabLayoutAdapter(supportFragmentManager) }
+    private val sharedPrefs: PreferenceHelper by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,6 +94,7 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
             }
         }
         setupViewPager()
+        walkthrough()
     }
 
     private fun setupViewPager() {
@@ -125,6 +132,53 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
 
         fun createMyCourseActivityIntent(context: Context, attemptId: String, name: String = ""): Intent {
             return context.intentFor<MyCourseActivity>(COURSE_NAME to name, RUN_ATTEMPT_ID to attemptId).singleTop()
+        }
+    }
+
+    fun walkthrough() {
+        if (!sharedPrefs.SP_FIRST_COURSE_RUN) {
+            TapTargetSequence(this)
+                .targets(
+                    TapTarget.forView(findViewById(R.id.courseResumeBtn), "Resume", "Continue the course from exactly where you left it.")
+                        .outerCircleColor(R.color.colorPrimary)
+                        .outerCircleAlpha(.90f)
+                        .targetRadius(70)
+                        .titleTextSize(30)
+                        .titleTextColor(R.color.white)
+                        .descriptionTextSize(16)
+                        .descriptionTextColor(R.color.white)
+                        .dimColor(R.color.black)
+                        .drawShadow(true)
+                        .cancelable(false)
+                        .tintTarget(true)
+                        .transparentTarget(true),
+                    TapTarget.forView((myCourseTabs.getChildAt(0) as ViewGroup).getChildAt(1), "Curriculum", "Go through all the material of the selected course.")
+                        .outerCircleColor(R.color.colorPrimary)
+                        .outerCircleAlpha(.90f)
+                        .titleTextSize(30)
+                        .titleTextColor(R.color.white)
+                        .descriptionTextSize(16)
+                        .descriptionTextColor(R.color.white)
+                        .dimColor(R.color.black)
+                        .drawShadow(true)
+                        .cancelable(false)
+                        .tintTarget(true)
+                        .transparentTarget(true),
+                    TapTarget.forView((myCourseTabs.getChildAt(0) as ViewGroup).getChildAt(2), "Library", "See all you important bookmarks, notes and downloads at a single place")
+                        .outerCircleColor(R.color.colorPrimary)
+                        .outerCircleAlpha(.90f)
+                        .titleTextSize(30)
+                        .titleTextColor(R.color.white)
+                        .descriptionTextSize(16)
+                        .descriptionTextColor(R.color.white)
+                        .dimColor(R.color.black)
+                        .drawShadow(true)
+                        .cancelable(false)
+                        .tintTarget(true)
+                        .transparentTarget(true)
+                )
+                .start()
+            sharedPrefs.SP_FIRST_COURSE_RUN = true
         }
     }
 }

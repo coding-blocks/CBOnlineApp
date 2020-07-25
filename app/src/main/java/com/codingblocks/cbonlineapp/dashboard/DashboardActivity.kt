@@ -33,6 +33,7 @@ import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.JWTUtils
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
@@ -42,6 +43,8 @@ import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.extensions.slideDown
 import com.codingblocks.cbonlineapp.util.extensions.slideUp
 import com.codingblocks.onlineapi.ErrorStatus
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -60,6 +63,7 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 const val LOGGED_IN = "loggedIn"
@@ -69,6 +73,7 @@ class DashboardActivity : BaseCBActivity(),
     BottomNavigationView.OnNavigationItemSelectedListener {
     private val vm: DashboardViewModel by stateViewModel()
 
+    private val sharedPrefs: PreferenceHelper by inject()
     private val pagerAdapter: ViewPager2Adapter by lazy { ViewPager2Adapter(this) }
     private val appUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
     private var doubleBackToExitPressedOnce = false
@@ -97,6 +102,7 @@ class DashboardActivity : BaseCBActivity(),
                 }
             }
         }
+        walkthrough()
     }
 
     override fun onStart() {
@@ -390,4 +396,63 @@ class DashboardActivity : BaseCBActivity(),
             return context.intentFor<DashboardActivity>(LOGGED_IN to loggedIn)
         }
     }
+
+    private fun walkthrough() {
+        if (!sharedPrefs.SP_FIRST_DASHBOARD_RUN) {
+            TapTargetSequence(this)
+                .targets(
+                    TapTarget.forView(findViewById(R.id.dashboard_explore), "Explore", "Look through our wide catalog of courses.")
+                        .outerCircleColor(R.color.colorPrimary)
+                        .outerCircleAlpha(.90f)
+                        .titleTextSize(30)
+                        .titleTextColor(R.color.white)
+                        .descriptionTextSize(16)
+                        .descriptionTextColor(R.color.white)
+                        .dimColor(R.color.black)
+                        .drawShadow(true)
+                        .cancelable(false)
+                        .tintTarget(true)
+                        .transparentTarget(true),
+                    TapTarget.forView(findViewById(R.id.dashboard_library), "Library", "Start going through your enrolled courses.")
+                        .outerCircleColor(R.color.colorPrimary)
+                        .outerCircleAlpha(.90f)
+                        .titleTextSize(30)
+                        .titleTextColor(R.color.white)
+                        .descriptionTextSize(16)
+                        .descriptionTextColor(R.color.white)
+                        .dimColor(R.color.black)
+                        .drawShadow(true)
+                        .cancelable(false)
+                        .tintTarget(true)
+                        .transparentTarget(true),
+                    TapTarget.forView(findViewById(R.id.dashboard_doubts), "Doubts", "Go and ask your own doubts or answer others.")
+                        .outerCircleColor(R.color.colorPrimary)
+                        .outerCircleAlpha(.90f)
+                        .titleTextSize(30)
+                        .titleTextColor(R.color.white)
+                        .descriptionTextSize(16)
+                        .descriptionTextColor(R.color.white)
+                        .dimColor(R.color.black)
+                        .drawShadow(true)
+                        .cancelable(false)
+                        .tintTarget(true)
+                        .transparentTarget(true),
+                    TapTarget.forView(findViewById(R.id.dashboard_home), "Dashboard", "Track your progress and compete with your classmates.")
+                        .outerCircleColor(R.color.colorPrimary)
+                        .outerCircleAlpha(.90f)
+                        .titleTextSize(30)
+                        .titleTextColor(R.color.white)
+                        .descriptionTextSize(16)
+                        .descriptionTextColor(R.color.white)
+                        .dimColor(R.color.black)
+                        .drawShadow(true)
+                        .cancelable(false)
+                        .tintTarget(true)
+                        .transparentTarget(true)
+                )
+                .start()
+            sharedPrefs.SP_FIRST_DASHBOARD_RUN = true
+        }
+    }
+
 }

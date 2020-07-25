@@ -103,6 +103,24 @@ class PreferenceHelper private constructor() {
             prefs?.save("COURSE_FILTER_TYPE", value)
         }
 
+    var SP_FIRST_DASHBOARD_RUN: Boolean
+        get() = prefs?.getBoolean("FIRST_DASHBOARD_RUN", false) ?: false
+        set(value) {
+            prefs?.save("FIRST_DASHBOARD_RUN", value)
+        }
+
+    var SP_FIRST_COURSE_RUN: Boolean
+        get() = prefs?.getBoolean("FIRST_COURSE_RUN", false) ?: false
+        set(value) {
+            prefs?.save("FIRST_COURSE_RUN", value)
+        }
+
+    var SP_FIRST_VIDEO_RUN: Boolean
+        get() = prefs?.getBoolean("FIRST_VIDEO_RUN", false) ?: false
+        set(value) {
+            prefs?.save("FIRST_VIDEO_RUN", value)
+        }
+
     fun clearPrefs() {
         prefs?.edit()?.clear()?.apply()
     }

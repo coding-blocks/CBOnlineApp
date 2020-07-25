@@ -41,6 +41,7 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
@@ -53,6 +54,8 @@ import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControls
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -83,6 +86,7 @@ import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
@@ -90,6 +94,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     VdoPlayerControls.ControllerVisibilityListener, YouTubePlayerFullScreenListener {
 
     private val vm: VideoPlayerViewModel by stateViewModel()
+    private val sharedPrefs: PreferenceHelper by inject()
 
     private val animationUtils by lazy { Animations(this) }
     private val progressDialog by lazy { ProgressDialog.progressDialog(this) }
@@ -113,6 +118,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         setUpBottomSheet()
         setupViewPager()
         setupUI()
+        walkthrough()
     }
 
     private fun setupUI() {
@@ -775,6 +781,41 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
         if (::youtubePlayer.isInitialized) {
             youtubePlayer.pause()
+        }
+    }
+
+    private fun walkthrough() {
+        if (!sharedPrefs.SP_FIRST_VIDEO_RUN) {
+            TapTargetSequence(this)
+                .targets(
+                    TapTarget.forView(findViewById(R.id.bookmarkBtn), "Bookmark", "Bookmark your important videos for quicker access")
+                        .outerCircleColor(R.color.colorPrimary)
+                        .outerCircleAlpha(.90f)
+                        .targetRadius(70)
+                        .titleTextSize(30)
+                        .titleTextColor(R.color.white)
+                        .descriptionTextSize(16)
+                        .descriptionTextColor(R.color.white)
+                        .dimColor(R.color.black)
+                        .drawShadow(true)
+                        .cancelable(false)
+                        .tintTarget(true)
+                        .transparentTarget(true),
+                    TapTarget.forView(findViewById(R.id.videoFab), " Add", "Quickly ask your doubts and add new notes related to the lecture")
+                        .outerCircleColor(R.color.colorPrimary)
+                        .outerCircleAlpha(.90f)
+                        .titleTextSize(30)
+                        .titleTextColor(R.color.white)
+                        .descriptionTextSize(16)
+                        .descriptionTextColor(R.color.white)
+                        .dimColor(R.color.black)
+                        .drawShadow(true)
+                        .cancelable(false)
+                        .tintTarget(true)
+                        .transparentTarget(true)
+                )
+                .start()
+            sharedPrefs.SP_FIRST_VIDEO_RUN = true
         }
     }
 
