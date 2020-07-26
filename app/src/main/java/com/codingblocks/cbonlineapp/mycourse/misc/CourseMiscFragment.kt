@@ -54,7 +54,6 @@ class CourseMiscFragment : BaseCBFragment(), AnkoLogger {
             dialog.overallExp.setText(it?.userScore?.heading)
             dialog.publicRev.setText(it?.userScore?.review)
             dialog.ratingBar.rating = it?.userScore?.value?.toFloat()?:0.0f
-            dialog.progress.isVisible = false
         }
         with(dialog){
             window?.setBackgroundDrawableResource(android.R.color.transparent)

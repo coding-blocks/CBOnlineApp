@@ -70,9 +70,6 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
         intent.getStringExtra(COURSE_NAME)?.let {
             viewModel.name = it
         }
-        intent.getStringExtra(COURSE_ID)?.let {
-            viewModel.courseId = it
-        }
         title = viewModel.name
 
         if (!MediaUtils.checkPermission(this)) {
@@ -123,7 +120,7 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
             add(ViewPager2Adapter.FragmentName.COURSE_OVERVIEW)
             add(ViewPager2Adapter.FragmentName.COURSE_CURRICULUM)
             add(ViewPager2Adapter.FragmentName.COURSE_LIBRARY)
-//            add(ViewPager2Adapter.FragmentName.COURSE_MISC)
+            add(ViewPager2Adapter.FragmentName.COURSE_MISC)
         }
         coursePager.apply {
             isUserInputEnabled = false

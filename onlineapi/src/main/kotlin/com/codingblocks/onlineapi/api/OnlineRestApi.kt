@@ -153,7 +153,6 @@ interface OnlineRestApi {
     @POST("v2/runs/addOrder")
     suspend fun addOrder(): Response<JsonObject>
 
-    @Headers("Content-Type: application/json")
     @POST("v2/courses/{id}/rating")
     suspend fun sendFeedback(
         @Path("id") id: String,
