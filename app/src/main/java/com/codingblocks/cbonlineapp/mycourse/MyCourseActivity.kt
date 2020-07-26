@@ -23,7 +23,6 @@ import com.codingblocks.cbonlineapp.util.DIALOG_TYPE
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.TAB_POS
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.extensions.animateVisibility
@@ -120,7 +119,7 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
             add(ViewPager2Adapter.FragmentName.COURSE_OVERVIEW)
             add(ViewPager2Adapter.FragmentName.COURSE_CURRICULUM)
             add(ViewPager2Adapter.FragmentName.COURSE_LIBRARY)
-            add(ViewPager2Adapter.FragmentName.COURSE_MISC)
+//            add(ViewPager2Adapter.FragmentName.COURSE_MISC)
         }
         coursePager.apply {
             isUserInputEnabled = false
