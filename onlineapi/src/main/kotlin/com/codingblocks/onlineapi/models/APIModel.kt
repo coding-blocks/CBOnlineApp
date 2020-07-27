@@ -28,6 +28,14 @@ data class Project(
     val image: String = ""
 ) : BaseModel()
 
+    @Type("user_course_wishlists")
+    data class Wishlist(
+        @Relationship("course")
+        val course: Course? = null,
+        @Relationship("user")
+        val user: User? = null
+    ) : BaseModel()
+
 @Type("courses", "course")
 data class Course(
     val title: String = "",
@@ -55,6 +63,11 @@ data class Course(
     val tags: ArrayList<Tags>?
 ) : BaseModel() {
 
+    constructor(id: String) :
+        this("","","","",0,"",0,"",0f,"",
+            "", "", null, null, null, null, null, null){
+            super.id = id
+        }
     /** Logic to get [Runs] for enrolling into Trial */
     fun getTrialRun(tier: String): Runs? {
         return with(activeRuns ?: runs!!) {
@@ -369,13 +382,18 @@ data class User(
     val photo: String?,
     val verifiedemail: String?,
     val verifiedmobile: String?,
-    val username: String = "",
+    val username: String?,
     val roleId: Int = 0,
     val graduationyear: String? = "",
     val college: String? = "",
     val mobile: String? = "",
     val branch: String? = ""
-) : BaseModel()
+) : BaseModel(){
+    constructor(id: String) :
+        this("","","","","","","","","") {
+        super.id = id
+    }
+}
 
 class SectionContent(
     val order: Int,

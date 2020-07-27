@@ -1,7 +1,9 @@
 package com.codingblocks.cbonlineapp.mycourse.content.document
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.liveData
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
@@ -26,17 +28,18 @@ class PdfViewModel(handle: SavedStateHandle,
     val bookmark by lazy {
         repo.getBookmark(contentId!!)
     }
-    val offlineSnackbar = MutableLiveData<String>()
+    val bookmarkSnackbar = MutableLiveData<String>()
 
     fun markBookmark() {
         runIO {
+            Log.e("TAG", "markBookmark: $attempId $contentId $sectionId")
             val bookmark = Bookmark(RunAttempts(attempId!!), LectureContent(contentId!!), Sections(sectionId!!))
             when (val response = repo.addBookmark(bookmark)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         response.value.body()?.let { bookmark ->
-                            offlineSnackbar.postValue(("Bookmark Added Successfully !"))
+                            bookmarkSnackbar.postValue(("Bookmark Added Successfully !"))
                             repo.updateBookmark(bookmark)
                             bookmarkLiveData.postValue(true)
                         }
@@ -48,14 +51,19 @@ class PdfViewModel(handle: SavedStateHandle,
         }
     }
 
+    fun getPdf() = liveData {
+        emit(repo.getPdfBookmark(contentId?:""))
+    }
+
     fun removeBookmark() {
         runIO {
+            Log.e("TAG", "markBookmark: $attempId $contentId $sectionId")
             val uid =  bookmark.value?.bookmarkUid
             when (val response = uid?.let { repo.removeBookmark(it) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.code() == 204) {
-                        offlineSnackbar.postValue(("Removed Bookmark Successfully !"))
+                        bookmarkSnackbar.postValue(("Removed Bookmark Successfully !"))
                         repo.deleteBookmark(uid)
                         bookmarkLiveData.postValue(false)
                     } else {

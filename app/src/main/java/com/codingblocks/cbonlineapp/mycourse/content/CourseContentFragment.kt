@@ -28,9 +28,7 @@ import com.codingblocks.cbonlineapp.mycourse.content.document.PdfActivity
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.CODE
-import com.codingblocks.cbonlineapp.util.CODE_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.CONTEST_ID
 import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.QNA
@@ -293,9 +291,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                                     intentFor<PdfActivity>(
                                         CONTENT_ID to ccid,
                                         SECTION_ID to sectionId,
-                                        RUN_ATTEMPT_ID to attempt_id,
-                                        "fileUrl" to contentDocument.documentPdfLink,
-                                        "fileName" to contentDocument.documentName + ".pdf"
+                                        RUN_ATTEMPT_ID to attempt_id
                                     )
                                 )
                             } else
@@ -331,8 +327,6 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                                     intentFor<CodeChallengeActivity>(
                                         CONTENT_ID to ccid,
                                         SECTION_ID to sectionId,
-                                        CONTEST_ID to contentCode.codeContestId.toString(),
-                                        CODE_ID to contentCode.codeUid,
                                         RUN_ATTEMPT_ID to attempt_id
                                     )
                                 )

@@ -18,6 +18,7 @@ import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsViewModel
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
+import com.codingblocks.cbonlineapp.dashboard.home.WishlistViewModel
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.jobs.JobsViewModel
@@ -58,13 +59,14 @@ val viewModelModule = module {
     viewModel { AdminDoubtsViewModel(get()) }
     viewModel { AdminOverviewViewModel(get(), get()) }
     viewModel { DashboardDoubtsViewModel(get()) }
-    viewModel { CourseViewModel(get()) }
+    viewModel { CourseViewModel(get(),get()) }
     viewModel { (handle: SavedStateHandle) -> LibraryViewModel(handle, get(), get()) }
     viewModel { (handle: SavedStateHandle) -> DashboardViewModel(handle, get(), get(), get(), get(), get()) }
     viewModel { QuizViewModel(get()) }
     viewModel { CheckoutViewModel() }
     viewModel { TrackViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
+    viewModel { WishlistViewModel() }
     viewModel { (handle: SavedStateHandle) -> AuthViewModel(handle, get()) }
     viewModel { (handle: SavedStateHandle) -> CodeChallengeViewModel(handle, get()) }
     viewModel { (handle: SavedStateHandle) -> CampaignViewModel(handle, get()) }
@@ -86,7 +88,7 @@ val viewModelModule = module {
     single { CodeChallengeRepository(get(), get()) }
     single { AuthRepository(get()) }
     single { CampaignRepository(get()) }
-    single { PdfActivityRepository(get()) }
+    single { PdfActivityRepository(get(), get()) }
 }
 val preferencesModule = module {
     single { provideSettingsPreferences(androidApplication()) }

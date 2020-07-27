@@ -27,8 +27,6 @@ class CodeChallengeActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             vm.contentId = intent.getStringExtra(CONTENT_ID)
             vm.sectionId = intent.getStringExtra(SECTION_ID)
-            vm.contestId = intent.getStringExtra(CONTEST_ID)
-            vm.codeId = intent.getStringExtra(CODE_ID)
             vm.attempId = intent.getStringExtra(RUN_ATTEMPT_ID)
         }
         vm.fetchCodeChallenge().observer(this) {

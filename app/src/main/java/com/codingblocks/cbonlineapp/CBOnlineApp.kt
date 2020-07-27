@@ -17,7 +17,14 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.tracks.TrackActivity
-import com.codingblocks.cbonlineapp.util.*
+import com.codingblocks.cbonlineapp.util.ADMIN_CHANNEL_ID
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.COURSE_ID
+import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.RUN_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.misc.AppSignatureHelper
 import com.codingblocks.cbonlineapp.util.receivers.NotificationOpenedHandler
 import com.codingblocks.cbonlineapp.util.receivers.NotificationReceivedHandler
@@ -25,7 +32,6 @@ import com.codingblocks.onlineapi.CBOnlineCommunicator
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.onesignal.OneSignal
-import com.squareup.picasso.Picasso
 import org.jetbrains.anko.notificationManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -42,14 +48,21 @@ class CBOnlineApp : Application() {
         mInstance = this
         val prefs = PreferenceHelper.getPrefs(this)
 
-        CBOnlineLib.initialize(object: CBOnlineCommunicator {
+        CBOnlineLib.initialize(object : CBOnlineCommunicator {
 
             override var authJwt: String
                 get() = prefs.SP_JWT_TOKEN_KEY
-                set(value) { prefs.SP_JWT_TOKEN_KEY = value }
+                set(value) {
+                    prefs.SP_JWT_TOKEN_KEY = value
+                }
             override var refreshToken: String
                 get() = prefs.SP_JWT_REFRESH_TOKEN
-                set(value) { prefs.SP_JWT_REFRESH_TOKEN  = value }
+                set(value) {
+                    prefs.SP_JWT_REFRESH_TOKEN = value
+                }
+            override var baseUrl: String
+                get() = BuildConfig.BASE_URL
+                set(value) {}
 
         })
 

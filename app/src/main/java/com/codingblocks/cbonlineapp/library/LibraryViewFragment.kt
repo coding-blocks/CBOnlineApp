@@ -25,6 +25,10 @@ import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
 import android.view.WindowManager
+import com.codingblocks.cbonlineapp.mycourse.content.document.PdfActivity
+import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeActivity
+import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizActivity
+import com.codingblocks.cbonlineapp.util.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
@@ -37,6 +41,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class LibraryViewFragment : BaseCBFragment() {
@@ -53,9 +58,37 @@ class LibraryViewFragment : BaseCBFragment() {
                     is ContentLecture -> startActivity(
                         createVideoPlayerActivityIntent(requireContext(), item.lectureContentId, item.lectureSectionId)
                     )
-                    is BookmarkModel -> startActivity(
-                        createVideoPlayerActivityIntent(requireContext(), item.contentId, item.sectionId)
-                    )
+                    is BookmarkModel -> {
+                        when (item.contentable) {
+                            DOCUMENT ->
+                                startActivity(
+                                    intentFor<PdfActivity>(
+                                        CONTENT_ID to item.contentId,
+                                        SECTION_ID to item.sectionId,
+                                        RUN_ATTEMPT_ID to item.runAttemptId
+                                    )
+                                )
+                            LECTURE, VIDEO ->
+                                startActivity(
+                                    createVideoPlayerActivityIntent(requireContext(), item.contentId, item.sectionId)
+                                )
+                            QNA ->
+                                startActivity(
+                                    intentFor<QuizActivity>(
+                                        CONTENT_ID to item.contentId,
+                                        SECTION_ID to item.sectionId
+                                    )
+                                )
+                            CODE ->
+                                startActivity(
+                                intentFor<CodeChallengeActivity>(
+                                    CONTENT_ID to item.contentId,
+                                    SECTION_ID to item.sectionId,
+                                    RUN_ATTEMPT_ID to item.runAttemptId
+                                )
+                            )
+                        }
+                    }
                     is NotesModel -> updateNotes(item)
                 }
             }

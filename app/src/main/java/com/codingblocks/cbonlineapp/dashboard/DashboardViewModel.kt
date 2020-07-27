@@ -6,6 +6,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import androidx.work.BackoffPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
@@ -15,6 +19,7 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
+import com.codingblocks.cbonlineapp.dashboard.home.WishlistDataSource
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.database.models.CourseRunPair
@@ -34,6 +39,7 @@ import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Player
 import com.google.common.util.concurrent.ListenableFuture
+import com.codingblocks.onlineapi.models.Wishlist
 import com.onesignal.OneSignal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -325,4 +331,78 @@ class DashboardViewModel(
     }
 
     fun getPerformance(attemptId: String) = homeRepo.getRunStats(attemptId)
+
+    var snackbar = MutableLiveData<String>()
+    var wishlistLiveData = MutableLiveData<List<Course>>()
+    fun fetchWishList(){
+        runIO{
+            when (val response = homeRepo.fetchWishlist()) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful){
+                        body()?.let {
+                            val wishlist = it.get()
+                            val courseList = ArrayList<Course>()
+                            for (course in wishlist!!){
+                                courseList.add(course.course!!)
+                            }
+                            wishlistLiveData.postValue(courseList)
+                        }
+                    }else
+                        setError(fetchError(code()))
+                }
+            }
+        }
+    }
+
+    fun changeWishlistStatus(id: String){
+        runIO {
+            when (val response = homeRepo.checkWishlisted(id)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        if (response.value.body()?.id!=null){
+                            response.value.body()?.let { removeWishlist(it.id) }
+                        }else{
+                            addWishlist(id)
+                        }
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun addWishlist(id: String){
+        val course = Wishlist(Course(id))
+        runIO {
+            when (val response = homeRepo.addWishlist(course)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                        snackbar.postValue("Course added to Wishlist")
+                    } else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun removeWishlist(id: String){
+        runIO {
+            when (val response = homeRepo.removeWishlist(id)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                        snackbar.postValue("Course removed from Wishlist")
+                        fetchWishList()
+                    } else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
 }

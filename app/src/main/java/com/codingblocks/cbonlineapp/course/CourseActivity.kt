@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.BuildConfig
@@ -24,12 +25,14 @@ import com.codingblocks.cbonlineapp.baseclasses.STATE
 import com.codingblocks.cbonlineapp.commons.InstructorListAdapter
 import com.codingblocks.cbonlineapp.course.adapter.CourseListAdapter
 import com.codingblocks.cbonlineapp.course.adapter.ItemClickListener
+import com.codingblocks.cbonlineapp.course.adapter.WishlistListener
 import com.codingblocks.cbonlineapp.course.batches.CourseTierFragment
 import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
+import com.codingblocks.cbonlineapp.util.LOGIN
 import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
@@ -37,6 +40,7 @@ import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.glide.GlideApp
 import com.codingblocks.cbonlineapp.util.glide.loadImage
@@ -53,9 +57,11 @@ import io.noties.markwon.ext.tables.TablePlugin
 import io.noties.markwon.ext.tables.TableTheme
 import kotlinx.android.synthetic.main.activity_course.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -67,7 +73,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     private val courseLogoImage by lazy {
         intent.getStringExtra(LOGO_TRANSITION_NAME)
     }
-
     private val courseLogoUrl by lazy {
         intent.getStringExtra(COURSE_LOGO)
     }
@@ -104,6 +109,22 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                         ViewCompat.getTransitionName(logo)!!
                     )
                 startActivity(intent, options.toBundle())
+            }
+        }
+    }
+
+    private val wishlistListener: WishlistListener by lazy {
+        object : WishlistListener {
+            override fun onWishListClickListener(id: String) {
+                if (getPrefs().SP_JWT_TOKEN_KEY.isNotEmpty()) {
+                    viewModel.changeWishlistStatus(id)
+                }else{
+                    CustomDialog.showConfirmation(applicationContext, LOGIN) {
+                        if (it) {
+                            startActivity(intentFor<LoginActivity>())
+                        }
+                    }
+                }
             }
         }
     }
@@ -193,6 +214,10 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             courseCardListAdapter.submitList(courses)
         }
 
+        viewModel.snackbar.observer(this){
+            courseActivity.snackbar(it)
+        }
+
         viewModel.errorLiveData.observer(this) {
             when (it) {
                 ErrorStatus.NO_CONNECTION -> {
@@ -220,6 +245,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         appbar.addOnOffsetChangedListener(this)
 
         courseCardListAdapter.onItemClick = itemClickListener
+        courseCardListAdapter.wishlistListener = wishlistListener
 
         viewModel.addedToCartProgress.observer(this) {
             when (it!!) {
@@ -314,6 +340,10 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         }
         android.R.id.home -> {
             onBackPressed()
+            true
+        }
+        R.id.wishlist ->{
+            viewModel.changeWishlistStatus(courseId)
             true
         }
         else -> super.onOptionsItemSelected(item)
