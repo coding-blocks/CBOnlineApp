@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.SystemClock
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
 import com.codingblocks.cbonlineapp.R
@@ -48,7 +47,6 @@ class DoubtReceiver : BroadcastReceiver() {
                     if (isSuccessful)
                         if (!body()?.get().isNullOrEmpty()) {
                             body()?.get()?.get(0)?.apply {
-                                Log.i("Notification Worker", "CurrentTime ${System.currentTimeMillis()} AckTime ${createdAt.isotomillisecond()}")
                                 if ((System.currentTimeMillis() - createdAt.isotomillisecond()) < 900000) {
                                     showNotification(context)
                                 }

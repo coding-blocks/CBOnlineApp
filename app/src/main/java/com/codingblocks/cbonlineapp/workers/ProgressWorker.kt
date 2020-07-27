@@ -16,7 +16,8 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import retrofit2.Response
 
-class ProgressWorker(context: Context, private val workerParameters: WorkerParameters) : CoroutineWorker(context, workerParameters), KoinComponent {
+class ProgressWorker(context: Context, private val workerParameters: WorkerParameters) :
+    CoroutineWorker(context, workerParameters), KoinComponent {
 
     override suspend fun doWork(): Result {
         val contentDao: ContentDao by inject()

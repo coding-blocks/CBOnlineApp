@@ -7,7 +7,7 @@ on:
   push:
     branches:
       # Push events on develop branch
-      - develop
+      - development
 
 jobs:
   linters:

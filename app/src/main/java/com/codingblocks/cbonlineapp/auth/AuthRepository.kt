@@ -11,9 +11,12 @@ class AuthRepository(
 
     suspend fun getToken(grantCode: String) = safeApiCall { CBOnlineLib.api.getToken(grantCode) }
 
-    suspend fun sendOtp(dialCode: String, mobile: String) = safeApiCall { CBOnlineLib.api.getOtp(hashMapOf("mobile" to mobile, "dialCode" to dialCode)) }
+    suspend fun sendOtp(dialCode: String, mobile: String) = safeApiCall {
+        CBOnlineLib.api.getOtp(hashMapOf("mobile" to mobile, "dialCode" to dialCode))
+    }
 
-    suspend fun verifyOtp(otp: Int, uniqueId: String) = safeApiCall { CBOnlineLib.api.verifyOtp(uniqueId, hashMapOf("otp" to otp, "client" to "android")) }
+    suspend fun verifyOtp(otp: Int, uniqueId: String) =
+        safeApiCall { CBOnlineLib.api.verifyOtp(uniqueId, hashMapOf("otp" to otp, "client" to "android")) }
 
     suspend fun findUser(userMap: HashMap<String, String>) = safeApiCall { CBOnlineLib.api.findUser(userMap) }
 
@@ -38,18 +41,20 @@ class AuthRepository(
 
     suspend fun loginWithClaim(uniqueId: String) = safeApiCall { CBOnlineLib.api.getJwtWithClaim(uniqueId) }
 
-    suspend fun verifyMobileUsingClaim(uniqueId: String) = safeApiCall { CBOnlineLib.api.verifyMobile(hashMapOf("claimId" to uniqueId)) }
+    suspend fun verifyMobileUsingClaim(uniqueId: String) =
+        safeApiCall { CBOnlineLib.api.verifyMobile(hashMapOf("claimId" to uniqueId)) }
 
-    suspend fun createUser(name: List<String>, username: String, mobile: String, email: String, uniqueId: String) = safeApiCall {
-        CBOnlineLib.api.createUser(
-            hashMapOf(
-                "username" to username,
-                "mobile" to mobile,
-                "firstname" to name[0],
-                "lastname" to name[1],
-                "email" to email,
-                "claimId" to uniqueId
+    suspend fun createUser(name: List<String>, username: String, mobile: String, email: String, uniqueId: String) =
+        safeApiCall {
+            CBOnlineLib.api.createUser(
+                hashMapOf(
+                    "username" to username,
+                    "mobile" to mobile,
+                    "firstname" to name[0],
+                    "lastname" to name[1],
+                    "email" to email,
+                    "claimId" to uniqueId
+                )
             )
-        )
-    }
+        }
 }

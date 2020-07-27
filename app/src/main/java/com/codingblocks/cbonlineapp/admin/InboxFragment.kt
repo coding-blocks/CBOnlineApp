@@ -63,6 +63,7 @@ class InboxFragment : BaseCBFragment() {
                 val script: String
                 if (conversationId.isEmpty()) {
                     script =
+
                         """
                     Talk.ready.then(function() {
                         var me = new Talk.User({

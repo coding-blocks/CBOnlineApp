@@ -23,12 +23,7 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.google.gson.JsonObject
 import com.vdocipher.aegis.media.ErrorDescription
-import com.vdocipher.aegis.offline.DownloadOptions
-import com.vdocipher.aegis.offline.DownloadRequest
-import com.vdocipher.aegis.offline.DownloadSelections
-import com.vdocipher.aegis.offline.DownloadStatus
-import com.vdocipher.aegis.offline.OptionsDownloader
-import com.vdocipher.aegis.offline.VdoDownloadManager
+import com.vdocipher.aegis.offline.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -86,7 +81,11 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener {
             attemptId = intent.getStringExtra(RUN_ATTEMPT_ID)
             sectionId = intent.getStringExtra(SECTION_ID)
             GlobalScope.launch {
-                createNotification(withContext(Dispatchers.IO) { sectionWithContentsDao.getVideoIdsWithSectionId(sectionId!!, attemptId!!) })
+                createNotification(
+                    withContext(Dispatchers.IO) {
+                        sectionWithContentsDao.getVideoIdsWithSectionId(sectionId!!, attemptId!!)
+                    }
+                )
             }
         }
         return START_NOT_STICKY
@@ -106,7 +105,8 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener {
             startDownload(sectionList)
             val stopSelf = Intent(this, SectionDownloadService::class.java)
             stopSelf.action = ACTION_STOP
-            val pStopSelf = PendingIntent.getService(this, 0, stopSelf, /*Stop Service*/PendingIntent.FLAG_CANCEL_CURRENT)
+            val pStopSelf =
+                PendingIntent.getService(this, 0, stopSelf, /*Stop Service*/PendingIntent.FLAG_CANCEL_CURRENT)
             notification.addAction(R.drawable.ic_pause_white_24dp, "Cancel", pStopSelf)
             startForeground(1, notification.build())
         } else {
@@ -175,7 +175,10 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener {
     /** This function will be invoked when the progress of any download changes*/
     override fun onChanged(p0: String?, p1: DownloadStatus?) {
         notification.apply {
-            setStyle(NotificationCompat.BigTextStyle().bigText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded( Current ${p1?.downloadPercent}% )"))
+            setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded( Current ${p1?.downloadPercent}% )")
+            )
         }
         notificationManager.notify(1, notification.build())
     }
@@ -188,7 +191,8 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener {
      * it will remove the files when may have been downloaded and got corrupted
      */
     override fun onFailed(videoId: String, p1: DownloadStatus?) {
-        val folderFile = File(applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath), "/$videoId")
+        val folderFile =
+            File(applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath), "/$videoId")
         downloadList.remove(videoId)
         FileUtils.deleteRecursive(folderFile)
     }
@@ -207,7 +211,10 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener {
         downloadList[videoId]?.isDownloaded = true
         notification.apply {
             setProgress(downloadList.size, downloadList.filterValues { it.isDownloaded }.size, false)
-            setStyle(NotificationCompat.BigTextStyle().bigText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded"))
+            setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded")
+            )
         }
         notificationManager.notify(1, notification.build())
         if (downloadList.filterValues { !it.isDownloaded }.isEmpty()) {
@@ -222,7 +229,10 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener {
             setContentTitle("Downloaded $sectionName")
             setOnlyAlertOnce(true)
             setLargeIcon(BitmapFactory.decodeResource(applicationContext.resources, R.mipmap.ic_launcher))
-            setStyle(NotificationCompat.BigTextStyle().bigText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded"))
+            setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded")
+            )
         }
         notificationManager.notify(2, notification.build())
     }
