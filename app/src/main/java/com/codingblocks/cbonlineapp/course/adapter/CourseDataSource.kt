@@ -15,7 +15,7 @@ class CourseDataSource(private val scope: CoroutineScope) :
 
     override fun loadInitial(params: LoadInitialParams<String>, callback: LoadInitialCallback<String, Course>) {
         scope.launch {
-            when (val response = safeApiCall { CBOnlineLib.onlineV2JsonApi.getAllCourses("0","9") }) {
+            when (val response = safeApiCall { CBOnlineLib.onlineV2JsonApi.getAllCourses("0", "9") }) {
                 is ResultWrapper.Success -> with(response.value) {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
@@ -28,7 +28,6 @@ class CourseDataSource(private val scope: CoroutineScope) :
                 }
             }
         }
-
     }
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, Course>) {
@@ -50,12 +49,10 @@ class CourseDataSource(private val scope: CoroutineScope) :
     }
 
     override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<String, Course>) {
-
     }
 
     override fun invalidate() {
         super.invalidate()
         scope.cancel()
     }
-
 }

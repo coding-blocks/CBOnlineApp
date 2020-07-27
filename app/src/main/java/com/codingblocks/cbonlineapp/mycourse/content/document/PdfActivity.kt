@@ -11,18 +11,12 @@ import android.os.PersistableBundle
 import android.widget.LinearLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
-import com.codingblocks.cbonlineapp.database.LibraryDao
-import com.codingblocks.cbonlineapp.mycourse.content.document.PdfViewModel
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.SECTION_ID
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import org.jetbrains.anko.toast
 import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.livedata.observer
+import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.receivers.DownloadBroadcastReceiver
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -30,7 +24,6 @@ import es.voghdev.pdfviewpager.library.PDFViewPager
 import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter
 import kotlinx.android.synthetic.main.activity_pdf.*
 import org.jetbrains.anko.AnkoLogger
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 import java.io.File
 
@@ -49,7 +42,6 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pdf)
-        //TODO - remove this
         if (savedInstanceState == null){
             vm.contentId = intent.getStringExtra(CONTENT_ID)
             vm.sectionId = intent.getStringExtra(SECTION_ID)
@@ -77,7 +69,7 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
             pdfBookmarkBtn.isActivated = it
         }
 
-        vm.offlineSnackbar.observer(this){
+        vm.bookmarkSnackbar.observer(this){
             pdfBookmarkBtn.showSnackbar(it, Snackbar.LENGTH_SHORT, action = false)
         }
 
@@ -119,7 +111,7 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
         sectionId = savedInstanceState.getString(SECTION_ID).toString()
     }
 
-    private fun checkFile(){
+    private fun checkFile() {
         fileName?.replace(" ", "_")
 
         if (MediaUtils.checkPermission(this)) {

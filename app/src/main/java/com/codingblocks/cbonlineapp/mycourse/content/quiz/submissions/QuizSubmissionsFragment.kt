@@ -8,9 +8,9 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizFragment
 import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizViewModel
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.onlineapi.models.QuizAttempt
 import kotlinx.android.synthetic.main.fragment_quiz_submissions.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -26,7 +26,7 @@ class QuizSubmissionsFragment : BaseCBFragment() {
                 vm.quizAttempt.value = quizAttempt
                 vm.quizAttemptId = quizAttempt.id
                 replaceFragmentSafely(
-                        QuizFragment(),
+                    QuizFragment(),
                     "quiz",
                     containerViewId = R.id.quizContainer,
                     addToStack = true

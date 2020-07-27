@@ -42,7 +42,14 @@ import java.io.File
 class DownloadService : Service(), VdoDownloadManager.EventListener {
 
     companion object {
-        fun startService(context: Context, sectionId: String, attemptId: String, videoId: String, contentId: String, title: String) {
+        fun startService(
+            context: Context,
+            sectionId: String,
+            attemptId: String,
+            videoId: String,
+            contentId: String,
+            title: String
+        ) {
             val startIntent = Intent(context, DownloadService::class.java)
             startIntent.putExtra(SECTION_ID, sectionId)
             startIntent.putExtra(RUN_ATTEMPT_ID, attemptId)
@@ -103,7 +110,6 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
         return START_NOT_STICKY
     }
 
-
     private fun createNotification(downloadData: DownloadData) {
         GlobalScope.launch {
             startDownload(downloadData)
@@ -136,36 +142,36 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
 
     private fun initializeDownload(mOtp: String, mPlaybackInfo: String, videoId: String) {
         val optionsDownloader = OptionsDownloader()
-        optionsDownloader.downloadOptionsWithOtp(mOtp, mPlaybackInfo, object : OptionsDownloader.Callback {
-            override fun onOptionsReceived(options: DownloadOptions) {
-                // we have received the available download options
-                val selectionIndices = intArrayOf(0, 1)
-                val downloadSelections = DownloadSelections(options, selectionIndices)
-                val file = applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
-                val folderFile = File(file, "/$videoId")
-                if (!folderFile.exists()) {
-                    folderFile.mkdir()
+        optionsDownloader.downloadOptionsWithOtp(
+            mOtp, mPlaybackInfo,
+            object : OptionsDownloader.Callback {
+                override fun onOptionsReceived(options: DownloadOptions) {
+                    // we have received the available download options
+                    val selectionIndices = intArrayOf(0, 1)
+                    val downloadSelections = DownloadSelections(options, selectionIndices)
+                    val file = applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
+                    val folderFile = File(file, "/$videoId")
+                    if (!folderFile.exists()) {
+                        folderFile.mkdir()
+                    }
+                    val request =
+                        DownloadRequest.Builder(downloadSelections, folderFile.absolutePath).build()
+                    val vdoDownloadManager = VdoDownloadManager.getInstance(applicationContext)
+                    // enqueue request to VdoDownloadManager for download
+                    try {
+                        vdoDownloadManager.enqueue(request)
+                        vdoDownloadManager.addEventListener(this@DownloadService)
+                    } catch (e: IllegalArgumentException) {
+                    } catch (e: IllegalStateException) {
+                    }
                 }
-                val request =
-                    DownloadRequest.Builder(downloadSelections, folderFile.absolutePath).build()
-                val vdoDownloadManager = VdoDownloadManager.getInstance(applicationContext)
-                // enqueue request to VdoDownloadManager for download
-                try {
-                    vdoDownloadManager.enqueue(request)
-                    vdoDownloadManager.addEventListener(this@DownloadService)
-                } catch (e: IllegalArgumentException) {
 
-                } catch (e: IllegalStateException) {
-
+                override fun onOptionsNotReceived(errDesc: ErrorDescription) {
+                    Log.e("Service Error", "onOptionsNotReceived : $errDesc")
                 }
             }
-
-            override fun onOptionsNotReceived(errDesc: ErrorDescription) {
-                Log.e("Service Error", "onOptionsNotReceived : $errDesc")
-            }
-        })
+        )
     }
-
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -203,7 +209,7 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
         val data = findDataWithId(videoId)
         if (data != null) {
             notificationManager.cancel(data.notificationId)
-            val folderFile = File(applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath), "/${videoId}")
+            val folderFile = File(applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath), "/$videoId")
             FileUtils.deleteRecursive(folderFile)
         }
     }
@@ -242,5 +248,4 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
             }
         }
     }
-
 }

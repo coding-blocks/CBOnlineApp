@@ -23,6 +23,9 @@ class OnlineJsonApiPublicTest {
             override var refreshToken: String
                 get() = refreshToken
                 set(value) {}
+            override var baseUrl: String
+                get() = "api-online.codingblocks.xyz"
+                set(value) {}
         })
         api = CBOnlineLib.onlineV2JsonApi
     }

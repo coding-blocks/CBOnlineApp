@@ -55,8 +55,11 @@ class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 chip.text = it.title
                 projectsChips.addView(chip)
             }
-            if (!item.instructors.isNullOrEmpty()) courseCardInstructorsTv.text = getSpannableStringSecondBold("Instructor: ", item.instructors?.first()?.name
-                ?: "")
+            if (!item.instructors.isNullOrEmpty()) courseCardInstructorsTv.text = getSpannableStringSecondBold(
+                "Instructor: ",
+                item.instructors?.first()?.name
+                    ?: ""
+            )
             if (item.instructors!!.size > 1) {
                 courseCardInstructorsTv.append(" and ${item.instructors?.size!! - 1} more")
             }
@@ -82,16 +85,21 @@ class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
             if (type != "POPULAR" && type != "WISHLIST") {
                 if (!item.instructors.isNullOrEmpty()) {
-                    courseCardInstructorsTv.text = getSpannableStringSecondBold("", item.instructors?.first()?.name
-                        ?: "")
+                    courseCardInstructorsTv.text = getSpannableStringSecondBold(
+                        "",
+                        item.instructors?.first()?.name
+                            ?: ""
+                    )
                     if (item.instructors!!.size > 1) {
                         courseCardInstructorsTv.append(" and ${item.instructors?.size!! - 1} more")
                     }
                     if (type != "LIST") {
                         course_card_share.setOnClickListener {
-                            context.share("Check out the course *${item.title}* by Coding Blocks!\n\n" +
-                                item.subtitle + "\n" +
-                                "https://online.codingblocks.com/courses/${item.slug}/")
+                            context.share(
+                                "Check out the course *${item.title}* by Coding Blocks!\n\n" +
+                                    item.subtitle + "\n" +
+                                    "https://online.codingblocks.com/courses/${item.slug}/"
+                            )
                         }
                         item.instructors?.first()?.photo?.let { courseCardInstructorImg1.loadImage(it) }
                         if (item.instructors!!.size > 1) {

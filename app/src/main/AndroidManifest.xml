@@ -203,11 +203,6 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".util.DownloadService"
-            android:enabled="true"
-            android:exported="true" />
-
         <meta-data
             android:name="com.onesignal.NotificationOpened.DEFAULT"
             android:value="DISABLE" />

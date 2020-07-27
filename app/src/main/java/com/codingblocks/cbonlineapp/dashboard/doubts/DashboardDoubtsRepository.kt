@@ -30,23 +30,26 @@ class DashboardDoubtsRepository(
 
     suspend fun insertDoubts(doubts: List<Doubts>) {
         doubts.forEach {
-            doubtsDao.insert(DoubtsModel(
-                dbtUid = it.id,
-                title = it.title,
-                body = it.body,
-                contentId = it.content?.id ?: "",
-                status = it.status,
-                runAttemptId = it.runAttempt?.id ?: "",
-                discourseTopicId = it.discourseTopicId,
-                conversationId = it.conversationId,
-                createdAt = it.createdAt
-            ))
+            doubtsDao.insert(
+                DoubtsModel(
+                    dbtUid = it.id,
+                    title = it.title,
+                    body = it.body,
+                    contentId = it.content?.id ?: "",
+                    status = it.status,
+                    runAttemptId = it.runAttempt?.id ?: "",
+                    discourseTopicId = it.discourseTopicId,
+                    conversationId = it.conversationId,
+                    createdAt = it.createdAt
+                )
+            )
         }
     }
 
     suspend fun resolveDoubt(doubt: DoubtsModel) =
         safeApiCall {
-            CBOnlineLib.onlineV2JsonApi.resolveDoubt(doubt.dbtUid,
+            CBOnlineLib.onlineV2JsonApi.resolveDoubt(
+                doubt.dbtUid,
                 Doubts(
                     id = doubt.dbtUid,
                     title = doubt.title,
@@ -57,18 +60,21 @@ class DashboardDoubtsRepository(
                     content = LectureContent(doubt.contentId),
                     status = doubt.status,
                     createdAt = doubt.createdAt
-                ))
+                )
+            )
         }
 
     suspend fun insertComments(comments: List<Comment>) {
         comments.forEach {
-            commentsDao.insert(CommentModel(
-                it.id,
-                it.body,
-                it.doubt?.id ?: "",
-                it.updatedAt,
-                it.username
-            ))
+            commentsDao.insert(
+                CommentModel(
+                    it.id,
+                    it.body,
+                    it.doubt?.id ?: "",
+                    it.updatedAt,
+                    it.username
+                )
+            )
         }
     }
 
@@ -85,13 +91,15 @@ class DashboardDoubtsRepository(
     fun getRuns() = runDao.getActiveRuns(System.currentTimeMillis() / 1000).distinctUntilChanged()
     suspend fun createComment(comment: Comment) = safeApiCall { CBOnlineLib.onlineV2JsonApi.createComment(comment) }
     suspend fun insertComment(it: Comment) {
-        commentsDao.insert(CommentModel(
-            it.id,
-            it.body,
-            it.doubt?.id ?: "",
-            it.updatedAt,
-            it.username
-        ))
+        commentsDao.insert(
+            CommentModel(
+                it.id,
+                it.body,
+                it.doubt?.id ?: "",
+                it.updatedAt,
+                it.username
+            )
+        )
     }
 
     suspend fun updateDb(dbtUid: String) {

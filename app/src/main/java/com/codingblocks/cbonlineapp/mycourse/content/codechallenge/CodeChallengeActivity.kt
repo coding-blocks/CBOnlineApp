@@ -8,9 +8,9 @@ import androidx.lifecycle.observe
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.util.*
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_code_challenge.*

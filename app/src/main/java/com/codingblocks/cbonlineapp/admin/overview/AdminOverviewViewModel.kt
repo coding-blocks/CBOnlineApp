@@ -13,7 +13,8 @@ import com.codingblocks.onlineapi.models.DoubtStats
 import com.github.jasminb.jsonapi.JSONAPIDocument
 import retrofit2.Response
 
-class AdminOverviewViewModel(private val repo: AdminOverviewRepository, val prefs: PreferenceHelper) : BaseCBViewModel() {
+class AdminOverviewViewModel(private val repo: AdminOverviewRepository, val prefs: PreferenceHelper) :
+    BaseCBViewModel() {
 
     var doubtStats: MutableLiveData<DoubtStats> = MutableLiveData()
     var listLeaderboard: MutableLiveData<List<DoubtLeaderBoard>> = MutableLiveData()

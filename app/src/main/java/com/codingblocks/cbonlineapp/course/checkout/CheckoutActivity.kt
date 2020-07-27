@@ -57,7 +57,6 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener, AnkoLo
                     confirmPayment()
                 }
             }
-
         }
     }
 
@@ -71,11 +70,11 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener, AnkoLo
     }
 
     /** Call this function at the last step after applying coupon and everything.
-    Razorpay will automatically call either of the methods on CheckoutActivity.kt
+     Razorpay will automatically call either of the methods on CheckoutActivity.kt
 
-    override fun onPaymentSuccess(p0: String?)  - p0: is razorpay_payment_id that needs to be sent to capture payment API
+     override fun onPaymentSuccess(p0: String?)  - p0: is razorpay_payment_id that needs to be sent to capture payment API
 
-    override fun onPaymentError(p0: Int, p1: String?) - Show retry payment or payment declined.
+     override fun onPaymentError(p0: Int, p1: String?) - Show retry payment or payment declined.
 
      */
     private fun showRazorPayCheckoutForm(json: JsonObject) {
@@ -96,7 +95,7 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener, AnkoLo
                 options.put("image", it["logo"].asString)
                 checkout.setKeyID(it["razorpayKey"].asString)
             }
-            //Prefil user info
+            // Prefil user info
             json.getAsJsonObject("user").let {
                 options.put("prefill.name", it["firstname"].asString)
                 options.put("prefill.email", it["email"].asString)
@@ -148,7 +147,6 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener, AnkoLo
         vm.paymentMap["razorpay_order_id"] = payment.orderId
         vm.paymentMap["razorpay_signature"] = payment.signature
         confirmPayment()
-
     }
 
     private fun confirmPayment() {

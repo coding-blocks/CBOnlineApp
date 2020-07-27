@@ -227,7 +227,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                         textview4_20.visibility = View.VISIBLE
                     } else {
                         if ((activity as MyCourseActivity).myCourseTabs.selectedTabPosition == 1)
-                            (activity as MyCourseActivity).showFab()
+                        (activity as MyCourseActivity).showFab()
                         rvExpendableView.visibility = View.VISIBLE
                         textview4_20.visibility = View.GONE
                     }
@@ -254,7 +254,6 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
         } else {
             SectionDownloadService.startService(requireContext(), sectionId, viewModel.attemptId!!)
         }
-
     }
 
     private fun popUpWindowSection(): PopupWindow {

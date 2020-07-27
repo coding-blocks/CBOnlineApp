@@ -14,7 +14,6 @@ import android.graphics.drawable.PictureDrawable
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import java.io.File
 
 object MediaUtils {
 

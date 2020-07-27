@@ -15,8 +15,8 @@ import androidx.viewpager.widget.ViewPager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.CustomDialog
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.bottom_question_sheet.*
 import kotlinx.android.synthetic.main.fragment_quiz.*
@@ -24,8 +24,12 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.textColor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListener,
-    View.OnClickListener, ViewPagerAdapter.QuizInteractor {
+class QuizFragment :
+    BaseCBFragment(),
+    AnkoLogger,
+    ViewPager.OnPageChangeListener,
+    View.OnClickListener,
+    ViewPagerAdapter.QuizInteractor {
 
     private var isSubmitted: Boolean = false
 
@@ -64,14 +68,14 @@ class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListene
 
         vm.quizAttempt.observer(thisLifecycleOwner) {
             mAdapter = ViewPagerAdapter(
-                    requireContext(),
-                    vm.quiz.qnaUid,
-                    vm.quizAttemptId,
-                    questionList,
-                    it?.submission,
-                    it?.result,
-                    this,
-                    vm
+                requireContext(),
+                vm.quiz.qnaUid,
+                vm.quizAttemptId,
+                questionList,
+                it?.submission,
+                it?.result,
+                this,
+                vm
             )
             quizViewPager.adapter = mAdapter
             quizViewPager.currentItem = 0
@@ -166,7 +170,7 @@ class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListene
     private fun submitQuiz() {
         vm.submitQuiz {
             replaceFragmentSafely(
-                    QuizResultFragment.newInstance(vm.quizAttemptId),
+                QuizResultFragment.newInstance(vm.quizAttemptId),
                 "result",
                 containerViewId = R.id.quizContainer,
                 addToStack = true
@@ -176,18 +180,20 @@ class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListene
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.nextBtn -> if (nextBtn.text == "End" && !isSubmitted) {
-                submitQuiz()
-            } else
-                quizViewPager.currentItem = if (quizViewPager.currentItem < questionList.size() - 1)
-                    quizViewPager.currentItem + 1
+            R.id.nextBtn ->
+                if (nextBtn.text == "End" && !isSubmitted) {
+                    submitQuiz()
+                } else
+                    quizViewPager.currentItem = if (quizViewPager.currentItem < questionList.size() - 1)
+                        quizViewPager.currentItem + 1
+                    else
+                        0
+
+            R.id.prevBtn ->
+                quizViewPager.currentItem = if (quizViewPager.currentItem > 0)
+                    quizViewPager.currentItem - 1
                 else
                     0
-
-            R.id.prevBtn -> quizViewPager.currentItem = if (quizViewPager.currentItem > 0)
-                quizViewPager.currentItem - 1
-            else
-                0
             R.id.questionBtn -> {
                 if (sheetBehavior?.state != BottomSheetBehavior.STATE_EXPANDED) {
                     sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED

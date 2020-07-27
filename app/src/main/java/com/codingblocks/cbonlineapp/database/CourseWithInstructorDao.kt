@@ -26,96 +26,118 @@ interface CourseWithInstructorDao {
 //    """)
 //    fun getJobCourses(courses: ArrayList<String>): LiveData<List<CourseInstructorPair>>
 
-    @Query("""
+    @Query(
+        """
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
        ORDER BY rA.lastAccessedAt DESC
-    """)
+    """
+    )
     fun getMyRuns(): LiveData<List<CourseInstructorPair>>
 
-    @Query("""
+    @Query(
+        """
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
        WHERE rA.premium = 1  ORDER BY rA.lastAccessedAt DESC
-    """)
+    """
+    )
     fun getPurchasesRuns(): LiveData<List<CourseInstructorPair>>
 
-    @Query("""
+    @Query(
+        """
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
        WHERE rA.premium = 1 AND rA.`end` > :currenttimeSec AND rA.runTier != "LITE"
        ORDER BY rA.lastAccessedAt DESC
-    """)
+    """
+    )
     fun getActiveRuns(currenttimeSec: Long): LiveData<List<CourseInstructorPair>>
 
-    @Query("""
+    @Query(
+        """
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
        WHERE rA.premium = 1 AND rA.`end` > :currenttimeSec
        ORDER BY rA.lastAccessedAt DESC
-    """)
+    """
+    )
     fun getAllActiveRuns(currenttimeSec: Long): LiveData<List<CourseInstructorPair>>
 
-    @Query("""
+    @Query(
+        """
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
        ORDER BY rA.lastAccessedAt DESC LIMIT 5
-    """)
+    """
+    )
     fun getRecentRuns(): LiveData<List<CourseInstructorPair>>
 
-    @Query("""
+    @Query(
+        """
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
        WHERE rA.`end` < :currentTimeSec
-    """)
+    """
+    )
     fun getExpiredRuns(currentTimeSec: Long): LiveData<List<CourseInstructorPair>>
 
-    @Query("""
+    @Query(
+        """
    SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
        ORDER BY rA.lastAccessedAt DESC LIMIT 1
-    """)
+    """
+    )
     fun getTopRun(): LiveData<CourseRunPair>
 
-    @Query("""
+    @Query(
+        """
    SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
        WHERE rA.attemptId = :id ORDER BY rA.lastAccessedAt DESC LIMIT 1
-    """)
+    """
+    )
     fun getRunById(id: String): LiveData<CourseRunPair>
 
-    @Query("""
+    @Query(
+        """
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
        WHERE rA.premium = 1 AND rA.runTier != "LITE"
        ORDER BY rA.lastAccessedAt DESC
-    """)
+    """
+    )
     fun getPremiumRuns(): LiveData<List<CourseInstructorPair>>
 
-    @Query("""
+    @Query(
+        """
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
        WHERE rA.premium = 0
        ORDER BY rA.lastAccessedAt DESC
-    """)
+    """
+    )
     fun getTrialRuns(): LiveData<List<CourseInstructorPair>>
 
-    @Query("""
+    @Query(
+        """
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
        WHERE rA.premium = 1 AND rA.`end` > :currenttimeSec AND rA.runTier != "LITE"
        ORDER BY rA.lastAccessedAt DESC
-    """)
+    """
+    )
     fun getPremiumActiveRuns(currenttimeSec: Long): LiveData<List<CourseInstructorPair>>
 }

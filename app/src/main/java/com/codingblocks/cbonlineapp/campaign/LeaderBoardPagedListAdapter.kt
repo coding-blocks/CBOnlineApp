@@ -27,7 +27,8 @@ class LeaderBoardPagedListAdapter : PagedListAdapter<Spins, LeaderBoardPagedList
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CampaignViewHolder {
-        return CampaignViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_campaign_leaderboard, parent, false)
+        return CampaignViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_campaign_leaderboard, parent, false)
         )
     }
 

@@ -39,4 +39,3 @@ class SvgSoftwareLayerSetter : RequestListener<Drawable> {
         return false
     }
 }
-

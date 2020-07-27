@@ -63,7 +63,6 @@ class CBOnlineApp : Application() {
             override var baseUrl: String
                 get() = BuildConfig.BASE_URL
                 set(value) {}
-
         })
 
         if (BuildConfig.DEBUG) {
@@ -92,8 +91,12 @@ class CBOnlineApp : Application() {
         }
         startKoin {
             androidContext(this@CBOnlineApp)
-            modules(listOf(viewModelModule, firebaseModule,
-                databaseModule, preferencesModule))
+            modules(
+                listOf(
+                    viewModelModule, firebaseModule,
+                    databaseModule, preferencesModule
+                )
+            )
         }
 
         // OneSignal Initialization
@@ -106,22 +109,25 @@ class CBOnlineApp : Application() {
 
         // Configure Routers
         try {
-            Router.initActivityRouter(applicationContext, IActivityRouteTableInitializer { router ->
-                router["activity://courseRun/https://online.codingblocks.com/app/classroom/course/:s{$COURSE_ID}/run/:s{$RUN_ID}"] =
-                    MyCourseActivity::class.java
-                router["activity://courseRun/https://online.codingblocks.com/courses/:s{courseId}"] =
-                    CourseActivity::class.java
-                router["activity://courseRun/https://online.codingblocks.com/courses"] =
-                    SearchCourseActivity::class.java
-                router["activity://courseRun/https://online.codingblocks.com/app/player/:s{$RUN_ATTEMPT_ID}/content/:s{$SECTION_ID}/:s{$CONTENT_ID}"] =
-                    VideoPlayerActivity::class.java
-                router["activity://courseRun/https://online.codingblocks.com/app/tracks/:s{courseId}"] =
-                    TrackActivity::class.java
-                router["activity://courseRun/https://online.codingblocks.com/app/tracks"] =
-                    LearningTracksActivity::class.java
-                router["activity://courseRun/https://online.codingblocks.com/app/spin-n-win"] =
-                    CampaignActivity::class.java
-            })
+            Router.initActivityRouter(
+                applicationContext,
+                IActivityRouteTableInitializer { router ->
+                    router["activity://courseRun/https://online.codingblocks.com/app/classroom/course/:s{$COURSE_ID}/run/:s{$RUN_ID}"] =
+                        MyCourseActivity::class.java
+                    router["activity://courseRun/https://online.codingblocks.com/courses/:s{courseId}"] =
+                        CourseActivity::class.java
+                    router["activity://courseRun/https://online.codingblocks.com/courses"] =
+                        SearchCourseActivity::class.java
+                    router["activity://courseRun/https://online.codingblocks.com/app/player/:s{$RUN_ATTEMPT_ID}/content/:s{$SECTION_ID}/:s{$CONTENT_ID}"] =
+                        VideoPlayerActivity::class.java
+                    router["activity://courseRun/https://online.codingblocks.com/app/tracks/:s{courseId}"] =
+                        TrackActivity::class.java
+                    router["activity://courseRun/https://online.codingblocks.com/app/tracks"] =
+                        LearningTracksActivity::class.java
+                    router["activity://courseRun/https://online.codingblocks.com/app/spin-n-win"] =
+                        CampaignActivity::class.java
+                }
+            )
         } catch (e: ConcurrentModificationException) {
             FirebaseCrashlytics.getInstance().log("Router not working : ${e.localizedMessage}")
         }

@@ -16,6 +16,8 @@ data class DoubtsModel(
     var conversationId: String?,
     var createdAt: String
 ) {
-    constructor() : this("", "", "", "", "",
-        "", "", null, "")
+    constructor() : this(
+        "", "", "", "", "",
+        "", "", null, ""
+    )
 }

@@ -54,14 +54,17 @@ class InboxFragment : BaseCBFragment() {
             webView.settings.allowFileAccess = true
             webView.settings.allowFileAccessFromFileURLs = true
         }
-        CBOnlineLib.api.getSignature().enqueue(retrofitCallback { _, response ->
-            val signature = response?.body()?.get("signature")
-            val userId = prefs.SP_USER_ID
-            val userName = prefs.SP_USER_NAME
-            val email = prefs.SP_EMAIL_ID
-            val script: String
-            if (conversationId.isEmpty()) {
-                script = """
+        CBOnlineLib.api.getSignature().enqueue(
+            retrofitCallback { _, response ->
+                val signature = response?.body()?.get("signature")
+                val userId = prefs.SP_USER_ID
+                val userName = prefs.SP_USER_NAME
+                val email = prefs.SP_EMAIL_ID
+                val script: String
+                if (conversationId.isEmpty()) {
+                    script =
+
+                        """
                     Talk.ready.then(function() {
                         var me = new Talk.User({
                             id: $userId,
@@ -76,9 +79,10 @@ class InboxFragment : BaseCBFragment() {
                         var inbox = talkSession.createInbox();
                         inbox.mount(document.getElementById("talkjs-container"));
                     });
-                """.trimIndent()
-            } else {
-                script = """
+                        """.trimIndent()
+                } else {
+                    script =
+                        """
                     Talk.ready.then(function() {
                         var me = new Talk.User({
                             id: $userId,
@@ -95,22 +99,23 @@ class InboxFragment : BaseCBFragment() {
                         var inbox = talkSession.createChatbox(conversation);
                         inbox.mount(document.getElementById("talkjs-container"));
                     });
-                """.trimIndent()
-            }
-
-            webView.webViewClient = object : WebViewClient() {
-                override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                    return false
+                        """.trimIndent()
                 }
 
-                override fun onPageFinished(view: WebView, url: String?) {
-                    super.onPageFinished(view, url)
-                    view.evaluateJavascript("javascript:$script", null)
-                }
-            }
+                webView.webViewClient = object : WebViewClient() {
+                    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                        return false
+                    }
 
-            webView.loadUrl("file:///android_asset/Chat.html")
-        })
+                    override fun onPageFinished(view: WebView, url: String?) {
+                        super.onPageFinished(view, url)
+                        view.evaluateJavascript("javascript:$script", null)
+                    }
+                }
+
+                webView.loadUrl("file:///android_asset/Chat.html")
+            }
+        )
         if (inboxRoot != null)
             inboxRoot.addView(webView)
     }

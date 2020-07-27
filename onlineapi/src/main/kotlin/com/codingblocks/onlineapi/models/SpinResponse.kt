@@ -15,4 +15,3 @@ data class SpinResponse(
     val actions: List<String>,
     val updatedAt: String
 )
-
