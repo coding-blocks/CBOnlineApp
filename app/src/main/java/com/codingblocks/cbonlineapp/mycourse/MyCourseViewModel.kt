@@ -25,6 +25,7 @@ import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.PREMIUM
+import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
@@ -50,7 +51,7 @@ class MyCourseViewModel(
     var name by savedStateValue<String>(handle, COURSE_NAME)
     var runId by savedStateValue<String>(handle, RUN_ID)
     var premiumRun by savedStateValue<Boolean>(handle, PREMIUM)
-    var courseId: String?= null
+    var courseId by savedStateValue<String>(handle, COURSE_ID)
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
 
