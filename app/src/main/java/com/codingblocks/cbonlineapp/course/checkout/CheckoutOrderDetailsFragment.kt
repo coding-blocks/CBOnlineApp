@@ -73,7 +73,6 @@ class CheckoutOrderDetailsFragment : BaseCBFragment(), AnkoLogger {
                     cartLayout.isVisible = false
                 }
             }
-
         }
 
         exploreBtn.setOnClickListener { requireActivity().finish() }

@@ -23,12 +23,12 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.lang.reflect.Type
 import kotlinx.android.synthetic.main.bottom_sheet_comparsion.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_runs.*
 import kotlinx.android.synthetic.main.bottom_sheet_runs.view.*
 import org.json.JSONArray
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.lang.reflect.Type
 
 class CourseTierFragment : BottomSheetDialogFragment() {
 
@@ -92,10 +92,12 @@ class CourseTierFragment : BottomSheetDialogFragment() {
     @NonNull
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog: Dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setOnShowListener(DialogInterface.OnShowListener { dialogInterface ->
-            val bottomSheetDialog = dialogInterface as BottomSheetDialog
-            setupFullHeight(bottomSheetDialog)
-        })
+        dialog.setOnShowListener(
+            DialogInterface.OnShowListener { dialogInterface ->
+                val bottomSheetDialog = dialogInterface as BottomSheetDialog
+                setupFullHeight(bottomSheetDialog)
+            }
+        )
         return dialog
     }
 

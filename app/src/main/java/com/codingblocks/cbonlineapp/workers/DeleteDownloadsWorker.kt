@@ -12,7 +12,6 @@ import org.koin.core.inject
 import java.io.File
 import java.util.*
 
-
 /**
  * Worker class to Auto-Delete downloaded files after 15 days.
  */

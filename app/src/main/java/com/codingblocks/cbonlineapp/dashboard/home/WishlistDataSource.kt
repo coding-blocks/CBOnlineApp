@@ -45,7 +45,6 @@ class WishlistDataSource(private val scope: CoroutineScope, private val pageSize
     }
 
     override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<String, Wishlist>) {
-
     }
 
     override fun invalidate() {

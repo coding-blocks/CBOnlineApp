@@ -27,7 +27,6 @@ class CampaignDataSource(private val scope: CoroutineScope) :
                 }
             }
         }
-
     }
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, Spins>) {
@@ -49,12 +48,10 @@ class CampaignDataSource(private val scope: CoroutineScope) :
     }
 
     override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<String, Spins>) {
-
     }
 
     override fun invalidate() {
         super.invalidate()
         scope.cancel()
     }
-
 }

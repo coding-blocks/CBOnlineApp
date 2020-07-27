@@ -17,7 +17,6 @@ import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerViewModel
 import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.DOUBT_ID
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.fragment_video_doubt.*
@@ -28,7 +27,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class VideoDoubtFragment : BaseCBFragment() {
 
-    private val viewModel:VideoPlayerViewModel by sharedViewModel()
+    private val viewModel: VideoPlayerViewModel by sharedViewModel()
     private val doubtListAdapter = DashboardDoubtListAdapter()
 
     private val resolveClickListener: ResolveDoubtClickListener by lazy {

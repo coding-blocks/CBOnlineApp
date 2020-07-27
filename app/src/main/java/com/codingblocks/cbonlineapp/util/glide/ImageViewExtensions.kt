@@ -26,9 +26,11 @@ fun ImageView.loadSvg(svgUrl: String, callback: () -> Unit = { }) {
 
             with(SVG.getFromInputStream(it.byteStream())) {
                 uiThread {
-                    val picDrawable = PictureDrawable(renderToPicture(
-                        400, 400
-                    ))
+                    val picDrawable = PictureDrawable(
+                        renderToPicture(
+                            400, 400
+                        )
+                    )
                     setImageDrawable(picDrawable)
                     callback()
                 }
@@ -67,7 +69,6 @@ fun ImageView.loadImage(imgUrl: String, scale: Boolean = false, callback: (loade
             .into(this)
     }
 }
-
 
 fun createGlideRequest(source: Uri?, context: Context, resize: Boolean = false): GlideRequest<Drawable> {
     val req = GlideApp.with(context)

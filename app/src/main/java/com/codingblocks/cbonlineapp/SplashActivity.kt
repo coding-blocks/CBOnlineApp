@@ -6,7 +6,6 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
-import com.codingblocks.onlineapi.CBOnlineLib
 import org.jetbrains.anko.intentFor
 import org.koin.android.ext.android.inject
 

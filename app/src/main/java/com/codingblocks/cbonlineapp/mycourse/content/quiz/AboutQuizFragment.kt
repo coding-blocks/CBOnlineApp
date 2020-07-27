@@ -9,8 +9,8 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.content.quiz.info.QuizInfoFragment
 import com.codingblocks.cbonlineapp.mycourse.content.quiz.submissions.QuizSubmissionsFragment
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.fragment_about_quiz.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.runOnUiThread
@@ -45,7 +45,7 @@ class AboutQuizFragment : BaseCBFragment(), AnkoLogger {
                 runOnUiThread {
                     quizStartBtn.isEnabled = true
                     replaceFragmentSafely(
-                            QuizFragment(),
+                        QuizFragment(),
                         "quiz",
                         containerViewId = R.id.quizContainer,
                         addToStack = true

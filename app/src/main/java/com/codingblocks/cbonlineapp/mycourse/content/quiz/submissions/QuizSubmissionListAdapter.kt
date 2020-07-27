@@ -16,8 +16,8 @@ class QuizSubmissionListAdapter : ListAdapter<QuizAttempt, QuizSubmissionListAda
     var onItemClick: ItemClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
-                LayoutInflater.from(parent.context)
-                        .inflate(R.layout.item_quiz_attempt, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_quiz_attempt, parent, false)
         )
     }
 

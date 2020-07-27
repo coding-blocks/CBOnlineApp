@@ -11,7 +11,8 @@ import com.codingblocks.cbonlineapp.util.extensions.getDurationBreakdown
 import kotlinx.android.synthetic.main.item_section.view.*
 
 class SectionViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.item_section, parent, false)) {
+    LayoutInflater.from(parent.context).inflate(R.layout.item_section, parent, false)
+) {
 
     var section: SectionModel? = null
     var starterListener: DownloadStarter? = null

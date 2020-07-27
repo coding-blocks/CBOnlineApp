@@ -18,8 +18,8 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
@@ -93,7 +93,8 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
                             num,
                             0
                         )
-                    ), null, requireContext().getDrawable(R.drawable.ic_dropdown), null
+                    ),
+                    null, requireContext().getDrawable(R.drawable.ic_dropdown), null
                 )
             }
         }

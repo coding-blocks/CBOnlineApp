@@ -10,7 +10,7 @@ import com.codingblocks.onlineapi.models.Wishlist
 
 class WishlistViewModel() : BaseCBViewModel() {
 
-    private var wishlist : LiveData<PagedList<Wishlist>>
+    private var wishlist: LiveData<PagedList<Wishlist>>
     init {
         val config = PagedList.Config.Builder()
             .setPageSize(10)
@@ -18,16 +18,16 @@ class WishlistViewModel() : BaseCBViewModel() {
             .build()
         wishlist = initializedPagedListBuilder(config).build()
     }
-    fun fetchWishList():LiveData<PagedList<Wishlist>> = wishlist
+    fun fetchWishList(): LiveData<PagedList<Wishlist>> = wishlist
 
     private fun initializedPagedListBuilder(config: PagedList.Config):
         LivePagedListBuilder<String, Wishlist> {
 
-        val dataSourceFactory = object : DataSource.Factory<String, Wishlist>() {
-            override fun create(): DataSource<String, Wishlist> {
-                return WishlistDataSource(viewModelScope,"10")
+            val dataSourceFactory = object : DataSource.Factory<String, Wishlist>() {
+                override fun create(): DataSource<String, Wishlist> {
+                    return WishlistDataSource(viewModelScope, "10")
+                }
             }
+            return LivePagedListBuilder(dataSourceFactory, config)
         }
-        return LivePagedListBuilder(dataSourceFactory, config)
-    }
 }

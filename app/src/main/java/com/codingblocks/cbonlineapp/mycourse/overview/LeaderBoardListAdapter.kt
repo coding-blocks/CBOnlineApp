@@ -21,8 +21,10 @@ class LeaderBoardListAdapter : ListAdapter<Leaderboard, LeaderBoardViewHolder>(d
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeaderBoardViewHolder {
-        return LeaderBoardViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_course_leaderboard, parent, false))
+        return LeaderBoardViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_course_leaderboard, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: LeaderBoardViewHolder, position: Int) {

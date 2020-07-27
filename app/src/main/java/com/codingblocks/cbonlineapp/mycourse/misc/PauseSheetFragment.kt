@@ -25,7 +25,6 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.ocpsoft.prettytime.PrettyTime
 import java.util.*
 
-
 class PauseSheetFragment : BottomSheetDialogFragment() {
 
     val vm: MyCourseViewModel by sharedViewModel()

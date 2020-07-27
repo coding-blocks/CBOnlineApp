@@ -5,7 +5,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
@@ -61,5 +60,4 @@ class ReferralActivity : BaseCBActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 }

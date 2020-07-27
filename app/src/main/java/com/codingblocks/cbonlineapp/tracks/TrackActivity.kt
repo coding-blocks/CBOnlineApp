@@ -15,10 +15,10 @@ import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
-import com.codingblocks.cbonlineapp.util.glide.loadImage
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.glide.loadImage
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_course.courseToolbar
@@ -41,7 +41,7 @@ class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {
     }
 
     private val courseLogoUrl by lazy {
-        intent.getStringExtra(COURSE_LOGO)
+        intent.getStringExtra(COURSE_LOGO)!!
     }
     private val viewModel by viewModel<TrackViewModel>()
 
@@ -70,7 +70,7 @@ class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {
         setContentView(R.layout.activity_track)
         supportPostponeEnterTransition()
         setToolbar(courseToolbar)
-        viewModel.id = courseId
+        viewModel.id = courseId!!
         viewModel.fetchCurrentTrack()
         trackShimmer.showShimmer(true)
         trackCourseRv.setRv(

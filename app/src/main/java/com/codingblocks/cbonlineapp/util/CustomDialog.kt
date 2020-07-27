@@ -80,7 +80,7 @@ object CustomDialog {
                 updateView.dialogDescTv.text =
                     "You have been logged out of this account.Please login again to Continue"
             }
-            LOGIN->{
+            LOGIN -> {
                 updateView.dialogPositiveBtn.text = "Log In"
                 updateView.dialogDescTv.text =
                     "Please login to use this feature."

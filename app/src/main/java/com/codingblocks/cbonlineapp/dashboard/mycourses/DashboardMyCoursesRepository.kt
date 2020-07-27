@@ -87,20 +87,22 @@ class DashboardMyCoursesRepository(
         if (course != null && refresh)
             return with(course) {
                 instructors?.let { getInstructors(it, id) }
-                courseDao.insert(CourseModel(
-                    id,
-                    title,
-                    subtitle,
-                    logo,
-                    summary,
-                    promoVideo ?: "",
-                    difficulty,
-                    reviewCount,
-                    rating,
-                    slug,
-                    coverImage ?: "",
-                    categoryId ?: 0
-                ))
+                courseDao.insert(
+                    CourseModel(
+                        id,
+                        title,
+                        subtitle,
+                        logo,
+                        summary,
+                        promoVideo ?: "",
+                        difficulty,
+                        reviewCount,
+                        rating,
+                        slug,
+                        coverImage ?: "",
+                        categoryId ?: 0
+                    )
+                )
             } else if (!refresh)
             return -2L
         else
@@ -114,8 +116,14 @@ class DashboardMyCoursesRepository(
                     is ResultWrapper.Success -> {
                         if (response.value.isSuccessful)
                             response.value.body()?.let {
-                                instructorDao.insert(InstructorModel(it.id, it.name, it.description
-                                    ?: "", it.photo, it.email, it.sub))
+                                instructorDao.insert(
+                                    InstructorModel(
+                                        it.id, it.name,
+                                        it.description
+                                            ?: "",
+                                        it.photo, it.email, it.sub
+                                    )
+                                )
                                 courseWithInstructorDao.insert(
                                     CourseWithInstructor(courseId = courseId, instructorId = it.id)
                                 )

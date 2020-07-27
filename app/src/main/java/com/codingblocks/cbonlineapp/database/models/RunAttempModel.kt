@@ -23,7 +23,7 @@ data class RunAttemptModel(
     val runId: String,
     val certificateUrl: String = "",
     val runTier: String = "",
-    val paused:Boolean = false,
+    val paused: Boolean = false,
     val pauseTimeLeft: String? = null,
     val lastPausedLeft: String? = null
 ) {

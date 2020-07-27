@@ -27,11 +27,13 @@ class AuthRepository(
     }
 
     suspend fun loginWithEmail(email: String, password: String) = safeApiCall {
-        CBOnlineLib.api.getJwtWithEmail(hashMapOf(
-            "username" to email,
-            "password" to password,
-            "client" to "android"
-        ))
+        CBOnlineLib.api.getJwtWithEmail(
+            hashMapOf(
+                "username" to email,
+                "password" to password,
+                "client" to "android"
+            )
+        )
     }
 
     suspend fun loginWithClaim(uniqueId: String) = safeApiCall { CBOnlineLib.api.getJwtWithClaim(uniqueId) }
@@ -40,11 +42,14 @@ class AuthRepository(
 
     suspend fun createUser(name: List<String>, username: String, mobile: String, email: String, uniqueId: String) = safeApiCall {
         CBOnlineLib.api.createUser(
-            hashMapOf("username" to username,
+            hashMapOf(
+                "username" to username,
                 "mobile" to mobile,
                 "firstname" to name[0],
                 "lastname" to name[1],
                 "email" to email,
-                "claimId" to uniqueId))
+                "claimId" to uniqueId
+            )
+        )
     }
 }

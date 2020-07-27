@@ -174,7 +174,6 @@ class AuthViewModel(
         } catch (je: JSONException) {
             errorLiveData.postValue("Try Again!!!")
         }
-
     }
 
     private fun parseError(errorBody: ResponseBody, key: String = "message") {

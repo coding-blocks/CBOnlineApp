@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.activity_admin.*
 
 class AdminActivity : BaseCBActivity(), FragmentChangeListener {
 
-
     override fun openInbox(conversationId: String) {
         bottomNavAdmin.selectedItemId = R.id.inbox
         replaceFragmentSafely(
@@ -48,7 +47,6 @@ class AdminActivity : BaseCBActivity(), FragmentChangeListener {
         }
     }
 
-
     private fun initializeUI() {
         replaceFragmentSafely(
             fragment = AdminOverviewFragment(),
@@ -61,14 +59,16 @@ class AdminActivity : BaseCBActivity(), FragmentChangeListener {
                     replaceFragmentSafely(
                         fragment = InboxFragment(),
                         containerViewId = R.id.pagerAdmin,
-                        allowStateLoss = true)
+                        allowStateLoss = true
+                    )
                     true
                 }
                 R.id.doubts -> {
                     replaceFragmentSafely(
                         fragment = AdminDoubtsFragment(),
                         containerViewId = R.id.pagerAdmin,
-                        allowStateLoss = true)
+                        allowStateLoss = true
+                    )
                     true
                 }
                 else -> {
@@ -80,7 +80,6 @@ class AdminActivity : BaseCBActivity(), FragmentChangeListener {
                     true
                 }
             }
-
         }
     }
 }

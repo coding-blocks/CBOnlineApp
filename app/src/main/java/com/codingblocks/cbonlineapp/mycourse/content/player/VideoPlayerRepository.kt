@@ -28,15 +28,15 @@ class VideoPlayerRepository(
     private val playerDao: PlayerDao,
     private val doubtsDao: DoubtsDao
 ) {
-    suspend fun fetchCourseContentNotes(attemptId: String,contentId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getNotesForContent(attemptId,contentId) }
+    suspend fun fetchCourseContentNotes(attemptId: String, contentId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getNotesForContent(attemptId, contentId) }
 
-    suspend fun fetchCourseContentDoubts(attemptId: String,contentId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getDoubtsForContent(attemptId,contentId) }
+    suspend fun fetchCourseContentDoubts(attemptId: String, contentId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getDoubtsForContent(attemptId, contentId) }
 
     fun getDoubtsByCourseRun(type: String?, pair: Pair<String?, String?>): LiveData<List<DoubtsModel>> {
         return when (type) {
-            LIVE -> doubtsDao.getLiveDoubtsForContent(pair.first!!,pair.second!!)
-            RESOLVED -> doubtsDao.getResolveDoubtsForContent(pair.first!!,pair.second!!)
-            else -> doubtsDao.getDoubtsForContent(pair.first!!,pair.second!!).distinctUntilChanged()
+            LIVE -> doubtsDao.getLiveDoubtsForContent(pair.first!!, pair.second!!)
+            RESOLVED -> doubtsDao.getResolveDoubtsForContent(pair.first!!, pair.second!!)
+            else -> doubtsDao.getDoubtsForContent(pair.first!!, pair.second!!).distinctUntilChanged()
         }
     }
 
@@ -87,7 +87,7 @@ class VideoPlayerRepository(
         notesDao.insert(model)
     }
 
-    fun getNotes(pair: Pair<String?, String?>) = notesDao.getNotesForContent(pair.second!!,pair.first!!)
+    fun getNotes(pair: Pair<String?, String?>) = notesDao.getNotesForContent(pair.second!!, pair.first!!)
 
     suspend fun updateNote(note: Note) = safeApiCall { CBOnlineLib.onlineV2JsonApi.updateNoteById(note.id, note) }
 
@@ -97,11 +97,15 @@ class VideoPlayerRepository(
     suspend fun markDoubt(bookmark: Bookmark) = safeApiCall { CBOnlineLib.onlineV2JsonApi.addBookmark(bookmark) }
 
     suspend fun updateBookmark(bookmark: Bookmark) {
-        bookmarkDao.insert(BookmarkModel(bookmark.id ?: "",
-            bookmark.runAttempt?.id ?: "",
-            bookmark.content?.id ?: "",
-            bookmark.section?.id ?: "",
-            bookmark.createdAt ?: ""))
+        bookmarkDao.insert(
+            BookmarkModel(
+                bookmark.id ?: "",
+                bookmark.runAttempt?.id ?: "",
+                bookmark.content?.id ?: "",
+                bookmark.section?.id ?: "",
+                bookmark.createdAt ?: ""
+            )
+        )
     }
 
     fun getContents(attemptId: String, sectionId: String) = sectionDao.getNextContent(attemptId, sectionId).distinctUntilChanged()
@@ -123,5 +127,4 @@ class VideoPlayerRepository(
     fun deletePlayerState(attemptId: String) {
         playerDao.deleteById(attemptId)
     }
-
 }

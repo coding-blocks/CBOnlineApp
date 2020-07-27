@@ -26,8 +26,14 @@ class ProgressWorker(context: Context, private val workerParameters: WorkerParam
         if (progressId.isNullOrEmpty()) {
             progressId = null
         }
-        val progress = ContentProgress("DONE", RunAttempts(attemptId ?: ""), LectureContent(contentId
-            ?: ""), progressId)
+        val progress = ContentProgress(
+            "DONE", RunAttempts(attemptId ?: ""),
+            LectureContent(
+                contentId
+                    ?: ""
+            ),
+            progressId
+        )
         val response: Response<ContentProgress> = if (progressId.isNullOrEmpty()) {
             CBOnlineLib.onlineV2JsonApi.setProgress(progress)
         } else {

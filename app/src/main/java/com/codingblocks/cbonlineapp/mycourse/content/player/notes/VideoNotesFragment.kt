@@ -15,7 +15,6 @@ import com.codingblocks.cbonlineapp.library.EditNoteClickListener
 import com.codingblocks.cbonlineapp.library.ItemClickListener
 import com.codingblocks.cbonlineapp.library.LibraryListAdapter
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerViewModel
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.livedata.observer
