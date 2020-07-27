@@ -1,15 +1,12 @@
 package com.codingblocks.cbonlineapp.auth
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
-import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.activity_login2.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
@@ -38,7 +35,7 @@ class LoginActivity : BaseCBActivity(), AnkoLogger {
                     replaceFragmentSafely(SignUpFragment(), containerViewId = R.id.loginContainer)
                 }
                 else -> {
-                    //Todo - handle this
+                    // Todo - handle this
                 }
             }
         }
@@ -62,7 +59,6 @@ class LoginActivity : BaseCBActivity(), AnkoLogger {
         }
         finish()
     }
-
 
     override fun onBackPressed() {
         val count = supportFragmentManager.backStackEntryCount

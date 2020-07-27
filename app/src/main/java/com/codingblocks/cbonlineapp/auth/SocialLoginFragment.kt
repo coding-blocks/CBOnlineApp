@@ -33,7 +33,8 @@ class SocialLoginFragment : Fragment() {
         val web: WebView = webview
         web.settings.javaScriptEnabled = true
         web.settings.setSupportMultipleWindows(true)
-        web.settings.userAgentString = "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36"
+        web.settings.userAgentString =
+            "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36"
         web.loadUrl("${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}")
         web.webViewClient = object : WebViewClient() {
 

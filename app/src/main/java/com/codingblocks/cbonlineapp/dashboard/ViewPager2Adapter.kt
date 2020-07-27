@@ -39,7 +39,6 @@ class ViewPager2Adapter(activity: FragmentActivity) : FragmentStateAdapter(activ
             FragmentName.CAMPAIGN_RULES -> RulesFragment()
             FragmentName.CAMPAIGN_LEADERBOARD -> LeaderBoardFragment()
             FragmentName.CAMPAIGN_WINNING -> WinningsFragment()
-
         }
     }
 

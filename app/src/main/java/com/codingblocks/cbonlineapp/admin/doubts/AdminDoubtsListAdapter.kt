@@ -16,8 +16,10 @@ class DoubtsAdapter : ListAdapter<Doubts, AdminDoubtsViewHolder>(diffCallback) {
     var onDiscussClick: DiscussClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdminDoubtsViewHolder {
-        return AdminDoubtsViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_admin_doubt, parent, false))
+        return AdminDoubtsViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_admin_doubt, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: AdminDoubtsViewHolder, position: Int) {

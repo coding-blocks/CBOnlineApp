@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.fragment_campaign_home.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-
 class HomeFragment : BaseCBFragment(), AnkoLogger {
 
     private val vm: CampaignViewModel by sharedViewModel()
@@ -55,11 +54,9 @@ class HomeFragment : BaseCBFragment(), AnkoLogger {
                         .setDuration(1000)
                         .setInterpolator(LinearInterpolator()).start()
                     showDialog(res.size, res.title, res.description)
-
                 }
                 spinBtn.isEnabled = true
             } catch (e: Exception) {
-
             }
         }
 
@@ -108,8 +105,6 @@ class HomeFragment : BaseCBFragment(), AnkoLogger {
             waMSg = msg
             twMsg = msg
             json = "lose.json"
-
-
         }
 
         view.apply {
@@ -139,6 +134,4 @@ class HomeFragment : BaseCBFragment(), AnkoLogger {
             show()
         }
     }
-
-
 }

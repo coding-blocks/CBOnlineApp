@@ -13,7 +13,6 @@ import androidx.appcompat.app.AlertDialog
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
-import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.dashboard.ViewPager2Adapter
 import com.codingblocks.cbonlineapp.dashboard.ViewPager2Adapter.*
 import com.codingblocks.cbonlineapp.dashboard.ViewPager2Adapter.FragmentName.*
@@ -30,7 +29,6 @@ import kotlinx.android.synthetic.main.dialog_share.view.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
-
 
 class CampaignActivity : BaseCBActivity() {
 
@@ -83,7 +81,6 @@ class CampaignActivity : BaseCBActivity() {
         earnMore.setOnClickListener {
             showDialog()
         }
-
     }
 
     private fun showDialog() {
@@ -96,17 +93,14 @@ class CampaignActivity : BaseCBActivity() {
             fb.setOnClickListener {
                 ShareUtils.shareToFacebook(msg, this@CampaignActivity)
                 dialog.dismiss()
-
             }
             whatsapp.setOnClickListener {
                 ShareUtils.shareToWhatsapp(msg, this@CampaignActivity)
                 dialog.dismiss()
-
             }
             twitter.setOnClickListener {
                 ShareUtils.shareToTwitter(msg, this@CampaignActivity)
                 dialog.dismiss()
-
             }
             copy_clipboard.setOnClickListener {
                 val text = referralTv?.text

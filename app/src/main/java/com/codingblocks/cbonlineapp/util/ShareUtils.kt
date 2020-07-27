@@ -20,7 +20,7 @@ object ShareUtils {
             }
         }
         if (!facebookAppFound) {
-            val sharerUrl = "https://www.facebook.com/sharer/sharer.php?u=online.codingblocks.com&quote=${msg}"
+            val sharerUrl = "https://www.facebook.com/sharer/sharer.php?u=online.codingblocks.com&quote=$msg"
             intent = Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl))
         }
 
@@ -45,5 +45,4 @@ object ShareUtils {
         i.data = Uri.parse(url)
         context.startActivity(i)
     }
-
 }

@@ -16,5 +16,4 @@ open class RoundedBottomSheetDialogFragment : BottomSheetDialogFragment() {
     override fun getTheme(): Int = R.style.RoundedBottomSheetDialogTheme
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = BottomSheetDialog(requireContext(), theme)
-
 }

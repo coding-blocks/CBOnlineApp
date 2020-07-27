@@ -24,27 +24,29 @@ class JobRepository(
                 val company = withContext(Dispatchers.IO) {
                     CBOnlineLib.onlineV2JsonApi.getCompany(company?.id ?: "")
                 }.body()
-                jobsDao.insert(JobsModel(
-                    id,
-                    coverImage,
-                    ctc,
-                    deadline,
-                    description,
-                    eligibility,
-                    experience,
-                    location,
-                    postedOn,
-                    type,
-                    title,
-                    Companies(
-                        company?.id ?: "",
-                        company?.name ?: "",
-                        company?.logo ?: "",
-                        company?.description ?: "",
-                        company?.website ?: ""
-                    ),
-                    job.courses ?: arrayListOf()
-                ))
+                jobsDao.insert(
+                    JobsModel(
+                        id,
+                        coverImage,
+                        ctc,
+                        deadline,
+                        description,
+                        eligibility,
+                        experience,
+                        location,
+                        postedOn,
+                        type,
+                        title,
+                        Companies(
+                            company?.id ?: "",
+                            company?.name ?: "",
+                            company?.logo ?: "",
+                            company?.description ?: "",
+                            company?.website ?: ""
+                        ),
+                        job.courses ?: arrayListOf()
+                    )
+                )
             }
         }
     }

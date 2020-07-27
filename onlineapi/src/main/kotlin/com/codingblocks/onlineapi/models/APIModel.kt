@@ -28,13 +28,13 @@ data class Project(
     val image: String = ""
 ) : BaseModel()
 
-    @Type("user_course_wishlists")
-    data class Wishlist(
-        @Relationship("course")
-        val course: Course? = null,
-        @Relationship("user")
-        val user: User? = null
-    ) : BaseModel()
+@Type("user_course_wishlists")
+data class Wishlist(
+    @Relationship("course")
+    val course: Course? = null,
+    @Relationship("user")
+    val user: User? = null
+) : BaseModel()
 
 @Type("courses", "course")
 data class Course(
@@ -64,8 +64,10 @@ data class Course(
 ) : BaseModel() {
 
     constructor(id: String) :
-        this("","","","",0,"",0,"",0f,"",
-            "", "", null, null, null, null, null, null){
+        this(
+            "", "", "", "", 0, "", 0, "", 0f, "",
+            "", "", null, null, null, null, null, null
+        ) {
             super.id = id
         }
     /** Logic to get [Runs] for enrolling into Trial */
@@ -281,8 +283,8 @@ data class LectureContent(
 ) : BaseModel() {
     constructor(id: String) :
         this("", 0L, "", null, null, null, null, null, null, null, null, null) {
-        super.id = id
-    }
+            super.id = id
+        }
 }
 
 @Type("instructors")
@@ -348,8 +350,8 @@ data class QuizAttempt(
 
     constructor(id: String, qnaId: ContentQna) :
         this(qna = qnaId) {
-        super.id = id
-    }
+            super.id = id
+        }
 }
 
 @Type("notes")
@@ -365,8 +367,8 @@ data class Note(
 ) : BaseModel(), Serializable {
     constructor(id: String, duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent) :
         this(duration, null, null, text, runAttemptId, contentId) {
-        super.id = id
-    }
+            super.id = id
+        }
 
     constructor(duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent) :
         this(duration, null, null, text, runAttemptId, contentId)
@@ -388,11 +390,11 @@ data class User(
     val college: String? = "",
     val mobile: String? = "",
     val branch: String? = ""
-) : BaseModel(){
+) : BaseModel() {
     constructor(id: String) :
-        this("","","","","","","","","") {
-        super.id = id
-    }
+        this("", "", "", "", "", "", "", "", "") {
+            super.id = id
+        }
 }
 
 class SectionContent(
@@ -425,8 +427,8 @@ class ContentQna(
 ) : BaseModel() {
     constructor(id: String) :
         this() {
-        super.id = id
-    }
+            super.id = id
+        }
 }
 
 @Type("csv")
