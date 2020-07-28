@@ -45,7 +45,6 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
         if (savedInstanceState == null){
             vm.contentId = intent.getStringExtra(CONTENT_ID)
             vm.sectionId = intent.getStringExtra(SECTION_ID)
-            vm.attempId = intent.getStringExtra(RUN_ATTEMPT_ID)
         }
 
         vm.getPdf().observer(this){pdfModel->

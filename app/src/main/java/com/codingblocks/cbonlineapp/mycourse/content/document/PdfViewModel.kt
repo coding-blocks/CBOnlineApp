@@ -32,7 +32,6 @@ class PdfViewModel(handle: SavedStateHandle,
 
     fun markBookmark() {
         runIO {
-            Log.e("TAG", "markBookmark: $attempId $contentId $sectionId")
             val bookmark = Bookmark(RunAttempts(attempId!!), LectureContent(contentId!!), Sections(sectionId!!))
             when (val response = repo.addBookmark(bookmark)) {
                 is ResultWrapper.GenericError -> setError(response.error)
@@ -52,12 +51,13 @@ class PdfViewModel(handle: SavedStateHandle,
     }
 
     fun getPdf() = liveData {
-        emit(repo.getPdfBookmark(contentId?:""))
+        val pdfModel = repo.getPdfBookmark(contentId?:"")
+        attempId = pdfModel.attempt_id
+        emit(pdfModel)
     }
 
     fun removeBookmark() {
         runIO {
-            Log.e("TAG", "markBookmark: $attempId $contentId $sectionId")
             val uid =  bookmark.value?.bookmarkUid
             when (val response = uid?.let { repo.removeBookmark(it) }) {
                 is ResultWrapper.GenericError -> setError(response.error)

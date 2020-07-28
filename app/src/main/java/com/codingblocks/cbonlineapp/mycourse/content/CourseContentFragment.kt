@@ -289,8 +289,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                                 startActivity(
                                     intentFor<PdfActivity>(
                                         CONTENT_ID to ccid,
-                                        SECTION_ID to sectionId,
-                                        RUN_ATTEMPT_ID to attempt_id
+                                        SECTION_ID to sectionId
                                     )
                                 )
                             } else
@@ -325,8 +324,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                                 startActivity(
                                     intentFor<CodeChallengeActivity>(
                                         CONTENT_ID to ccid,
-                                        SECTION_ID to sectionId,
-                                        RUN_ATTEMPT_ID to attempt_id
+                                        SECTION_ID to sectionId
                                     )
                                 )
                             } else

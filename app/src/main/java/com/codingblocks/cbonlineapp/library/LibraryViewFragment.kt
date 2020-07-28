@@ -63,8 +63,7 @@ class LibraryViewFragment : BaseCBFragment() {
                                 startActivity(
                                     intentFor<PdfActivity>(
                                         CONTENT_ID to item.contentId,
-                                        SECTION_ID to item.sectionId,
-                                        RUN_ATTEMPT_ID to item.runAttemptId
+                                        SECTION_ID to item.sectionId
                                     )
                                 )
                             LECTURE, VIDEO ->
@@ -82,8 +81,7 @@ class LibraryViewFragment : BaseCBFragment() {
                                 startActivity(
                                 intentFor<CodeChallengeActivity>(
                                     CONTENT_ID to item.contentId,
-                                    SECTION_ID to item.sectionId,
-                                    RUN_ATTEMPT_ID to item.runAttemptId
+                                    SECTION_ID to item.sectionId
                                 )
                             )
                         }

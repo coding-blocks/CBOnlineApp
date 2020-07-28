@@ -36,6 +36,7 @@ class CodeChallengeViewModel(
 
     fun fetchCodeChallenge() = liveData(Dispatchers.IO) {
         val codeModel = contentId?.let { repo.getCodeId(it) }
+        attempId = codeModel?.attempt_id
         codeId = codeModel?.codeUid
         contestId = codeModel?.codeContestId.toString()
         when (val response = codeId?.toInt()?.let { repo.fetchCodeChallenge(it, contestId ?: "") }) {
