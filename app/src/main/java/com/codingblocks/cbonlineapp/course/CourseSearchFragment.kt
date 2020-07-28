@@ -16,6 +16,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.course.adapter.CourseListAdapter
+import com.codingblocks.cbonlineapp.course.adapter.ItemClickListener
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
@@ -64,7 +66,8 @@ class CourseSearchFragment : BottomSheetDialogFragment() {
                 val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     requireActivity(),
                     logo,
-                    ViewCompat.getTransitionName(logo)!!)
+                    ViewCompat.getTransitionName(logo)!!
+                )
                 startActivity(intent, options.toBundle())
             }
         }
@@ -73,10 +76,12 @@ class CourseSearchFragment : BottomSheetDialogFragment() {
     @NonNull
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog: Dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setOnShowListener(OnShowListener { dialogInterface ->
-            val bottomSheetDialog = dialogInterface as BottomSheetDialog
-            setupFullHeight(bottomSheetDialog)
-        })
+        dialog.setOnShowListener(
+            OnShowListener { dialogInterface ->
+                val bottomSheetDialog = dialogInterface as BottomSheetDialog
+                setupFullHeight(bottomSheetDialog)
+            }
+        )
         return dialog
     }
 

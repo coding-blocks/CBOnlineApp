@@ -9,9 +9,9 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.APPLIED
 import com.codingblocks.cbonlineapp.util.ELIGIBLE
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.widgets.SheetDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.ChipGroup
@@ -147,17 +147,17 @@ class JobsActivity : BaseCBActivity() {
 
         val bottomSheetBehavior = BottomSheetBehavior.from(sheetView.parent as View)
         bottomSheetBehavior.addBottomSheetCallback(object :
-            BottomSheetBehavior.BottomSheetCallback() {
-            override fun onSlide(p0: View, p1: Float) {
-            }
-
-            override fun onStateChanged(p0: View, p1: Int) {
-                if (p1 == BottomSheetBehavior.STATE_HIDDEN) {
-                    applyFilters()
-                    bottomSheetDialog.cancel()
+                BottomSheetBehavior.BottomSheetCallback() {
+                override fun onSlide(p0: View, p1: Float) {
                 }
-            }
-        })
+
+                override fun onStateChanged(p0: View, p1: Int) {
+                    if (p1 == BottomSheetBehavior.STATE_HIDDEN) {
+                        applyFilters()
+                        bottomSheetDialog.cancel()
+                    }
+                }
+            })
     }
 
     private fun applyFilters() {

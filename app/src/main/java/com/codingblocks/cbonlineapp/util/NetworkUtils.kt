@@ -1,12 +1,12 @@
 package com.codingblocks.cbonlineapp.util
 
 import com.codingblocks.cbonlineapp.CBOnlineApp
-import java.io.File
-import java.util.concurrent.TimeUnit
 import okhttp3.Cache
 import okhttp3.CacheControl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import java.io.File
+import java.util.concurrent.TimeUnit
 
 object NetworkUtils {
 

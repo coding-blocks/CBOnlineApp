@@ -8,6 +8,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
@@ -16,10 +17,10 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.JOB_ID
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.nonNull
-import com.codingblocks.cbonlineapp.util.extensions.observeOnce
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.glide.loadImage
+import com.codingblocks.cbonlineapp.util.livedata.nonNull
+import com.codingblocks.cbonlineapp.util.livedata.observeOnce
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.onlineapi.models.Applications
 import com.codingblocks.onlineapi.models.Form
 import com.codingblocks.onlineapi.models.JobId
@@ -49,7 +50,7 @@ class JobDetailActivity : BaseCBActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        jobId = intent.getStringExtra(JOB_ID)
+        jobId = intent?.getStringExtra(JOB_ID) ?: ""
 
 //        deadlinell.visibility = View.GONE
 
@@ -92,7 +93,7 @@ class JobDetailActivity : BaseCBActivity() {
             when (it) {
                 "eligible" -> statusTv.text = getString(R.string.job_eligible)
                 "not eligible" -> {
-                    statusTv.setTextColor(resources.getColor(R.color.salmon))
+                    statusTv.setTextColor(ContextCompat.getColor(this, R.color.salmon))
                     statusTv.text = getString(R.string.job_not_eligible)
                     addResumeBtn.isVisible = false
                 }
@@ -113,14 +114,15 @@ class JobDetailActivity : BaseCBActivity() {
         val sizeInDP = 8
 
         val marginInDp = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, sizeInDP.toFloat(), resources
-            .displayMetrics
+            TypedValue.COMPLEX_UNIT_DIP, sizeInDP.toFloat(),
+            resources
+                .displayMetrics
         ).toInt()
         params.setMargins(marginInDp, marginInDp / 2, marginInDp, marginInDp / 2)
         val formView = layoutInflater.inflate(R.layout.custom_form_dialog, null)
         val formlayout = formView.form
         formData.observer(this) {
-            it.forEachIndexed { index, it ->
+            it.forEachIndexed { _, it: Form ->
                 if (it.type == "text-field") {
                     val inputLayout = TextInputLayout(
                         this,
@@ -156,7 +158,7 @@ class JobDetailActivity : BaseCBActivity() {
                     inputLayout.boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_OUTLINE
 //                    inputLayout.setBoxCornerRadii(20f, 20f, 20f, 20f)
                     val edittext = TextInputEditText(inputLayout.context)
-                    edittext.setOnFocusChangeListener { view, b ->
+                    edittext.setOnFocusChangeListener { _, _ ->
                     }
                     inputLayout.addView(edittext)
                     inputLayout.tag = it.name
@@ -169,9 +171,9 @@ class JobDetailActivity : BaseCBActivity() {
                         layoutParams = params
                     }
                     formlayout.addView(title)
-                    val optionsArray = it.options?.split(",")
+                    val optionsArray = it.options.split(",")
 
-                    val rb = arrayOfNulls<RadioButton>(optionsArray!!.size)
+                    val rb = arrayOfNulls<RadioButton>(optionsArray.size)
                     val rg = RadioGroup(this) // create the RadioGroup
                     rg.layoutParams = params
                     rg.orientation = RadioGroup.VERTICAL // or RadioGroup.VERTICAL
@@ -201,23 +203,15 @@ class JobDetailActivity : BaseCBActivity() {
                     } else if (form.type == "radio-group") {
                         val group = formlayout.findViewWithTag<RadioGroup>(form.name)
                         val radioButton = findViewById<RadioButton>(group.checkedRadioButtonId)
-                        val optionsArray = form.options?.split(",")
+                        val optionsArray = form.options.split(",")
                         val selected_value: String = radioButton?.text?.toString()
-                            ?: (optionsArray?.get(0) ?: "")
+                            ?: optionsArray[0]
                         jsonObject.addProperty(form.name, selected_value)
                     }
                 }
                 formDialog.dismiss()
 //                if (!BuildConfig.DEBUG)
                 viewModel.applyJob(Applications(jsonObject, job = JobId(jobId)))
-            }
-            formView.cancelBtn.setOnClickListener { view ->
-                it.forEach { form ->
-                    if (form.type == "text-field") {
-                        val inputLayout = formlayout.findViewWithTag<TextInputLayout>(form.name)
-                        inputLayout.editText?.setText("")
-                    }
-                }
             }
         }
 

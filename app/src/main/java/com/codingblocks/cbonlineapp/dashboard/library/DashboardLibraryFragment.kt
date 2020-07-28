@@ -13,8 +13,8 @@ import com.codingblocks.cbonlineapp.library.LibraryActivity
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard_library.*
 import org.jetbrains.anko.singleTop
@@ -50,7 +50,7 @@ class DashboardLibraryFragment : BaseCBFragment() {
         super.onViewCreated(view, savedInstanceState)
         if (viewModel.isLoggedIn == true) {
             dashboardCoursesRv.setRv(requireContext(), courseListAdapter, true)
-            viewModel.allRuns.observer(viewLifecycleOwner) {
+            viewModel.allRuns.observer(thisLifecycleOwner) {
                 courseListAdapter.submitList(it)
                 changeViewState(dashboardCoursesRv, emptyLl, dashboardCourseShimmer, it.isEmpty())
             }

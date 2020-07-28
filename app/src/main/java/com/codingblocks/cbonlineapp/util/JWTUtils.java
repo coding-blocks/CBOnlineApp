@@ -5,6 +5,8 @@ import androidx.collection.SparseArrayCompat;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 /**
  * @author aggarwalpulkit596
  */
@@ -24,13 +26,13 @@ public class JWTUtils {
         SparseArrayCompat<String> decoded = decode(token);
 
         // We are using JSONObject instead of GSON as it takes about 5 ms instead of 150 ms taken by GSON
-        return Long.parseLong(new JSONObject(decoded.get(1)).get("exp").toString());
+        return Long.parseLong(new JSONObject(Objects.requireNonNull(decoded.get(1))).get("exp").toString());
     }
 
     public static long getIdentity(String token) throws JSONException {
         SparseArrayCompat<String> decoded = decode(token);
 
-        return Long.parseLong(new JSONObject(decoded.get(1)).get("id").toString());
+        return Long.parseLong(new JSONObject(Objects.requireNonNull(decoded.get(1))).get("id").toString());
     }
 
     public static boolean isExpired(String token) {

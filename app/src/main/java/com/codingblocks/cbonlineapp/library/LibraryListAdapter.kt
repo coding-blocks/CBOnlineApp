@@ -40,19 +40,34 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
         setHasStableIds(true)
     }
 
-    override fun getItemId(position: Int): Long = position.toLong()
+    override fun getItemId(position: Int): Long {
+        return when (getItem(position)) {
+            is NotesModel -> (getItem(position) as NotesModel).nttUid.toLong()
+            is BookmarkModel -> (getItem(position) as BookmarkModel).bookmarkUid.toLong()
+            is ContentLecture -> (getItem(position) as ContentLecture).lectureUid.toLong()
+            else -> position.toLong()
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (type) {
             LibraryTypes.NOTESVIDEO -> NoteVideoViewHolder(
-                inflater.inflate(R.layout.item_note_player, parent, false))
+                inflater.inflate(R.layout.item_note_player, parent, false)
+            )
             LibraryTypes.NOTE -> NoteViewHolder(
-                inflater.inflate(R.layout.item_note, parent, false))
+                inflater.inflate(R.layout.item_note, parent, false)
+            )
             LibraryTypes.BOOKMARK -> BookmarkViewHolder(
-                inflater.inflate(R.layout.item_bookmark, parent, false))
+                inflater.inflate(R.layout.item_bookmark, parent, false)
+            )
             LibraryTypes.DOWNLOADS -> DownloadViewHolder(
-                inflater.inflate(R.layout.item_download, parent, false))
+                inflater.inflate(R.layout.item_download, parent, false)
+            )
         }
     }
 
@@ -71,6 +86,7 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
                     tracker?.let {
                         val item = getItem(position) as NotesModel
                         bind(item, it.isSelected(item.nttUid))
+                        itemClickListener = onItemClick
                     }
                 }
             }
@@ -97,6 +113,8 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
     }
 
     inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var itemClickListener: ItemClickListener? = null
+
         fun bind(item: NotesModel, isActivated: Boolean = false) = with(itemView) {
 
             noteTitleTv.text = item.contentTitle
@@ -104,6 +122,10 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
             noteTimeTv.text = item.createdAt.timeAgo()
             selectionImg.isVisible = isActivated
             noteTimeTv.isVisible = !isActivated
+            editNote.isVisible = !isActivated
+            editNote.setOnClickListener {
+                itemClickListener?.onClick(item)
+            }
         }
 
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<String> =
@@ -123,9 +145,6 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
             noteVDescriptionTv.text = item.text
             noteVTimeTv.text = item.createdAt.timeAgo()
             noteVCreateTv.text = item.duration.secToTime()
-//            noteVDeleteImg.setOnClickListener {
-//                deleteClickListener?.onClick(item.nttUid, adapterPosition, itemView)
-//            }
             noteVEditImg.setOnClickListener {
                 editClickListener?.onClick(item)
             }
@@ -189,11 +208,11 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
 class DiffCallback : DiffUtil.ItemCallback<BaseModel>() {
     override fun areItemsTheSame(oldItem: BaseModel, newItem: BaseModel):
         Boolean = when (oldItem) {
-        is NotesModel -> if (newItem is NotesModel) oldItem.nttUid == newItem.nttUid else false
-        is BookmarkModel -> if (newItem is BookmarkModel) oldItem.bookmarkUid == newItem.bookmarkUid else false
-        is ContentLecture -> if (newItem is ContentLecture) oldItem.lectureId == newItem.lectureId else false
-        else -> false
-    }
+            is NotesModel -> if (newItem is NotesModel) oldItem.nttUid == newItem.nttUid else false
+            is BookmarkModel -> if (newItem is BookmarkModel) oldItem.bookmarkUid == newItem.bookmarkUid else false
+            is ContentLecture -> if (newItem is ContentLecture) oldItem.lectureId == newItem.lectureId else false
+            else -> false
+        }
 
     override fun areContentsTheSame(oldItem: BaseModel, newItem: BaseModel): Boolean {
         return oldItem.sameAndEqual(newItem)
@@ -201,7 +220,7 @@ class DiffCallback : DiffUtil.ItemCallback<BaseModel>() {
 }
 
 interface DeleteNoteClickListener {
-    fun onClick(noteId: String, position: Int, view: View)
+    fun onClick(noteId: String, position: Int)
 }
 
 interface EditNoteClickListener {

@@ -46,7 +46,7 @@ class JobsViewModel(
     fun getFilteredList() {
 //        allJobList.clear()
 //        filteredJobsProgress.value = true
-//        Clients.onlineV2JsonApi.getJobs(
+//        CBOnlineLib.onlineV2JsonApi.getJobs(
 //            getDate(),
 //            getDate(),
 //            searchFilters.filterLocation,
@@ -61,7 +61,7 @@ class JobsViewModel(
 //                        }
 //                        forEachIndexed { index, job ->
 //                            noFilteredJobs = false
-//                            Clients.onlineV2JsonApi.getCompany(job.company?.id ?: "").enqueue(
+//                            CBOnlineLib.onlineV2JsonApi.getCompany(job.company?.id ?: "").enqueue(
 //                                retrofitCallback { _, response ->
 //                                    response?.body()?.let {
 //                                        allJobList.add(JobsModel(

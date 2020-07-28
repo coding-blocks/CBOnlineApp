@@ -4,22 +4,19 @@ import android.graphics.Color
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
 import androidx.core.text.color
+import org.ocpsoft.prettytime.PrettyTime
 import java.io.File
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.NoSuchElementException
 import kotlin.math.floor
 import kotlin.math.log10
-import org.ocpsoft.prettytime.PrettyTime
 
 fun folderSize(directory: File): Long {
     var length: Long = 0
-    for (file in directory.listFiles()) {
+    directory.listFiles()?.forEach { file ->
         length += if (file.isFile)
             file.length()
         else
@@ -45,7 +42,7 @@ fun String.greater(): Boolean {
 }
 
 fun String.timeAgo(): String {
-    return if (this.isNullOrEmpty())
+    return if (this.isEmpty())
         ""
     else {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)

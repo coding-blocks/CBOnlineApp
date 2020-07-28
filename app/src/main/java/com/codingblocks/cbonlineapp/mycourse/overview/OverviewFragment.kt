@@ -9,9 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
@@ -19,33 +21,40 @@ import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.dashboard.home.loadData
 import com.codingblocks.cbonlineapp.dashboard.home.setGradientColor
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
-import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
-import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.extensions.observer
-import java.io.File
+import com.codingblocks.cbonlineapp.util.CustomDialog
+import com.codingblocks.cbonlineapp.util.DIALOG_TYPE
+import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.livedata.observeOnce
+import com.codingblocks.cbonlineapp.util.livedata.observer
+import com.codingblocks.cbonlineapp.util.showConfirmDialog
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_certificate.*
+import kotlinx.android.synthetic.main.item_hb_performance.*
 import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.ocpsoft.prettytime.PrettyTime
+import java.io.File
+import java.util.*
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val view = inflater.inflate(R.layout.fragment_overview, container, false)
-        return view
+    private val leaderBoardListAdapter = LeaderBoardListAdapter()
+    var confirmDialog: AlertDialog? = null
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_overview, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.run?.distinctUntilChanged()?.observer(viewLifecycleOwner) { courseAndRun ->
+        courseLeaderboardRv.setRv(requireContext(), leaderBoardListAdapter)
+        viewModel.run?.distinctUntilChanged()?.observer(thisLifecycleOwner) { courseAndRun ->
+            if (courseAndRun.runAttempt.paused) {
+                showPauseDialog(courseAndRun.runAttempt.pauseTimeLeft)
+            }
+            viewModel.premiumRun = courseAndRun.runAttempt.premium
             viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
             viewModel.runId = (courseAndRun.run.crUid)
             val progressValue = courseAndRun.getProgress()
@@ -64,7 +73,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             if (progressTv.isActivated && mentorApprovalTv.isActivated && courseAndRun.runAttempt.certificateApproved) {
                 requestCertificateBtn.apply {
                     isEnabled = true
-                    text = "Download & Share"
+                    text = getString(R.string.download_share)
                     setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                     setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_share, 0)
                     setOnClickListener {
@@ -78,36 +87,88 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
                     setOnClickListener {
                         isEnabled = false
-                        text = "Requested"
+                        text = getString(R.string.requested)
                         setTextColor(ContextCompat.getColor(requireContext(), R.color.brownish_grey))
                         setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, 0, 0)
                         viewModel.requestMentorApproval()
                     }
                 }
             }
-            courseAndRun.run.whatsappLink?.let { setWhatsappCard(it, courseAndRun.runAttempt.premium) }
+            courseAndRun.run.whatsappLink?.let {
+                if (it.isNotEmpty()) {
+                    setWhatsappCard(it, courseAndRun.runAttempt.premium)
+                }
+            }
 
             if (courseAndRun.run.crStart > "1574985600") {
                 if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium && RUNTIERS.LITE.name != courseAndRun.runAttempt.runTier)
                     setGoodiesCard(courseAndRun.run.goodiesThreshold, progressValue)
             }
+            viewModel.getLeaderboard().observer(thisLifecycleOwner) { leaderboard ->
+
+                val currUserLeaderboard = leaderboard.find { it.id == viewModel.prefs.SP_USER_ID }
+                currUserLeaderboard?.let {
+                    it.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
+                    if (leaderboard.size > 5) {
+                        courseLeaderboardll.isVisible = true
+                        leaderBoardListAdapter.submitList(mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5))
+                    }
+                }
+            }
         }
 
-        viewModel.performance?.observer(viewLifecycleOwner) {
+        viewModel.performance?.observer(thisLifecycleOwner) {
             homePerformanceTv.text = it.remarks
             homePercentileTv.text = it.percentile.toString()
             chart1.loadData(it.averageProgress, it.userProgress)
         }
 
+        viewModel.getHackerBlocksPerformance().distinctUntilChanged().observe(
+            thisLifecycleOwner,
+            Observer {
+                if (it != null) {
+                    hbRankContainer.isVisible = true
+                    currentOverallRank.text = it.currentOverallRank.toString()
+                    currentMonthScore.text = requireContext().getString(R.string.points, it.currentMonthScore)
+                    val rankDelta = it.currentOverallRank - it.previousOverallRank
+                    val pointsDelta = it.currentMonthScore - it.previousMonthScore
+                    previousRank.apply {
+                        isActivated = rankDelta >= 0
+                        text = context.getString(R.string.ranks, kotlin.math.abs(rankDelta))
+                    }
+                    previousMonthlyScore.apply {
+                        isActivated = pointsDelta >= 0
+                        text = context.getString(R.string.points, pointsDelta)
+                    }
+                }
+            }
+        )
+
         confirmReset.setOnClickListener {
-            Components.showConfirmation(requireContext(), "reset") {
+            CustomDialog.showConfirmation(requireContext(), "reset") {
                 if (it) {
-                    viewModel.resetProgress.observer(viewLifecycleOwner) {
+                    viewModel.resetProgress.observer(thisLifecycleOwner) {
                         requireActivity().finish()
                     }
                 }
             }
         }
+    }
+
+    private fun showPauseDialog(pauseTimeLeft: String?) {
+        if (confirmDialog == null)
+            confirmDialog = showConfirmDialog(DIALOG_TYPE.PAUSED) {
+                cancelable = false
+                val time = PrettyTime().format(Date(System.currentTimeMillis() + pauseTimeLeft!!.toLong()))
+                desc.text = getString(R.string.pause_time_left, time)
+                positiveBtnClickListener {
+                    viewModel.unPauseCourse().observeOnce {
+                        dialog?.dismiss()
+                    }
+                }
+                negativeBtnClickListener { requireActivity().finish() }
+            }
+        confirmDialog?.show()
     }
 
     private fun downloadCertificate(context: Context, certificateUrl: String, name: String) {
@@ -162,10 +223,5 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
             }
         }
-    }
-
-    override fun onDestroy() {
-//        requireActivity().unregisterReceiver(receiver)
-        super.onDestroy()
     }
 }

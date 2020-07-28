@@ -38,6 +38,13 @@
             tools:text="4 hours ago" />
 
         <ImageView
+            android:id="@+id/editNote"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:padding="4dp"
+            android:src="@drawable/ic_edit_grey" />
+
+        <ImageView
             android:id="@+id/selectionImg"
             android:layout_width="21dp"
             android:layout_height="21dp"

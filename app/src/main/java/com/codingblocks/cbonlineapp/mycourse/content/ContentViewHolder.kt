@@ -19,19 +19,20 @@ import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.OnCleanDialogListener
 import com.codingblocks.cbonlineapp.util.QNA
 import com.codingblocks.cbonlineapp.util.VIDEO
-import java.io.File
 import kotlinx.android.synthetic.main.item_content.view.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.textColor
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.yesButton
+import java.io.File
 
 class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.item_content, parent, false)) {
+    LayoutInflater.from(parent.context).inflate(R.layout.item_content, parent, false)
+) {
 
     var starterListener: DownloadStarter? = null
-    lateinit var contentModel: ContentModel
+    private lateinit var contentModel: ContentModel
 
     /**
      * Items might be null if they are not paged in yet. PagedListAdapter will re-bind the
@@ -91,13 +92,16 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
     private fun checkDownloadStatus(it: ImageView) {
         if (FileUtils.checkIfCannotDownload(itemView.context)) {
-            FileUtils.showIfCleanDialog(itemView.context, object : OnCleanDialogListener {
-                override fun onComplete() {
-                    downloadFile(it)
+            FileUtils.showIfCleanDialog(
+                itemView.context,
+                object : OnCleanDialogListener {
+                    override fun onComplete() {
+                        downloadFile()
+                    }
                 }
-            })
+            )
         } else {
-            downloadFile(it)
+            downloadFile()
         }
     }
 
@@ -111,13 +115,13 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                     "/${contentModel.contentLecture.lectureId}"
 
                 )
-                MediaUtils.deleteRecursive(folderFile)
+                FileUtils.deleteRecursive(folderFile)
             }
             noButton { it.dismiss() }
         }.show()
     }
 
-    private fun downloadFile(downloadBtn: ImageView) {
+    private fun downloadFile() {
         if (MediaUtils.checkPermission(itemView.context)) {
             starterListener?.startDownload(
                 contentModel.contentLecture.lectureId,
@@ -126,7 +130,6 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                 contentModel.attempt_id,
                 contentModel.sectionId
             )
-//            (downloadBtn.background as AnimationDrawable).start()
         }
     }
 }

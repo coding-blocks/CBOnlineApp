@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.home.setGradientColor
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
+import com.codingblocks.cbonlineapp.util.glide.loadImage
 import kotlinx.android.synthetic.main.item_courses.view.*
 
 class MyCourseListAdapter(val type: String = "DEFAULT") : ListAdapter<CourseInstructorPair, RecyclerView.ViewHolder>(DiffCallback()) {
@@ -27,12 +27,14 @@ class MyCourseListAdapter(val type: String = "DEFAULT") : ListAdapter<CourseInst
             "RUN" -> {
                 RunViewHolder(
                     LayoutInflater.from(parent.context)
-                        .inflate(R.layout.item_courses, parent, false))
+                        .inflate(R.layout.item_courses, parent, false)
+                )
             }
             else -> {
                 DefaultViewHolder(
                     LayoutInflater.from(parent.context)
-                        .inflate(R.layout.item_courses, parent, false))
+                        .inflate(R.layout.item_courses, parent, false)
+                )
             }
         }
     }
@@ -102,7 +104,8 @@ class DefaultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 item.courseRun.course.cid,
                 item.courseRun.run.crUid,
                 item.courseRun.runAttempt.attemptId,
-                item.courseRun.course.title)
+                item.courseRun.course.title
+            )
         }
     }
 }

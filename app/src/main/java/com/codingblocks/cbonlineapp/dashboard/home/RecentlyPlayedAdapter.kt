@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.PlayerState
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
+import com.codingblocks.cbonlineapp.util.glide.loadImage
 import kotlinx.android.synthetic.main.item_continue_card.view.*
 
 class RecentlyPlayedAdapter : ListAdapter<PlayerState, ItemViewHolder>(
@@ -26,8 +26,10 @@ class RecentlyPlayedAdapter : ListAdapter<PlayerState, ItemViewHolder>(
     var onItemClick: ItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        return ItemViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_continue_card, parent, false))
+        return ItemViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_continue_card, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {

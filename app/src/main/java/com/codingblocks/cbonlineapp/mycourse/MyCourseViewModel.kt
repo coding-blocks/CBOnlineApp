@@ -19,29 +19,36 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
+import com.codingblocks.cbonlineapp.database.models.CourseRunPair
+import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
-import com.codingblocks.cbonlineapp.util.ProgressWorker
+import com.codingblocks.cbonlineapp.util.PREMIUM
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
-import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.extensions.runIO
-import com.codingblocks.cbonlineapp.util.savedStateValue
+import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
+import com.codingblocks.cbonlineapp.util.livedata.DoubleTrigger
+import com.codingblocks.cbonlineapp.workers.ProgressWorker
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
+import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.ResetRunAttempt
-import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.Dispatchers
+import java.util.concurrent.TimeUnit
 
 class MyCourseViewModel(
     private val handle: SavedStateHandle,
-    private val repo: MyCourseRepository
+    private val repo: MyCourseRepository,
+    val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
 
     var attemptId by savedStateValue<String>(handle, RUN_ATTEMPT_ID)
     var name by savedStateValue<String>(handle, COURSE_NAME)
     var runId by savedStateValue<String>(handle, RUN_ID)
+    var premiumRun by savedStateValue<Boolean>(handle, PREMIUM)
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -51,9 +58,10 @@ class MyCourseViewModel(
     var content: LiveData<List<SectionContentHolder.SectionContentPair>> = MutableLiveData()
 
     init {
-        getStats()
+        getPerformance()
         content = Transformations.switchMap(DoubleTrigger(complete, filters)) {
             attemptId?.let {
+                getStats()
                 repo.getSectionWithContent(it)
             }
         }
@@ -67,11 +75,11 @@ class MyCourseViewModel(
             handle.set("runStartEnd", value)
         }
 
-    val performance by lazy {
+    val performance: LiveData<RunPerformance>? by lazy {
         attemptId?.let { repo.getRunStats(it) }
     }
 
-    val run by lazy {
+    val run: LiveData<CourseRunPair>? by lazy {
         attemptId?.let { repo.getRunById(it) }
     }
 
@@ -141,6 +149,24 @@ class MyCourseViewModel(
             .enqueue(request)
     }
 
+    fun getLeaderboard() = liveData(Dispatchers.IO) {
+        when (val response = repo.fetchLeaderboard(runId!!)) {
+            is ResultWrapper.GenericError -> setError(response.error)
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful) {
+                    body()?.let {
+                        emit(it)
+                    }
+                } else {
+                    if (code() == 404)
+                        emit(emptyList<Leaderboard>())
+                    else
+                        setError(fetchError(code()))
+                }
+            }
+        }
+    }
+
     fun addToCart() = liveData(Dispatchers.IO) {
         when (val response = runId?.let { repo.addToCart(it) }) {
             is ResultWrapper.GenericError -> setError(response.error)
@@ -177,14 +203,7 @@ class MyCourseViewModel(
     }
 
     fun requestGoodies(name: String, address: String, postal: String, mobile: String?) {
-        runIO {
-            when (val response = attemptId?.let { repo.fetchSections(it) }) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> with(response.value) {
-                    if (!isSuccessful) setError(fetchError(code()))
-                }
-            }
-        }
+        // Todo - Complete this
     }
 
     fun downloadCertificateAndShow(context: Context, certificateUrl: String, fileName: String) {
@@ -202,25 +221,66 @@ class MyCourseViewModel(
             dm.enqueue(request)
         }
     }
+
+    private fun getPerformance() {
+        runIO {
+            val mRank = repo.getHackerBlocksPerformance().value
+            when (val response = repo.getPerformance()) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        body()?.let { response ->
+                            if (mRank?.currentOverallRank != response.currentOverallRank) {
+                                repo.saveRank(response)
+                            }
+                        }
+                    } else {
+                        if (code() != 404)
+                            setError(fetchError(code()))
+                        else {
+                            // No HB Report
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun getHackerBlocksPerformance() = repo.getHackerBlocksPerformance()
+
+    fun pauseCourse() = liveData {
+        when (val response = repo.pauseCourse(attemptId)) {
+            is ResultWrapper.GenericError -> setError(response.error)
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful) {
+                    body()?.let { repo.updateRunAttempt(it) }
+                    emit(true)
+                } else {
+                    errorLiveData.postValue("There was some error")
+                }
+            }
+        }
+    }
+
+    fun unPauseCourse() = liveData {
+        when (val response = repo.unPauseCourse(attemptId)) {
+            is ResultWrapper.GenericError -> setError(response.error)
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful) {
+                    body()?.let { repo.updateRunAttempt(it) }
+                    emit(true)
+                } else {
+                    errorLiveData.postValue("There was some error")
+                }
+            }
+        }
+    }
+
+    fun getRunAttempt() = repo.getRunAttempt(attemptId!!)
 }
 
-//    fun requestApproval() {
-//        Clients.api.requestApproval(attemptId).enqueue(retrofitCallback { throwable, response ->
-//            response.let {
-//                if (it?.isSuccessful == true) {
-//                    mutablePopMessage.value = it.body()?.string()
-//                } else {
-//                    mutablePopMessage.value = it?.errorBody()?.string()
-//                }
-//            }
-//            throwable.let {
-//                mutablePopMessage.value = it?.message
-//            }
-//        })
-//    }
-//
 //    fun fetchExtensions(productId: Int): MutableLiveData<List<ProductExtensionsItem>> {
-//        Clients.api.getExtensions(productId).enqueue(retrofitCallback { throwable, response ->
+//        CBOnlineLib.api.getExtensions(productId).enqueue(retrofitCallback { throwable, response ->
 //            response?.body().let { list ->
 //                if (response?.isSuccessful == true) {
 //                    extensions.postValue(list?.productExtensions)

@@ -14,8 +14,8 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.course.CourseViewModel
 import com.codingblocks.cbonlineapp.library.MyItemDetailsLookup
 import com.codingblocks.cbonlineapp.library.MyItemKeyProvider
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.fragment_course_run.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -64,7 +64,7 @@ class RunFragment : BaseCBFragment() {
 
         val runKey: String? = arguments?.getString("run")
         if (!runKey.isNullOrEmpty()) {
-            viewModel.course.distinctUntilChanged().observer(viewLifecycleOwner) { course ->
+            viewModel.course.distinctUntilChanged().observer(thisLifecycleOwner) { course ->
                 val list = course.activeRuns?.groupBy { it.start }?.get(runKey)?.sortedBy { it.price }
                 runListAdapter.submitList(list)
             }

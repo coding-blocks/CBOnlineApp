@@ -83,7 +83,7 @@
     <string name="chat_with_ta">Chat with TA</string>
     <string name="comment">Comment</string>
     <string name="doubts">Doubts</string>
-    <string name="my_courses">My Courses</string>
+    <string name="my_courses">MyCourses</string>
     <string name="explore">Explore</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -99,6 +99,10 @@
     <string name="recently_accessed">Recently Accessed</string>
     <string name="wishlisted_courses">Wishlisted Courses</string>
     <string name="all_courses">All Courses</string>
+    <string name="free_trials">Free Trials</string>
+    <string name="active">Active</string>
+    <string name="premium">Premium</string>
+
     <string name="expired_courses">Expired Courses</string>
     <string name="buy_extension">Buy Extension</string>
     <string name="doubt_resolved_title">Your doubt has been marked Resolved</string>
@@ -286,11 +290,48 @@
     <string name="progress">%d %%</string>
     <string name="completed">%d %% Completed</string>
     <string name="continue_from_where_you_left">Continue from where you left</string>
+    <string name="input_format">Input Format</string>
+    <string name="constraints">Constraints</string>
+    <string name="output_format">Output Format</string>
+    <string name="sample_input">Sample Input</string>
+    <string name="sample_output">Sample Output</string>
+    <string name="explanation">Explanation</string>
     <string name="clear">Remove Product</string>
     <string name="no_notes">No Notes</string>
     <string name="click_on_to_add_a_new_note">Click on + to add a new note.</string>
     <string name="payment_failed">Your payment has failed!</string>
     <string name="internet_connection_error">Please check your internet connection</string>
     <string name="retry">Retry Now</string>
-
+    <string name="rank">Rank</string>
+    <string name="user">User</string>
+    <string name="score">Score</string>
+    <string name="hb_report">Hacker Blocks Report</string>
+    <string name="coding_skills">Improve your coding skills</string>
+    <string name="current_rank">Your Current Rank</string>
+    <string name="hb_performance">Your Monthly Score</string>
+    <string name="ranks">%d Ranks</string>
+    <string name="points">%d Points</string>
+    <string name="policy_text"><![CDATA[By logging in you agree to Coding Blocks’s\n Privacy Policy & Terms of Service]]></string>
+    <string name="spin_wheel">Spin Wheel</string>
+    <string name="winnings">Winnings</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="rules">Rules</string>
+    <string name="logged_in">Logged in successfully !!</string>
+    <string name="requested">Requested</string>
+    <string name="download_share"><![CDATA[Download & Share]]></string>
+    <string name="pause_course">Pause Course</string>
+    <string name="upgrade_course">Upgrade Course</string>
+    <string name="no_take_me_back">No, Take me back</string>
+    <string name="pause_now">Pause Now</string>
+    <string name="login_desc">You have been logged out of this account.Please login again to Continue</string>
+    <string name="log_in">Log In</string>
+    <string name="share_course">Share Course</string>
+    <string name="rate_course">Rate Course</string>
+    <string name="about_course">About Course</string>
+    <string name="are_you_sure_you_want_to_pause">Are you sure you want to pause?</string>
+    <string name="pause_desc">Pause feature allows to \'pause\' your course during important days such as exam-time. Your course expiry date will be extended by X days if you pause your course for X days (up to 30 days max). Course can be paused-unpaused multiple times.\n\nAll progress related to course material including assignments bookmarks, notes and your doubts that you asked will remain. However, you won\'t be able access course until you unpause.\n</string>
+    <string name="pause_time_left">\nYou have a %s of time left.</string>
+    <string name="update">Update</string>
+    <string name="notes_info">%s | %s</string>
+    <string name="post">Post</string>
 </resources>

@@ -1,48 +1,44 @@
 package com.codingblocks.onlineapi.api
 
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineCommunicator
+import com.codingblocks.onlineapi.CBOnlineLib
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 
 class OnlineRestApiAuthenticatedTest {
 
-    val restapi = Clients.api
+    @Before
+    fun `SET JWT`() {
 
-//    @Before
-//    fun `set JWT`() {
-//        Clients.authJwt =
-//            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTI4ODE1LCJmaXJzdG5hbWUiOiJSYWh1bCIsImxhc3RuYW1lIjoiUmF5IiwidXNlcm5hbWUiOiJSYWh1bC1SYXktMjM0OTI2MDg3MjAxOTQ4OCIsImVtYWlsIjoicmFodWw5NjUwcmF5QGdtYWlsLmNvbSIsInZlcmlmaWVkZW1haWwiOiJyYWh1bDk2NTByYXlAZ21haWwuY29tIiwidmVyaWZpZWRtb2JpbGUiOm51bGwsIm1vYmlsZSI6Iis5MS05NjUwMTI0NzU2Iiwib25lYXV0aF9pZCI6IjMyODIyIiwibGFzdF9yZWFkX25vdGlmaWNhdGlvbiI6IjAiLCJwaG90byI6Imh0dHBzOi8vZ3JhcGguZmFjZWJvb2suY29tLzIzNDkyNjA4NzIwMTk0ODgvcGljdHVyZT90eXBlPWxhcmdlIiwiY29sbGVnZSI6IjAtLS1PVEhFUiAvIE5PVCBMSVNURUQgLyBOTyBDT0xMRUdFIC0tLTAiLCJvcmdhbml6YXRpb24iOm51bGwsInJvbGVJZCI6MiwiY3JlYXRlZEF0IjoiMjAxOS0wNS0xNFQxODowNToxOC44NTRaIiwidXBkYXRlZEF0IjoiMjAxOS0wNy0yMFQxNTozMjo1OS43OTZaIiwicm9sZSI6eyJpZCI6MiwibmFtZSI6IlN0dWRlbnQiLCJjcmVhdGVkQXQiOiIyMDE3LTA5LTA3VDEwOjU4OjE5Ljk5M1oiLCJ1cGRhdGVkQXQiOiIyMDE3LTA5LTA3VDEwOjU4OjE5Ljk5M1oifSwiY2xpZW50SWQiOiI0MmIzZTNkNy00ZDE4LTQ1ZjAtOTBlMS1lNzlhNDIyZjgyYTgiLCJjbGllbnQiOiJhbmRyb2lkIiwiaWF0IjoxNTYzNjM2Nzc5LCJleHAiOjE1NjkwMzY3Nzl9.S-q6uYhnDQZQdIJABMzeJDDW9THQcefZ6YXo-6IMUM7gZlxS2G8W3zOGgS-DmsH6MMXJwu2u7oNeJh3OgI5hgp41PuCzehYuW2lrOZuf1FU2xdDdPrATo35M7qjpJLGIE2rIZOZQh-3EE6mPePrblUG0M9YwoQFi1ITDn19FS3YGlfsy5PNrvkyuNCx2wfkEvNLJKvmsvKQNVDorruLMm6zbTcFbGTEAHiryxWeJUyI2u9LxJrIEsph6NEnoDMsilUY5-fUGSQ-UB_FMvseG1rYPtClJjrrOYNjWPpK-MqCashceH6XukNtN8JjMl776EEaHio775-ULZ13A-upSxg"
-//    }
-//
-////    @Test
-////    fun `GET getMyCourseProgress`() {
-////        val progress = restapi.getMyCourseProgress("22684").execute().body()
-////        assertNotNull(progress)
-////    }
-//
-//    @Test
-//    fun `GET getOTP`() {
-//        val otp = restapi.getOtp("7f97136df7cc4f349e0129040d85b79f", "4688", "22685").execute().body()
-//        assertNotNull(otp)
-//    }
-//
-//    @Test
-//    fun `GET getMe`() {
-//        val me = restapi.getMe().execute().body()
-//        assertNotNull(me)
-//    }
-//
-//    @Test
-//    fun `GET enrollTrial`() {
-//        val enroll = restapi.enrollTrial("262").execute().body()
-//        assertNotNull(enroll)
-//    }
-//
-//    @Test
-//    fun `GET Doubts `() {
-//        val doubts = restapi.getDoubts("25").execute().body()
-//        assertNotNull(doubts)
-//    }
+        val jwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjAzNDMxLCJmaXJzdG5hbWUiOiJQdWxraXQiLCJsYXN0bmFtZSI6IkFnZ2Fyd2FsIiwidXNlcm5hbWUiOiJwdWxraXQxMjM0IiwiZW1haWwiOiJwdWxraXQubWNhMTkuZHVAZ21haWwuY29tIiwidmVyaWZpZWRlbWFpbCI6InB1bGtpdC5tY2ExOS5kdUBnbWFpbC5jb20iLCJ2ZXJpZmllZG1vYmlsZSI6Iis5MS04NTk1MzUyNjQ3IiwibW9iaWxlIjoiKzkxLTk1ODIwNTQ2NjQiLCJvbmVhdXRoX2lkIjoiOTMwMjciLCJsYXN0X3JlYWRfbm90aWZpY2F0aW9uIjoiMCIsInBob3RvIjpudWxsLCJjb2xsZWdlIjoiMC0tLU9USEVSIC8gTk9UIExJU1RFRCAvIE5PIENPTExFR0UgLS0tMCIsImJyYW5jaCI6bnVsbCwiZ3JhZHVhdGlvbnllYXIiOiIyMDE5Iiwib3JnYW5pemF0aW9uIjpudWxsLCJyb2xlSWQiOjMsImNyZWF0ZWRBdCI6IjIwMjAtMDMtMTFUMTM6MDM6MDIuNjg3WiIsInVwZGF0ZWRBdCI6IjIwMjAtMDctMjdUMTM6MzY6NDEuMzY1WiIsInJvbGUiOnsiaWQiOjMsIm5hbWUiOiJNb2RlcmF0b3IiLCJjcmVhdGVkQXQiOiIyMDE4LTA5LTA0VDEzOjM4OjMxLjg4NVoiLCJ1cGRhdGVkQXQiOiIyMDE4LTA5LTA0VDEzOjM4OjMxLjg4NVoifSwiY2xpZW50SWQiOiI0MGY3YWJhNS02ZmQ4LTRlZGQtYjExZC05NGExZGZlN2VlYjAiLCJjbGllbnQiOiJhbmRyb2lkIiwiaWF0IjoxNTk1ODU3MDAxLCJleHAiOjE2MDEyNTcwMDF9.n1ZobWSZCjau_4y4sCpxv8zfKkqaYxELA0D4-clKIgjEdTwkYQMPHXaQJ38B5Vv5Nlnt0MD21z0ZQc41fo-ZP7THttbxUDA_da30jalzY3sIeafQoegalj2GDLGUx_OyVOYsHzv0v_dYfBkc1cMwJ1cVpdWI814RK-LFFdl8ToQHm2ZPVBQSIM4b5_rRXfeYtypCptH-C3lrueAWbrch7KITOGd8DK3RC292aU6NBNFf9IpyGXDaSfHSXPOOIpoqmg4tn8ZrcsIPebnCiWZXizqxdBWqXrjrQox2W6xhp1ghF0cQitiNyt7uKg-aOn27hn4LwgPqWq4-xPyRG3CRsQ"
+        val refreshToken = "57672e90-dada-4345-b596-d4133cb473d9"
 
+        CBOnlineLib.initialize(object : CBOnlineCommunicator {
+            override var authJwt: String
+                get() = jwt
+                set(value) {}
+            override var refreshToken: String
+                get() = refreshToken
+                set(value) {}
+            override var baseUrl: String
+                get() = "api-online.codingblocks.xyz"
+                set(value) {}
+        })
+    }
+
+    @Test
+    fun `GET getCart`() {
+        val cart = runBlocking { CBOnlineLib.api.getCart().body() }
+        assertNotNull(cart)
+        assertNotNull(cart?.get("cartItems")?.asJsonObject?.get("invoice_id"))
+    }
+
+//    @Test
+//    fun `GET updateCart`() {
+//        val map = hashMapOf<String, Any>("stateId" to "DL","invoice_id" to "187595")
+//        val updateCart = runBlocking { CBOnlineLib.api.updateCart(map).code() }
+//        assertTrue(updateCart == 204)
+//    }
 }

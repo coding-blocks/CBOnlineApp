@@ -46,7 +46,8 @@ class SectionContentHolder {
     data class DownloadableContent(
         var videoId: String,
         var sectionId: String,
-        var contentId: String
+        var contentId: String,
+        var name: String
     ) {
         @Ignore
         var isDownloaded: Boolean = false

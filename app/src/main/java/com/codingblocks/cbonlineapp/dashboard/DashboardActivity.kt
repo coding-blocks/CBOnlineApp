@@ -3,8 +3,6 @@ package com.codingblocks.cbonlineapp.dashboard
 import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ShortcutInfo
-import android.content.pm.ShortcutManager
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -14,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -31,17 +30,17 @@ import com.codingblocks.cbonlineapp.purchases.PurchasesActivity
 import com.codingblocks.cbonlineapp.settings.AboutActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
-import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.extensions.slideDown
 import com.codingblocks.cbonlineapp.util.extensions.slideUp
+import com.codingblocks.cbonlineapp.util.glide.loadImage
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.onlineapi.ErrorStatus
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
@@ -68,7 +67,8 @@ import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 const val LOGGED_IN = "loggedIn"
 
-class DashboardActivity : BaseCBActivity(),
+class DashboardActivity :
+    BaseCBActivity(),
     NavigationView.OnNavigationItemSelectedListener,
     BottomNavigationView.OnNavigationItemSelectedListener {
     private val vm: DashboardViewModel by stateViewModel()
@@ -81,7 +81,7 @@ class DashboardActivity : BaseCBActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        vm.isLoggedIn = intent?.getBooleanExtra(LOGGED_IN, false)
+        vm.isLoggedIn = intent?.getBooleanExtra(LOGGED_IN, vm.prefs.SP_ACCESS_TOKEN_KEY.isNotEmpty())
 
         setToolbar(dashboardToolbar, hasUpEnabled = false, homeButtonEnabled = false, title = getString(R.string.dashboard))
         val toggle = ActionBarDrawerToggle(this, dashboardDrawer, dashboardToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -94,7 +94,7 @@ class DashboardActivity : BaseCBActivity(),
         vm.errorLiveData.observer(this) { error ->
             when (error) {
                 ErrorStatus.UNAUTHORIZED -> {
-                    Components.showConfirmation(this, UNAUTHORIZED) {
+                    CustomDialog.showConfirmation(this, UNAUTHORIZED) {
                         if (it) {
                             startActivity(intentFor<LoginActivity>())
                         }
@@ -107,35 +107,27 @@ class DashboardActivity : BaseCBActivity(),
 
     override fun onStart() {
         super.onStart()
-//        checkForUpdates()
-        fetchToken()
+        checkForUpdates()
     }
 
     private fun setUser() {
-        vm.fetchUser().observe(this, Observer {
-            referralContainer.isVisible = true
-            if (JWTUtils.isExpired(vm.prefs.SP_JWT_TOKEN_KEY))
-                vm.refreshToken()
-            val navMenu = dashboardNavigation.menu
-            navMenu.findItem(R.id.nav_inbox).isVisible = true
-            navMenu.findItem(R.id.nav_purchases).isVisible = true
-            navMenu.findItem(R.id.nav_admin).isVisible = vm.prefs.SP_ADMIN
+        vm.fetchUser().observe(
+            this,
+            Observer {
+                referralContainer.isVisible = true
+                if (JWTUtils.isExpired(vm.prefs.SP_JWT_TOKEN_KEY))
+                    vm.refreshToken()
+                val navMenu = dashboardNavigation.menu
+                navMenu.findItem(R.id.nav_inbox).isVisible = true
+                navMenu.findItem(R.id.nav_purchases).isVisible = true
+                navMenu.findItem(R.id.nav_admin).isVisible = vm.prefs.SP_ADMIN
 
-            dashboardNavigation.getHeaderView(0).apply {
-                findViewById<CircleImageView>(R.id.navHeaderImageView).loadImage(vm.prefs.SP_USER_IMAGE, true)
-                findViewById<TextView>(R.id.navUsernameTv).text = ("Hello ${vm.prefs.SP_USER_NAME}")
+                dashboardNavigation.getHeaderView(0).apply {
+                    findViewById<CircleImageView>(R.id.navHeaderImageView).loadImage(vm.prefs.SP_USER_IMAGE, true)
+                    findViewById<TextView>(R.id.navUsernameTv).text = ("Hello ${vm.prefs.SP_USER_NAME}")
+                }
             }
-        })
-    }
-
-    private fun fetchToken() {
-        val data = intent.data
-        if (data != null && data.isHierarchical) {
-            if (data.getQueryParameter("code") != null) {
-                val grantCode = data.getQueryParameter("code") as String
-                vm.fetchToken(grantCode)
-            }
-        }
+        )
     }
 
     private fun initializeUI(loggedIn: Boolean) {
@@ -159,13 +151,13 @@ class DashboardActivity : BaseCBActivity(),
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 createShortcut()
             }
-            dashboardBottomNav.selectedItemId = R.id.dashboard_home
+//            dashboardBottomNav.selectedItemId = R.id.dashboard_home
         } else {
             dashboardNavigation.getHeaderView(0).apply {
                 findViewById<TextView>(R.id.navUsernameTv).text = "Login/Signup"
             }
-            dashboardBottomNav.selectedItemId = R.id.dashboard_explore
         }
+        dashboardBottomNav.selectedItemId = R.id.dashboard_explore
 
         dashboardAppBarLayout.bringToFront()
     }
@@ -173,8 +165,8 @@ class DashboardActivity : BaseCBActivity(),
     @TargetApi(25)
     fun createShortcut() {
 
-        val sM = getSystemService(ShortcutManager::class.java)
-        val shortcutList: MutableList<ShortcutInfo> = ArrayList()
+//        val sM = getSystemService(ShortcutManager::class.java)
+//        val shortcutList: MutableList<ShortcutInfo> = ArrayList()
 
 //        vm.courses.observeOnce {
 //
@@ -307,11 +299,6 @@ class DashboardActivity : BaseCBActivity(),
         }
     }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        fetchToken()
-    }
-
     fun openProfile(view: View) {
         if (vm.isLoggedIn == false) {
             startActivity<LoginActivity>()
@@ -364,12 +351,12 @@ class DashboardActivity : BaseCBActivity(),
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
             } else {
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, resources.getColor(R.color.white))
+                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, ContextCompat.getColor(this, R.color.white))
             }
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
         } else {
-            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, resources.getColor(R.color.black))
+            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, ContextCompat.getColor(this, R.color.black))
         }
 
         dashboardToolbarSecondary.post {

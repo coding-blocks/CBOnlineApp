@@ -1,5 +1,7 @@
 package com.codingblocks.cbonlineapp.mycourse.content
 
+import android.app.ActivityManager
+import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -11,15 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.work.BackoffPolicy
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
-import androidx.work.workDataOf
-import com.codingblocks.cbonlineapp.PdfActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.commons.DownloadStarter
@@ -28,27 +21,25 @@ import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
 import com.codingblocks.cbonlineapp.database.ListObject
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionModel
+import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity
+import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeActivity
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
+import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.CODE
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOCUMENT
-import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.LECTURE
-import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
 import com.codingblocks.cbonlineapp.util.QNA
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
-import com.codingblocks.cbonlineapp.util.SectionDownloadService
 import com.codingblocks.cbonlineapp.util.VIDEO
-import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.applyDim
 import com.codingblocks.cbonlineapp.util.extensions.clearDim
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
-import java.util.concurrent.TimeUnit
+import com.codingblocks.cbonlineapp.util.livedata.observer
+import com.codingblocks.cbonlineapp.workers.DownloadService
+import com.codingblocks.cbonlineapp.workers.SectionDownloadService
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
@@ -56,6 +47,17 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+
+/*
+ *   Payment issues
+ *   multi select quizzes
+ *   pdf not issue
+ *   challenge can't be done
+ *   webinar - make,
+ *   make more category
+ *   expired,upgrade and pause-unpause
+ *   only course, free course
+ */
 
 const val SECTION_DOWNLOAD = "sectionDownload"
 
@@ -98,11 +100,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
             }
         }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ):
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = inflater.inflate(R.layout.fragment_course_content, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -156,15 +154,15 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
 
     private fun attachObservers() {
 
-        viewModel.progress.observer(viewLifecycleOwner) {
+        viewModel.progress.observer(thisLifecycleOwner) {
             swiperefresh.isRefreshing = it
         }
 
-//        viewModel.computedData.observe(viewLifecycleOwner, Observer {
+//        viewModel.computedData.observe(thisLifecycleOwner, Observer {
 //                    info { it }
 //        })
 
-        viewModel.content.observer(viewLifecycleOwner) { sectionWithContentList ->
+        viewModel.content.observer(thisLifecycleOwner) { sectionWithContentList ->
             sectionitem.clear()
             val consolidatedList = ArrayList<ListObject>()
             sectionWithContentList.forEach { sectionContent ->
@@ -219,6 +217,19 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 sectionListAdapter.notifyDataSetChanged()
 
                 sectionItemsAdapter.submitList(consolidatedList)
+
+                rvExpendableView.viewTreeObserver.addOnGlobalLayoutListener {
+                    if (sectionListAdapter.itemCount == 0) {
+                        (activity as MyCourseActivity).hideFab()
+                        rvExpendableView.visibility = View.GONE
+                        textview4_20.visibility = View.VISIBLE
+                    } else {
+                        if ((activity as MyCourseActivity).myCourseTabs.selectedTabPosition == 1)
+                        (activity as MyCourseActivity).showFab()
+                        rvExpendableView.visibility = View.VISIBLE
+                        textview4_20.visibility = View.GONE
+                    }
+                }
             }
             contentShimmer.isVisible = sectionWithContentList.isEmpty()
         }
@@ -231,61 +242,15 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
         attemptId: String,
         sectionId: String
     ) {
-        val constraints = if (getPrefs(requireContext()).SP_WIFI)
-            Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
-        else
-            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val videoData = workDataOf(
-            VIDEO_ID to videoId,
-            "title" to title,
-            SECTION_ID to sectionId,
-            RUN_ATTEMPT_ID to attemptId,
-            CONTENT_ID to contentId
-        )
 
-        val request: OneTimeWorkRequest =
-            OneTimeWorkRequestBuilder<DownloadWorker>()
-                .setConstraints(constraints)
-                .setInputData(videoData)
-                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
-                .build()
-
-        WorkManager.getInstance()
-            .enqueue(request)
+        DownloadService.startService(requireContext(), sectionId, attemptId, videoId, contentId, title)
     }
 
     override fun startSectionDownlod(sectionId: String) {
-        val constraints = if (getPrefs(requireContext()).SP_WIFI)
-            Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
-        else
-            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val videoData = workDataOf(
-            SECTION_ID to sectionId,
-            RUN_ATTEMPT_ID to viewModel.attemptId
-        )
-
-        val request: OneTimeWorkRequest =
-            OneTimeWorkRequestBuilder<SectionDownloadService>()
-                .setConstraints(constraints)
-                .addTag(SECTION_DOWNLOAD)
-                .setInputData(videoData)
-                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
-                .build()
-        val pendingRequest = WorkManager.getInstance().getWorkInfosByTag(SECTION_DOWNLOAD).get()
-
-        pendingRequest.let { workList ->
-            if (workList.size == 0) {
-                WorkManager.getInstance()
-                    .enqueue(request)
-            } else if (workList.size == 1 && workList[0].state == WorkInfo.State.RUNNING) {
-                toast("Section Download in Progress")
-            } else if (workList[0].state == WorkInfo.State.FAILED) {
-                WorkManager.getInstance().pruneWork()
-                WorkManager.getInstance()
-                    .enqueue(request)
-            } else {
-                toast("Cannot Start Download !!!")
-            }
+        if (isMyServiceRunning(SectionDownloadService::class.java)) {
+            toast("One Section download is in progress")
+        } else {
+            SectionDownloadService.startService(requireContext(), sectionId, viewModel.attemptId!!)
         }
     }
 
@@ -321,8 +286,8 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                                 viewModel.updateProgress(ccid)
                                 startActivity(
                                     intentFor<PdfActivity>(
-                                        "fileUrl" to contentDocument.documentPdfLink,
-                                        "fileName" to contentDocument.documentName + ".pdf"
+                                        CONTENT_ID to ccid,
+                                        SECTION_ID to sectionId
                                     )
                                 )
                             } else
@@ -330,20 +295,14 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                         LECTURE ->
                             if (contentLecture.lectureUid.isNotEmpty())
                                 startActivity(
-                                    intentFor<VideoPlayerActivity>(
-                                        CONTENT_ID to ccid,
-                                        SECTION_ID to sectionId
-                                    )
+                                    createVideoPlayerActivityIntent(requireContext(), ccid, sectionId)
                                 )
                             else
                                 checkSection(premium)
                         VIDEO ->
                             if (contentVideo.videoUid.isNotEmpty()) {
                                 startActivity(
-                                    intentFor<VideoPlayerActivity>(
-                                        CONTENT_ID to ccid,
-                                        SECTION_ID to sectionId
-                                    )
+                                    createVideoPlayerActivityIntent(requireContext(), ccid, sectionId)
                                 )
                             } else
                                 checkSection(premium)
@@ -359,12 +318,15 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                             } else
                                 checkSection(premium)
                         CODE ->
-                            requireContext().showDialog(
-                                "unavailable",
-                                secondaryText = R.string.unavailable,
-                                primaryButtonText = R.string.ok,
-                                cancelable = true
-                            )
+                            if (contentCode.codeUid.isNotEmpty()) {
+                                startActivity(
+                                    intentFor<CodeChallengeActivity>(
+                                        CONTENT_ID to ccid,
+                                        SECTION_ID to sectionId
+                                    )
+                                )
+                            } else
+                                checkSection(premium)
                     }
                 }
             }
@@ -392,7 +354,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 ) {
                     if (it) {
                         dialog.show()
-                        viewModel.addToCart().observer(viewLifecycleOwner) {
+                        viewModel.addToCart().observer(thisLifecycleOwner) {
                             dialog.hide()
                             requireContext().startActivity<CheckoutActivity>()
                         }
@@ -414,5 +376,15 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 }
             }
         }
+    }
+
+    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = requireContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
     }
 }

@@ -8,9 +8,9 @@ import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.dashboard.mycourses.ItemClickListener
 import com.codingblocks.cbonlineapp.dashboard.mycourses.MyCourseListAdapter
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.activity_purchases.*
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
@@ -22,11 +22,13 @@ class PurchasesActivity : BaseCBActivity() {
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
             override fun onClick(id: String, runId: String, runAttemptId: String, name: String) {
-                startActivity(MyCourseActivity.createMyCourseActivityIntent(
-                    this@PurchasesActivity,
-                    runAttemptId,
-                    name
-                ))
+                startActivity(
+                    MyCourseActivity.createMyCourseActivityIntent(
+                        this@PurchasesActivity,
+                        runAttemptId,
+                        name
+                    )
+                )
             }
         }
     }
@@ -35,16 +37,14 @@ class PurchasesActivity : BaseCBActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_purchases)
         setToolbar(purchasesToolbar)
-            purchasedCoursesRv.setRv(this, courseListAdapter, true)
-            viewModel.purchasedRuns.observer(this) {list ->
-                courseListAdapter.submitList(list)
-                if(list.isNotEmpty())
-                {
-                    purchasedCoursesRv.isVisible = true
-                }
+        purchasedCoursesRv.setRv(this, courseListAdapter, true)
+        viewModel.purchasedRuns.observer(this) { list ->
+            courseListAdapter.submitList(list)
+            if (list.isNotEmpty()) {
+                purchasedCoursesRv.isVisible = true
             }
-            courseListAdapter.onItemClick = itemClickListener
-            purchasesMyCoursesExploreBtn.setOnClickListener { finish() }
-
+        }
+        courseListAdapter.onItemClick = itemClickListener
+        purchasesMyCoursesExploreBtn.setOnClickListener { finish() }
     }
 }

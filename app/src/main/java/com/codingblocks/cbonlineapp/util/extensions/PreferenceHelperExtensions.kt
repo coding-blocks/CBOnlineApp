@@ -5,8 +5,6 @@ import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 
-// import com.codingblocks.cbonlineapp.util.PreferenceHelper
-
 @Keep
 fun <A : Context> A.getPrefs(): PreferenceHelper {
     return PreferenceHelper.getPrefs(this)

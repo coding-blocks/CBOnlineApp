@@ -18,8 +18,8 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
@@ -83,7 +83,7 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
             }
         }
 
-        type.observer(viewLifecycleOwner) { num ->
+        type.observer(thisLifecycleOwner) { num ->
             courseTypeTv.apply {
                 text = coursesType[num]
                 vm.courseFilter.postValue(coursesType[num])
@@ -93,7 +93,8 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
                             num,
                             0
                         )
-                    ), null, requireContext().getDrawable(R.drawable.ic_dropdown), null
+                    ),
+                    null, requireContext().getDrawable(R.drawable.ic_dropdown), null
                 )
             }
         }
@@ -103,7 +104,7 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
         dashboardCoursesRv.setRv(requireContext(), courseListAdapter, true)
         if (vm.isLoggedIn == true) {
             vm.fetchMyCourses()
-            vm.courses.distinctUntilChanged().observer(viewLifecycleOwner) {
+            vm.courses.distinctUntilChanged().observer(thisLifecycleOwner) {
                 courseListAdapter.submitList(it)
                 changeViewState(
                     dashboardCoursesRv,
@@ -117,7 +118,7 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
             dashboardMyCourse.isVisible = false
         }
 
-//        viewModel.errorLiveData.observer(viewLifecycleOwner) {
+//        viewModel.errorLiveData.observer(thisLifecycleOwner) {
 //            when (it) {
 //                ErrorStatus.NO_CONNECTION -> {
 // //                    dashboardCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
@@ -153,7 +154,7 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
     private fun setUpBottomSheet() {
         val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_mycourses, null)
         val list = arrayListOf<SheetItem>()
-        repeat(3) {
+        repeat(6) {
             list.add(SheetItem(coursesType[it], imgs.getResourceId(it, 0)))
         }
         sheetDialog.run {

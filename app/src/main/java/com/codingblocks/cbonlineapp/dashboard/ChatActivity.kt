@@ -10,7 +10,7 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import kotlinx.android.synthetic.main.activity_chat.*
 import org.koin.android.ext.android.inject
 
@@ -37,14 +37,16 @@ class ChatActivity : BaseCBActivity() {
             allowFileAccess = true
             allowFileAccessFromFileURLs = true
         }
-        Clients.api.getSignature().enqueue(retrofitCallback { _, response ->
-            val signature = response?.body()?.get("signature")
-            val userId = prefs.SP_USER_ID
-            val userName = prefs.SP_USER_NAME
-            val email = prefs.SP_EMAIL_ID
-            val script: String
-            if (conversationId.isEmpty()) {
-                script = """
+        CBOnlineLib.api.getSignature().enqueue(
+            retrofitCallback { _, response ->
+                val signature = response?.body()?.get("signature")
+                val userId = prefs.SP_USER_ID
+                val userName = prefs.SP_USER_NAME
+                val email = prefs.SP_EMAIL_ID
+                val script: String
+                if (conversationId.isEmpty()) {
+                    script =
+                        """
                     Talk.ready.then(function() {
                         var me = new Talk.User({
                             id: $userId,
@@ -59,9 +61,10 @@ class ChatActivity : BaseCBActivity() {
                         var inbox = talkSession.createInbox();
                         inbox.mount(document.getElementById("talkjs-container"));
                     });
-                """.trimIndent()
-            } else {
-                script = """
+                        """.trimIndent()
+                } else {
+                    script =
+                        """
                     Talk.ready.then(function() {
                         var me = new Talk.User({
                             id: $userId,
@@ -78,25 +81,26 @@ class ChatActivity : BaseCBActivity() {
                         var inbox = talkSession.createChatbox(conversation);
                         inbox.mount(document.getElementById("talkjs-container"));
                     });
-                """.trimIndent()
-            }
-
-            webView.webViewClient = object : WebViewClient() {
-                override fun shouldOverrideUrlLoading(
-                    view: WebView?,
-                    request: WebResourceRequest?
-                ): Boolean {
-                    return false
+                        """.trimIndent()
                 }
 
-                override fun onPageFinished(view: WebView, url: String?) {
-                    super.onPageFinished(view, url)
-                    view.evaluateJavascript("javascript:$script", null)
-                }
-            }
+                webView.webViewClient = object : WebViewClient() {
+                    override fun shouldOverrideUrlLoading(
+                        view: WebView?,
+                        request: WebResourceRequest?
+                    ): Boolean {
+                        return false
+                    }
 
-            webView.loadUrl("file:///android_asset/Chat.html")
-        })
+                    override fun onPageFinished(view: WebView, url: String?) {
+                        super.onPageFinished(view, url)
+                        view.evaluateJavascript("javascript:$script", null)
+                    }
+                }
+
+                webView.loadUrl("file:///android_asset/Chat.html")
+            }
+        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
