@@ -44,9 +44,17 @@ import com.codingblocks.cbonlineapp.library.EditNoteClickListener
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoBottomSheet.Companion.VideoSheetType
 import com.codingblocks.cbonlineapp.mycourse.content.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.mycourse.content.player.notes.VideoNotesFragment
-import com.codingblocks.cbonlineapp.util.*
+import com.codingblocks.cbonlineapp.util.Animations
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.FileUtils
+import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils.getYoutubeVideoId
 import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.TITLE
+import com.codingblocks.cbonlineapp.util.VIDEO
+import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.setRv
@@ -864,6 +872,7 @@ class VideoPlayerActivity :
           sharedPrefs.SP_FIRST_VIDEO_RUN = true
       }
   }
+
     private val vdoParamsGenerator: VdoPlayerControls.VdoParamsGenerator = object : VdoPlayerControls.VdoParamsGenerator {
 
         override fun getNewVdoInitParams(): VdoPlayer.VdoInitParams? {
