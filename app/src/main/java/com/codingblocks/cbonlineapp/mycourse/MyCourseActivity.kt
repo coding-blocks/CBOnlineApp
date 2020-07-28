@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.invoke
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,6 +17,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
+import com.codingblocks.cbonlineapp.util.*
 import com.codingblocks.cbonlineapp.dashboard.ViewPager2Adapter
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
@@ -32,6 +34,8 @@ import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.livedata.pageChangeCallback
 import com.codingblocks.cbonlineapp.util.showConfirmDialog
 import com.codingblocks.onlineapi.ErrorStatus
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
@@ -40,11 +44,14 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
+import kotlin.random.Random.Default.Companion
 
 class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefreshListener {
 
     private val viewModel: MyCourseViewModel by stateViewModel()
+    private val sharedPrefs: PreferenceHelper by inject()
     private val pagerAdapter: ViewPager2Adapter by lazy { ViewPager2Adapter(this) }
     private var confirmDialog: AlertDialog? = null
 
@@ -112,6 +119,7 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
             }
         }
         setupViewPager()
+        walkthrough()
     }
 
     private fun setupViewPager() {
@@ -171,6 +179,53 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
 
         fun createMyCourseActivityIntent(context: Context, attemptId: String, name: String = "", pos: Int = 0): Intent {
             return context.intentFor<MyCourseActivity>(COURSE_NAME to name, RUN_ATTEMPT_ID to attemptId, TAB_POS to pos).singleTop()
+        }
+    }
+
+    fun walkthrough() {
+        if (!sharedPrefs.SP_FIRST_COURSE_RUN) {
+            TapTargetSequence(this)
+                .targets(
+                    TapTarget.forView(findViewById(R.id.courseResumeBtn), "Resume", "Continue the course from exactly where you left it.")
+                        .outerCircleColor(R.color.colorPrimary)
+                        .outerCircleAlpha(.90f)
+                        .targetRadius(70)
+                        .titleTextSize(30)
+                        .titleTextColor(R.color.white)
+                        .descriptionTextSize(16)
+                        .descriptionTextColor(R.color.white)
+                        .dimColor(R.color.black)
+                        .drawShadow(true)
+                        .cancelable(false)
+                        .tintTarget(true)
+                        .transparentTarget(true),
+                    TapTarget.forView((myCourseTabs.getChildAt(0) as ViewGroup).getChildAt(1), "Curriculum", "Go through all the material of the selected course.")
+                        .outerCircleColor(R.color.colorPrimary)
+                        .outerCircleAlpha(.90f)
+                        .titleTextSize(30)
+                        .titleTextColor(R.color.white)
+                        .descriptionTextSize(16)
+                        .descriptionTextColor(R.color.white)
+                        .dimColor(R.color.black)
+                        .drawShadow(true)
+                        .cancelable(false)
+                        .tintTarget(true)
+                        .transparentTarget(true),
+                    TapTarget.forView((myCourseTabs.getChildAt(0) as ViewGroup).getChildAt(2), "Library", "See all you important bookmarks, notes and downloads at a single place")
+                        .outerCircleColor(R.color.colorPrimary)
+                        .outerCircleAlpha(.90f)
+                        .titleTextSize(30)
+                        .titleTextColor(R.color.white)
+                        .descriptionTextSize(16)
+                        .descriptionTextColor(R.color.white)
+                        .dimColor(R.color.black)
+                        .drawShadow(true)
+                        .cancelable(false)
+                        .tintTarget(true)
+                        .transparentTarget(true)
+                )
+                .start()
+            sharedPrefs.SP_FIRST_COURSE_RUN = true
         }
     }
 }
