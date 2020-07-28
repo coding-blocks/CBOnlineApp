@@ -15,14 +15,7 @@ import com.codingblocks.cbonlineapp.mycourse.content.CourseContentFragment
 import com.codingblocks.cbonlineapp.mycourse.library.CourseLibraryFragment
 import com.codingblocks.cbonlineapp.mycourse.overview.OverviewFragment
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
-import com.codingblocks.cbonlineapp.util.COURSE_NAME
-import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.LECTURE
-import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
-import com.codingblocks.cbonlineapp.util.VIDEO
-import com.codingblocks.cbonlineapp.util.PreferenceHelper
+import com.codingblocks.cbonlineapp.util.*
 import com.codingblocks.cbonlineapp.util.extensions.animateVisibility
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.pageChangeCallback
