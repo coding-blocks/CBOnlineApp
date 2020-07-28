@@ -11,7 +11,7 @@ import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.KeyboardVisibilityUtil
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.safeApiCall
 import com.google.android.material.snackbar.Snackbar
@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.activity_complete_profile.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.contentView
-import org.jetbrains.anko.intentFor
 import org.json.JSONException
 import org.json.JSONObject
 import org.koin.android.ext.android.inject
@@ -35,7 +34,7 @@ class CompleteProfileActivity : BaseCBActivity() {
         setContentView(R.layout.activity_complete_profile)
         val id = JWTUtils.getIdentity(sharedPrefs.SP_JWT_TOKEN_KEY)
         courseResumeBtn.setOnClickListener {
-            startActivity(intentFor<DashboardActivity>())
+            startActivity(DashboardActivity.createDashboardActivityIntent(this, true))
             finish()
         }
         val json =
@@ -63,7 +62,7 @@ class CompleteProfileActivity : BaseCBActivity() {
         val arrayAdapter: ArrayAdapter<String> =
             ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, collegeList)
         college.setAdapter(arrayAdapter)
-        college.setOnItemClickListener { _, _, position, id ->
+        college.setOnItemClickListener { _, _, position, _ ->
             val name = arrayAdapter.getItem(position)
 
             for (i in 0 until collegeArray?.length()!!) {
@@ -77,7 +76,7 @@ class CompleteProfileActivity : BaseCBActivity() {
         val arrayAdapter2: ArrayAdapter<String> =
             ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, branchList)
         branch.setAdapter(arrayAdapter2)
-        branch.setOnItemClickListener { _, _, position, id ->
+        branch.setOnItemClickListener { _, _, position, _ ->
             val name = arrayAdapter2.getItem(position)
 
             for (i in 0 until branchArray?.length()!!) {
@@ -87,10 +86,10 @@ class CompleteProfileActivity : BaseCBActivity() {
                 }
             }
         }
-        genderRadio?.setOnCheckedChangeListener { group, checkedId ->
+        genderRadio?.setOnCheckedChangeListener { _, checkedId ->
             map["gender"] = if (R.id.radioMale == checkedId) "MALE" else "FEMALE"
         }
-        apparelRadio?.setOnCheckedChangeListener { group, checkedId ->
+        apparelRadio?.setOnCheckedChangeListener { _, _ ->
             map["apparelGoodiesSize"] = "L"
         }
         proceedBtn.setOnClickListener {
@@ -99,7 +98,7 @@ class CompleteProfileActivity : BaseCBActivity() {
             proceedBtn.isEnabled = false
 
             GlobalScope.launch {
-                when (val response = safeApiCall { Clients.api.updateUser(id.toString(), map) }) {
+                when (val response = safeApiCall { CBOnlineLib.api.updateUser(id.toString(), map) }) {
                     is ResultWrapper.GenericError -> {
                         runOnUiThread {
                             proceedBtn.isEnabled = true
@@ -108,7 +107,7 @@ class CompleteProfileActivity : BaseCBActivity() {
                     }
                     is ResultWrapper.Success -> {
                         if (response.value.isSuccessful) {
-                            startActivity(intentFor<DashboardActivity>())
+                            startActivity(DashboardActivity.createDashboardActivityIntent(this@CompleteProfileActivity, true))
                             finish()
                         } else
                             runOnUiThread {

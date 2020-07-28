@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.onlineapi.models.Course
+import java.io.Serializable
 import java.sql.Date
 
 @Entity
@@ -90,7 +91,7 @@ data class NotesModel(
     var createdAt: String = "",
     var deletedAt: String? = "",
     val contentTitle: String = ""
-) : BaseModel()
+) : BaseModel(), Serializable
 
 @Entity
 data class Notification(
@@ -103,14 +104,30 @@ data class Notification(
     val videoId: String = ""
 )
 
+@Entity
+data class HBRankModel(
+    val bestRank: Int = 0,
+    val bestRankAchievedOn: String = "",
+    val currentMonthScore: Int = 0,
+    val currentOverallRank: Int = 0,
+    val previousMonthScore: Int = 0,
+    val previousOverallRank: Int = 0,
+    @PrimaryKey
+    val id: Long = 0
+)
+
 @Entity(
     indices = [Index("contentId")],
-    foreignKeys = [(ForeignKey(
-        entity = ContentModel::class,
-        parentColumns = ["ccid"],
-        childColumns = ["contentId"],
-        onDelete = ForeignKey.CASCADE
-    ))]
+    foreignKeys = [
+        (
+            ForeignKey(
+                entity = ContentModel::class,
+                parentColumns = ["ccid"],
+                childColumns = ["contentId"],
+                onDelete = ForeignKey.CASCADE
+            )
+            )
+    ]
 )
 data class BookmarkModel(
     @PrimaryKey
@@ -120,7 +137,8 @@ data class BookmarkModel(
     var sectionId: String = "",
     var createdAt: String = "",
     var sectionName: String = "",
-    var contentName: String = ""
+    var contentName: String = "",
+    var contentable: String = ""
 ) : BaseModel()
 
 @Entity
@@ -149,6 +167,16 @@ class FormModel(
     val type: String
 )
 
+data class CodeModel(
+    val codeUid: String,
+    val codeContestId: Int
+)
+
+data class PdfModel(
+    val documentPdfLink: String,
+    val documentName: String
+)
+
 @Entity
 data class Companies(
     val id: String,
@@ -156,6 +184,49 @@ data class Companies(
     val logo: String,
     val companyDescription: String,
     val website: String
+)
+
+@Entity
+data class CodeChallengeModel(
+    @PrimaryKey
+    val id: String,
+    val difficulty: String,
+    val title: String,
+    @Embedded
+    val content: ProblemModel? = null
+)
+
+@Entity
+data class ProblemModel(
+    val name: String,
+    val image: String,
+    val status: String,
+    @Embedded
+    val details: CodeDetailsModel,
+    @Embedded
+    val timeLimits: TimeLimitsModel
+)
+
+@Entity
+data class TimeLimitsModel(
+    val cpp: String,
+    val c: String,
+    val py2: String,
+    val py3: String,
+    val js: String,
+    val csharp: String,
+    val java: String
+)
+
+@Entity
+data class CodeDetailsModel(
+    val constraints: String,
+    val explanation: String,
+    val inputFormat: String,
+    val sampleInput: String,
+    val outputFormat: String,
+    val sampleOutput: String,
+    val description: String
 )
 
 open class BaseModel()

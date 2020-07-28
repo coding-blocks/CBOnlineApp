@@ -14,11 +14,13 @@ class SectionListAdapter(private val sectionList: ArrayList<SectionModel>) : Rec
     var onSectionListClick: SectionListClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionListViewHolder {
-        return SectionListViewHolder(LayoutInflater.from(parent.context).inflate(
-            R.layout.item_section_list,
-            parent,
-            false
-        ))
+        return SectionListViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item_section_list,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int = sectionList.size

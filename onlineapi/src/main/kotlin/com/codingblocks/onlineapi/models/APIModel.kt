@@ -1,22 +1,20 @@
 package com.codingblocks.onlineapi.models
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.github.jasminb.jsonapi.Links
 import com.github.jasminb.jsonapi.RelType
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.RelationshipLinks
 import com.github.jasminb.jsonapi.annotations.Type
-import com.google.gson.Gson
 import com.google.gson.JsonObject
 import java.io.Serializable
-
 
 open class BaseModel {
     @Id
     var id: String = ""
     var updatedAt: String = ""
 }
-
 
 data class CourseFeatures(
     val icon: String,
@@ -28,6 +26,14 @@ data class Project(
     val title: String = "",
     val description: String = "",
     val image: String = ""
+) : BaseModel()
+
+@Type("user_course_wishlists")
+data class Wishlist(
+    @Relationship("course")
+    val course: Course? = null,
+    @Relationship("user")
+    val user: User? = null
 ) : BaseModel()
 
 @Type("courses", "course")
@@ -54,7 +60,32 @@ data class Course(
     @Relationship("projects", resolve = true)
     var projects: ArrayList<Project>?,
     @Relationship("tags")
-    val tags: ArrayList<Tags>?) : BaseModel()
+    val tags: ArrayList<Tags>?
+) : BaseModel() {
+
+    constructor(id: String) :
+        this(
+            "", "", "", "", 0, "", 0, "", 0f, "",
+            "", "", null, null, null, null, null, null
+        ) {
+            super.id = id
+        }
+    /** Logic to get [Runs] for enrolling into Trial */
+    fun getTrialRun(tier: String): Runs? {
+        return with(activeRuns ?: runs!!) {
+            groupBy { it.tier }[tier]?.firstOrNull()
+                ?: minBy { it.price }
+        }
+    }
+
+    /** Logic to get [Runs] to display in [Sections] */
+    fun getContentRun(tier: String): Runs? {
+        return with(activeRuns ?: runs!!) {
+            getTrialRun(tier)
+                ?: groupBy { it.tier }["LIVE"]?.firstOrNull()
+        }
+    }
+}
 
 @Type("runs", "run")
 data class Runs(
@@ -79,10 +110,53 @@ data class Runs(
     val productId: Int?,
     val completionThreshold: Int?,
     val goodiesThreshold: Int?,
-    val totalContents: Int
-) : BaseModel() {
+    val totalContents: Int,
+    val tier: String?
+) : BaseModel()
 
-}
+@Type("hbcontents")
+data class CodeChallenge(
+    val name: String,
+    @Relationship("problem")
+    val content: Problem? = null
+
+) : BaseModel()
+
+@Type("timelimits")
+data class TimeLimits(
+    val cpp: String,
+    val c: String,
+    val py2: String,
+    val py3: String,
+    val js: String,
+    val csharp: String,
+    val java: String
+) : BaseModel()
+
+@Type("details")
+data class CodeDetails(
+    val constraints: String? = "None",
+    val explanation: String? = "None",
+    @JsonProperty("input_format")
+    val inputFormat: String? = "None",
+    @JsonProperty("sample_input")
+    val sampleInput: String? = "None",
+    @JsonProperty("output_format")
+    val outputFormat: String? = "None",
+    @JsonProperty("sample_output")
+    val sampleOutput: String? = "None",
+    val description: String? = "None"
+) : BaseModel()
+
+@Type("problems")
+data class Problem(
+    val difficulty: String,
+    val name: String,
+    val image: String? = "",
+    val status: String? = "",
+    val details: CodeDetails? = null,
+    val timelimits: TimeLimits? = null
+) : BaseModel()
 
 @Type("run-attempts", "run_attempts")
 data class RunAttempts(
@@ -95,12 +169,21 @@ data class RunAttempts(
     val completedContents: Int = 0,
     val lastAccessedAt: String? = "",
     @Relationship("run")
-    val run: Runs? = null
+    val run: Runs? = null,
+    @Relationship("certificate")
+    val certifcate: Certificate? = null,
+    val runTier: String? = null,
+    val paused: Boolean = false,
+    val pauseTimeLeft: String? = null,
+    val lastPausedLeft: String? = null
 ) : BaseModel() {
     constructor(id: String) : this() {
         super.id = id
     }
 }
+
+@Type("certificates")
+data class Certificate(val url: String?) : BaseModel()
 
 @Type("doubts", "doubt")
 data class Doubts(
@@ -122,22 +205,26 @@ data class Doubts(
     @Relationship("resolved_by", "resolved-by")
     val resolvedBy: User? = null
 ) : BaseModel() {
-    constructor(id: String, title: String,
-                body: String,
-                discourseTopicId: String,
-                runAttempt: RunAttempts?,
-                conversationId: String?,
-                content: LectureContent?,
-                status: String,
-                createdAt: String
+    constructor(
+        id: String,
+        title: String,
+        body: String,
+        discourseTopicId: String,
+        runAttempt: RunAttempts?,
+        conversationId: String?,
+        content: LectureContent?,
+        status: String,
+        createdAt: String
     ) : this(title, body, status, discourseTopicId, conversationId, runAttempt, content, createdAt) {
         super.id = id
     }
 
-    constructor(id: String?, title: String,
-                body: String,
-                runAttempt: RunAttempts?,
-                content: LectureContent?
+    constructor(
+        id: String?,
+        title: String,
+        body: String,
+        runAttempt: RunAttempts?,
+        content: LectureContent?
     ) : this(title = title, body = body, runAttempt = runAttempt, content = content)
 
     constructor(id: String) : this() {
@@ -153,7 +240,6 @@ data class Comment(
     @Relationship("doubt")
     val doubt: Doubts? = null
 ) : BaseModel()
-
 
 @Type("sections")
 data class Sections(
@@ -195,10 +281,10 @@ data class LectureContent(
     @Relationship("bookmark")
     val bookmark: Bookmark?
 ) : BaseModel() {
-    constructor(id: String)
-        : this("", 0L, "", null, null, null, null, null, null, null, null, null) {
-        super.id = id
-    }
+    constructor(id: String) :
+        this("", 0L, "", null, null, null, null, null, null, null, null, null) {
+            super.id = id
+        }
 }
 
 @Type("instructors")
@@ -224,8 +310,8 @@ data class ContentProgress(
     @Relationship("content")
     val content: LectureContent? = null
 ) {
-    constructor(status: String, runAttemptId: RunAttempts, contentId: LectureContent, progressId: String?)
-        : this(status = status, runAttempt = runAttemptId, content = contentId, id = progressId)
+    constructor(status: String, runAttemptId: RunAttempts, contentId: LectureContent, progressId: String?) :
+        this(status = status, runAttempt = runAttemptId, content = contentId, id = progressId)
 }
 
 @Type("bookmarks")
@@ -243,8 +329,8 @@ data class Bookmark(
     val sectionId: String? = null,
     val contentId: String? = null
 ) {
-    constructor(runAttemptId: RunAttempts, contentId: LectureContent, sectionId: Sections)
-        : this(null, runAttemptId, contentId, sectionId)
+    constructor(runAttemptId: RunAttempts, contentId: LectureContent, sectionId: Sections) :
+        this(null, runAttemptId, contentId, sectionId)
 }
 
 @Type("quiz-attempts", "quiz_attempts")
@@ -259,14 +345,13 @@ data class QuizAttempt(
     var runAttempt: RunAttempts? = null,
     var submission: ArrayList<QuizSubmission>? = null
 ) : BaseModel() {
-    constructor(qnaId: ContentQna, runAttemptId: RunAttempts)
-        : this(qna = qnaId, runAttempt = runAttemptId)
+    constructor(qnaId: ContentQna, runAttemptId: RunAttempts) :
+        this(qna = qnaId, runAttempt = runAttemptId)
 
-    constructor(id: String, qnaId: ContentQna)
-        : this(qna = qnaId) {
-        super.id = id
-
-    }
+    constructor(id: String, qnaId: ContentQna) :
+        this(qna = qnaId) {
+            super.id = id
+        }
 }
 
 @Type("notes")
@@ -280,39 +365,42 @@ data class Note(
     @Relationship("content")
     val content: LectureContent? = null
 ) : BaseModel(), Serializable {
-    constructor(id: String, duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent)
-        : this(duration, null, null, text, runAttemptId, contentId) {
-        super.id = id
-    }
+    constructor(id: String, duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent) :
+        this(duration, null, null, text, runAttemptId, contentId) {
+            super.id = id
+        }
 
-    constructor(duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent)
-        : this(duration, null, null, text, runAttemptId, contentId)
-
-    fun serializeToJson(): String {
-        return Gson().toJson(this)
-    }
+    constructor(duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent) :
+        this(duration, null, null, text, runAttemptId, contentId)
 }
 
 @Type("users", "user")
 data class User(
     val email: String?,
-    val firstname: String,
+    val firstname: String? = "",
     val lastReadNotification: String?,
-    val lastname: String,
+    val lastname: String? = "",
     val oneauthId: String?,
     val photo: String?,
     val verifiedemail: String?,
     val verifiedmobile: String?,
-    val username: String = "",
-    val roleId: Int = 0
-) : BaseModel()
-
+    val username: String?,
+    val roleId: Int = 0,
+    val graduationyear: String? = "",
+    val college: String? = "",
+    val mobile: String? = "",
+    val branch: String? = ""
+) : BaseModel() {
+    constructor(id: String) :
+        this("", "", "", "", "", "", "", "", "") {
+            super.id = id
+        }
+}
 
 class SectionContent(
     val order: Int,
     val sectionId: String?
 ) : BaseModel()
-
 
 // =======Section Content Models =========
 
@@ -320,10 +408,13 @@ class SectionContent(
 class ContentCodeChallenge() : BaseModel() {
     @JvmField
     var contentId: String? = null
+
     @JvmField
     var hbContestId: Int? = null
+
     @JvmField
     var name: String? = null
+
     @JvmField
     var hbProblemId: Int? = null
 }
@@ -334,26 +425,32 @@ class ContentQna(
     var qId: Int? = null,
     var name: String? = null
 ) : BaseModel() {
-    constructor(id: String)
-        : this() {
-        super.id = id
-    }
+    constructor(id: String) :
+        this() {
+            super.id = id
+        }
 }
 
 @Type("csv")
 class ContentCsv : BaseModel() {
     @JvmField
     var contentId: String? = null
+
     @JvmField
     var name: String? = null
+
     @JvmField
     var description: String? = null
+
     @JvmField
     var refCsv: String? = null
+
     @JvmField
     var datasetUrl: String? = null
+
     @JvmField
     var testcasesUrl: String? = null
+
     @JvmField
     var judgeScript: String? = null
 }
@@ -362,12 +459,16 @@ class ContentCsv : BaseModel() {
 class ContentDocumentType : BaseModel() {
     @JvmField
     var contentId: String? = null
+
     @JvmField
     var duration: Long? = null
+
     @JvmField
     var name: String? = null
+
     @JvmField
     var markdown: String? = null
+
     @JvmField
     var pdfLink: String? = null
 }
@@ -376,14 +477,19 @@ class ContentDocumentType : BaseModel() {
 class ContentLectureType : BaseModel() {
     @JvmField
     var createdAt: String? = null
+
     @JvmField
     var description: String? = null
+
     @JvmField
     var name: String? = null
+
     @JvmField
     var duration: Long? = null
+
     @JvmField
     var status: String? = null
+
     @JvmField
     var videoId: String? = null
 }
@@ -392,12 +498,16 @@ class ContentLectureType : BaseModel() {
 class ContentVideoType : BaseModel() {
     @JvmField
     var description: String? = null
+
     @JvmField
     var contentId: String? = null
+
     @JvmField
     var duration: Long? = null
+
     @JvmField
     var name: String? = null
+
     @JvmField
     var url: String? = null
 }
@@ -406,18 +516,21 @@ class ContentVideoType : BaseModel() {
 class Announcement : BaseModel() {
     @JvmField
     var userId: String? = null
+
     @JvmField
     var createdAt: String? = null
+
     @JvmField
     var text: String? = null
+
     @JvmField
     var title: String? = null
+
     @JvmField
     var runId: String? = null
 }
 
 // =======Section Content Models =========
-
 
 @Type("quizzes")
 class Quizzes(
@@ -431,8 +544,10 @@ class Quizzes(
 class Question : BaseModel() {
     @JvmField
     var title: String? = null
+
     @JvmField
     var description: String? = null
+
     @Relationship("choices", resolve = true)
     @JvmField
     var choices: ArrayList<Choice>? = null
@@ -442,10 +557,13 @@ class Question : BaseModel() {
 class Choice : BaseModel() {
     @JvmField
     var title: String? = null
+
     @JvmField
     var description: String? = null
+
     @JvmField
     var marked: Boolean = false
+
     @JvmField
     var correct: Boolean? = null
 }
@@ -458,8 +576,10 @@ class QuizSubmission : BaseModel() {
 class QuizResult : BaseModel() {
     @JvmField
     var type: String? = null
+
     @JvmField
     var score: Int? = null
+
     @JvmField
     var questions: ArrayList<QuizQuestion>? = null
 }
@@ -467,10 +587,13 @@ class QuizResult : BaseModel() {
 class QuizQuestion : BaseModel() {
     @JvmField
     var score: Int? = null
+
     @JvmField
     var answers: Array<String>? = null
+
     @JvmField
     var correctlyAnswered: Array<Choice>? = null
+
     @JvmField
     var incorrectlyAnswered: Array<Choice>? = null
 }
@@ -484,10 +607,8 @@ class DoubtLeaderBoard(
     var user: User?
 ) : BaseModel()
 
-
 @Type("rating")
 class Rating : BaseModel()
-
 
 @Type("tags")
 class Tags : BaseModel() {
@@ -527,8 +648,10 @@ class Professions(
     val title: String = ""
 ) : BaseModel()
 
-@Type("player")
-class Player(
+@Type("players")
+data class Player(
+    @Id
+    var id: String? = null,
     var playerId: String? = null
 )
 
@@ -601,6 +724,27 @@ class ApplicationId(
     val id: String?
 )
 
+@Type("spins")
+data class Spins(
+    val validTill: String?,
+    val used: Boolean? = false,
+    val usedAt: String?,
+    val won: Boolean,
+    val prizeRemarksExtra: PrizeContent?,
+    @Relationship("spin-prize")
+    val spinPrize: SpinPrize?,
+    @Relationship("user")
+    val user: User?
+) : BaseModel()
 
+@Type("spin_prizes")
+data class SpinPrize(
+    val title: String,
+    val description: String,
+    val img: String
+) : BaseModel()
 
-
+data class PrizeContent(
+    val couponCreated: String?,
+    val validEnd: String?
+)

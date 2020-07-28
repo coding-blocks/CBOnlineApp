@@ -1,11 +1,12 @@
+<div align="center">
+        
 # CBOnlineApp
 😎⚡️Online App for Coding Blocks Online
 
 [![codebeat badge](https://codebeat.co/badges/29c4e81e-f936-47a5-8d9f-2ac15cd9b13d)](https://codebeat.co/projects/github-com-coding-blocks-cbonlineapp-development)
 [![Maintainability](https://api.codeclimate.com/v1/badges/fb21e9bcd76c6905d68f/maintainability)](https://codeclimate.com/github/coding-blocks/CBOnlineApp/maintainability)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3871ba02cd654b9585f1d9c8bc0f4365)](https://www.codacy.com/app/championswimmer/CBOnlineApp?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=coding-blocks/CBOnlineApp&amp;utm_campaign=Badge_Grade)
-[![Build Status](https://travis-ci.org/coding-blocks/CBOnlineApp.svg?branch=development)](https://travis-ci.org/coding-blocks/CBOnlineApp)
-[![CircleCI](https://circleci.com/gh/coding-blocks/CBOnlineApp.svg?style=svg)](https://circleci.com/gh/coding-blocks/CBOnlineApp)
+![Build](https://github.com/coding-blocks/CBOnlineApp/workflows/Build/badge.svg)
 
 An app to consume online courses available at https://online.codingblocks.com
 
@@ -13,21 +14,26 @@ Application is available here:
 
 <a href='https://play.google.com/store/apps/details?id=com.codingblocks.cbonlineapp'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="80"/></a>
 
+[![Downloads Badge](https://img.shields.io/endpoint?logo=google-play&url=https://api-playstore.rajkumaar.co.in/downloads?id=com.codingblocks.cbonlineapp&color=success)](https://play.google.com/store/apps/details?id=com.codingblocks.cbonlineapp) [![Rating Badge](https://img.shields.io/endpoint?logo=google-play&url=https://api-playstore.rajkumaar.co.in/rating?id=com.codingblocks.cbonlineapp&color=success)](https://play.google.com/store/apps/details?id=com.codingblocks.cbonlineapp) 
+
+</div>
+
 ## Screenshots
 <table>
         <tr>
-          <td><img src = "app/screenshots/1.png" height = "480" width="270"></td>
-          <td><img src = "app/screenshots/2.png" height = "480" width="270"></td>
-          <td><img src = "app/screenshots/3.png" height = "480" width="270"></td>
+          <td><img src = "app/screenshots/1.png" ></td>
+          <td><img src = "app/screenshots/2.png" ></td>
+          <td><img src = "app/screenshots/3.png" ></td>
         </tr>
         <tr>
-        <td><img src = "app/screenshots/4.png" height = "480" width="270"></td>
-        <td><img src = "app/screenshots/5.png" height = "480" width="270"></td>
-        <td><img src = "app/screenshots/6.png" height = "480" width="270"></td>
+        <td><img src = "app/screenshots/4.png" ></td>
+        <td><img src = "app/screenshots/5.png" ></td>
+        <td><img src = "app/screenshots/6.png" ></td>
         </tr>
         <tr>
-        <td><img src = "app/screenshots/7.png" height = "480" width="270"></td>
-        <td><img src = "app/screenshots/8.png" height = "480" width="270"></td>
+        <td><img src = "app/screenshots/7.png" ></td>
+        <td><img src = "app/screenshots/8.png" ></td>
+        <td><img src = "app/screenshots/9.png" ></td>
         </tr>
 </table>    
 

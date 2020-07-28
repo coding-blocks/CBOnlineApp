@@ -34,6 +34,11 @@ class PreferenceHelper private constructor() {
         set(value) {
             prefs?.save(ONEAUTH_ID, value)
         }
+    var SP_PUSH_NOTIFICATIONS: Boolean
+        get() = prefs?.getBoolean(NOTIFICATIONS, false) ?: false
+        set(value) {
+            prefs?.save(NOTIFICATIONS, value)
+        }
 
     var SP_USER_ID: String
         get() = prefs?.getString(USER_ID, USER_ID) ?: ""
@@ -98,8 +103,12 @@ class PreferenceHelper private constructor() {
             prefs?.save("COURSE_FILTER_TYPE", value)
         }
 
+    fun clearPrefs() {
+        prefs?.edit()?.clear()?.apply()
+    }
+
     companion object {
-        const val PREFS_FILENAME = "com.codingblocks.cbonline.prefs"
+        private const val PREFS_FILENAME = "com.codingblocks.cbonline.prefs"
         const val ACCESS_TOKEN = "access_token"
         const val JWT_TOKEN = "jwt_token"
         const val REFRESH_TOKEN = "refresh_token"
@@ -109,6 +118,7 @@ class PreferenceHelper private constructor() {
         const val USER_NAME = "user_name"
         const val NAME = "name"
         const val ADMIN = "admin"
+        const val NOTIFICATIONS = "notification"
         const val EMAIL_ID = "email_id"
         const val ROLE_ID_DEFAULT = 0
         const val COURSE_FILTER_TYPE = 0
@@ -130,6 +140,24 @@ class PreferenceHelper private constructor() {
                 prefs = context.getSharedPreferences(PREFS_FILENAME, MODE_PRIVATE)
             }
             return instance
+        }
+
+        /**
+         * A function to run when changing app [SharedPreferences] file name.
+         */
+        fun runMigration(context: Context): Boolean {
+            val oldPrefsMap =
+                context.getSharedPreferences("com.codingblocks.cbonlineapp.prefs", MODE_PRIVATE).all
+            val newPrefsMap =
+                context.getSharedPreferences(PREFS_FILENAME, MODE_PRIVATE)
+
+            for (entry in oldPrefsMap) {
+                val current = entry.value
+                if (current is String) {
+                    newPrefsMap.edit().putString(entry.key, current).apply()
+                }
+            }
+            return true
         }
     }
 }

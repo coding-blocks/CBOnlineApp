@@ -11,7 +11,8 @@ import com.codingblocks.cbonlineapp.util.extensions.getDurationBreakdown
 import kotlinx.android.synthetic.main.item_section.view.*
 
 class SectionViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.item_section, parent, false)) {
+    LayoutInflater.from(parent.context).inflate(R.layout.item_section, parent, false)
+) {
 
     var section: SectionModel? = null
     var starterListener: DownloadStarter? = null
@@ -20,13 +21,21 @@ class SectionViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
      * Items might be null if they are not paged in yet. PagedListAdapter will re-bind the
      * ViewHolder when Item is loaded.
      */
-    fun bindTo(section: SectionModel) {
-        this.section = section
+    fun bindTo(section: SectionModel) = with(itemView) {
+        this@SectionViewHolder.section = section
         if (adapterPosition == 0) {
-            itemView.dividerTop.isVisible = false
+            dividerTop.isVisible = false
         }
-        itemView.title.text = section.name
-        itemView.lectures.text = "${section.totalContent} Items |"
-        itemView.lectureTime.text = "Duration : ${section.totalTime.getDurationBreakdown()}"
+        title.text = section.name
+        downloadBtn.apply {
+            isEnabled = section.isSectionDownloadEnabled
+            isVisible = section.isSectionDownloadEnabled
+        }
+        lectures.text = "${section.totalContent} Items |"
+        lectureTime.text = "Duration : ${section.totalTime.getDurationBreakdown()}"
+        downloadBtn.setOnClickListener {
+            downloadBtn.isEnabled = false
+            starterListener?.startSectionDownlod(section.csid)
+        }
     }
 }

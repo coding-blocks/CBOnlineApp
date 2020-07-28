@@ -1,7 +1,7 @@
 package com.codingblocks.cbonlineapp.admin.overview
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ErrorStatus
@@ -13,11 +13,11 @@ import com.codingblocks.onlineapi.models.DoubtStats
 import com.github.jasminb.jsonapi.JSONAPIDocument
 import retrofit2.Response
 
-class AdminOverviewViewModel(private val repo: AdminOverviewRepository, val prefs: PreferenceHelper) : ViewModel() {
+class AdminOverviewViewModel(private val repo: AdminOverviewRepository, val prefs: PreferenceHelper) :
+    BaseCBViewModel() {
 
     var doubtStats: MutableLiveData<DoubtStats> = MutableLiveData()
     var listLeaderboard: MutableLiveData<List<DoubtLeaderBoard>> = MutableLiveData()
-    var errorLiveData: MutableLiveData<String> = MutableLiveData()
     var nextOffSet: MutableLiveData<Int> = MutableLiveData(-1)
     var prevOffSet: MutableLiveData<Int> = MutableLiveData(-1)
 
@@ -69,9 +69,5 @@ class AdminOverviewViewModel(private val repo: AdminOverviewRepository, val pref
                 }
             }
         }
-    }
-
-    private fun setError(error: String) {
-        errorLiveData.postValue(error)
     }
 }

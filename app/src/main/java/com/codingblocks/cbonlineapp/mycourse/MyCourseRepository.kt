@@ -3,6 +3,8 @@ package com.codingblocks.cbonlineapp.mycourse
 import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.codingblocks.cbonlineapp.database.HBRankDao
+import com.codingblocks.cbonlineapp.database.RunAttemptDao
 import com.codingblocks.cbonlineapp.database.RunPerformanceDao
 import com.codingblocks.cbonlineapp.database.SectionDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
@@ -14,17 +16,22 @@ import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.ContentQnaModel
 import com.codingblocks.cbonlineapp.database.models.ContentVideo
+import com.codingblocks.cbonlineapp.database.models.HBRankModel
+import com.codingblocks.cbonlineapp.database.models.RunAttemptModel
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.PerformanceResponse
+import com.codingblocks.onlineapi.models.RankResponse
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.safeApiCall
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MyCourseRepository(
     private val sectionWithContentsDao: SectionWithContentsDao,
@@ -32,14 +39,43 @@ class MyCourseRepository(
     private val sectionDao: SectionDao,
     private val courseWithInstructorDao: CourseWithInstructorDao,
     private val runPerformanceDao: RunPerformanceDao,
-    private val bookmarkDao: BookmarkDao
+    private val bookmarkDao: BookmarkDao,
+    private val hbRankDao: HBRankDao,
+    private val attemptDao: RunAttemptDao
 ) {
+    suspend fun getSectionWithContentNonLive(attemptId: String) = sectionWithContentsDao.getSectionWithContentNonLive(attemptId)
 
     fun getSectionWithContent(attemptId: String) = sectionWithContentsDao.getSectionWithContent(attemptId)
 
-    suspend fun getSectionWithContentNonLive(attemptId: String) = sectionWithContentsDao.getSectionWithContentNonLive(attemptId)
+//    fun getSectionWithContentComputer(attemptId: String) = sectionWithContentsDao.getSectionWithContentComputed(SimpleSQLiteQuery("""
+// SELECT s.*, swc.content_id as "content_id", c.contentDuration as "contentDuration", s."sectionOrder" as "sectionOrder", count (c.ccid)  as "completedContents" FROM SectionModel s LEFT OUTER join SectionWithContent swc on swc."section_id" = s.csid LEFT OUTER join ContentModel c on c.ccid = swc.content_id where s.attemptId = 44872 ORDER BY s."sectionOrder"         """))
 
-    suspend fun insertSections(runAttempt: RunAttempts) {
+    fun getRunById(attemptId: String) = courseWithInstructorDao.getRunById(attemptId)
+
+    fun getRunStats(attemptId: String) = runPerformanceDao.getPerformance(attemptId)
+
+    fun getNextContent(attemptId: String) = sectionWithContentsDao.resumeCourse(attemptId)
+
+    suspend fun insertSections(runAttempt: RunAttempts, refresh: Boolean = false) {
+        val runAttemptModel = RunAttemptModel(
+            runAttempt.id,
+            runAttempt.certificateApproved,
+            runAttempt.end,
+            runAttempt.premium,
+            runAttempt.revoked,
+            runAttempt.approvalRequested,
+            runAttempt.doubtSupport ?: "",
+            runAttempt.completedContents,
+            runAttempt.lastAccessedAt ?: "",
+            runAttempt.run?.id ?: "",
+            runAttempt.certifcate?.url ?: "",
+            runAttempt.runTier ?: "PREMIUM",
+            runAttempt.paused,
+            runAttempt.pauseTimeLeft,
+            runAttempt.lastPausedLeft
+        )
+        attemptDao.update(runAttemptModel)
+
         runAttempt.run?.sections?.forEach { courseSection ->
             courseSection.run {
                 val newSection = SectionModel(
@@ -47,14 +83,30 @@ class MyCourseRepository(
                     order ?: 0, premium ?: false, status ?: "",
                     runId ?: "", runAttempt.id
                 )
-                sectionDao.insertNew(newSection)
+                if (refresh)
+                    sectionDao.insert(newSection)
+                else
+                    sectionDao.insertNew(newSection)
             }
             getSectionContent(courseSection.id, runAttempt.id, courseSection.name)
+        }
+        deleteOldSections(runAttempt.run?.sections?.map { it.id }!!, runAttempt.run?.id)
+    }
+
+    /**
+     *Function to delete [SectionModel] which are no longer part of course content.
+     */
+    private suspend fun deleteOldSections(newList: List<String>, id: String?) {
+        val oldList = withContext(Dispatchers.IO) { sectionDao.getCourseSection(id!!) }
+        oldList.forEach {
+            if (!newList.contains(it)) {
+                sectionDao.deleteSection(it)
+            }
         }
     }
 
     private suspend fun getSectionContent(sectionId: String, runAttemptId: String, name: String?) {
-        when (val response = safeApiCall { Clients.onlineV2JsonApi.getSectionContents(sectionId) }) {
+        when (val response = safeApiCall { CBOnlineLib.onlineV2JsonApi.getSectionContents(sectionId) }) {
             is ResultWrapper.Success -> {
                 if (response.value.isSuccessful)
                     response.value.body()?.let {
@@ -64,7 +116,12 @@ class MyCourseRepository(
         }
     }
 
-    private suspend fun insertContents(contentList: List<LectureContent>, attemptId: String, sectionId: String, name: String?) {
+    private suspend fun insertContents(
+        contentList: List<LectureContent>,
+        attemptId: String,
+        sectionId: String,
+        name: String?
+    ) {
         contentList.forEach { content ->
             var contentDocument =
                 ContentDocument()
@@ -92,7 +149,7 @@ class MyCourseRepository(
                                 ?: 0,
                             contentLectureType.videoId
                                 ?: "",
-                            content.sectionContent?.id
+                            content.sectionContent?.sectionId
                                 ?: "",
                             contentLectureType.updatedAt
                         )
@@ -105,7 +162,7 @@ class MyCourseRepository(
                                 ?: "",
                             contentDocumentType.pdfLink
                                 ?: "",
-                            content.sectionContent?.id
+                            content.sectionContent?.sectionId
                                 ?: "",
                             contentDocumentType.updatedAt
                         )
@@ -122,7 +179,7 @@ class MyCourseRepository(
                                 ?: "",
                             contentVideoType.url
                                 ?: "",
-                            content.sectionContent?.id
+                            content.sectionContent?.sectionId
                                 ?: "",
                             contentVideoType.updatedAt
                         )
@@ -135,12 +192,12 @@ class MyCourseRepository(
                                 ?: "",
                             contentQna1.qId
                                 ?: 0,
-                            content.sectionContent?.id
+                            content.sectionContent?.sectionId
                                 ?: "",
                             contentQna1.updatedAt
                         )
                 }
-                "code_challenge" -> content.codeChallenge?.let { codeChallenge ->
+                "code-challenge" -> content.codeChallenge?.let { codeChallenge ->
                     contentCodeChallenge =
                         ContentCodeChallenge(
                             codeChallenge.id,
@@ -150,7 +207,7 @@ class MyCourseRepository(
                                 ?: 0,
                             codeChallenge.hbContestId
                                 ?: 0,
-                            content.sectionContent?.id
+                            content.sectionContent?.sectionId
                                 ?: "",
                             codeChallenge.updatedAt
                         )
@@ -175,20 +232,22 @@ class MyCourseRepository(
             if (content.progress != null) {
                 status =
                     content.progress?.status
-                        ?: ""
+                    ?: ""
                 progressId =
                     content.progress?.id
-                        ?: ""
+                    ?: ""
             } else {
                 status =
                     "UNDONE"
             }
             content.bookmark?.let {
-                bookmark = BookmarkModel(it.id ?: "",
+                bookmark = BookmarkModel(
+                    it.id ?: "",
                     it.runAttemptId ?: "",
                     it.contentId ?: "",
                     it.sectionId ?: "",
-                    it.createdAt ?: "")
+                    it.createdAt ?: ""
+                )
             }
 
             val newContent =
@@ -235,12 +294,6 @@ class MyCourseRepository(
         }
     }
 
-    suspend fun fetchSections(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.enrolledCourseById(attemptId) }
-
-    fun getRunById(attemptId: String) = courseWithInstructorDao.getRunById(attemptId)
-
-    fun getRunStats(attemptId: String) = runPerformanceDao.getPerformance(attemptId)
-    suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }
     suspend fun saveStats(body: PerformanceResponse, id: String) {
         runPerformanceDao.insert(
             RunPerformance(
@@ -253,7 +306,53 @@ class MyCourseRepository(
         )
     }
 
-    fun getNextContent(attemptId: String) = sectionWithContentsDao.resumeCourse(attemptId)
+    suspend fun saveRank(rank: RankResponse) {
+        hbRankDao.insert(
+            HBRankModel(
+                rank.bestRank,
+                rank.bestRankAchievedOn,
+                rank.currentMonthScore,
+                rank.currentOverallRank,
+                rank.previousMonthScore,
+                rank.previousOverallRank
+            )
+        )
+    }
 
-    suspend fun resetProgress(attemptId: ResetRunAttempt) = safeApiCall { Clients.api.resetProgress(attemptId) }
+    fun getHackerBlocksPerformance() = hbRankDao.getRank()
+
+    suspend fun resetProgress(attemptId: ResetRunAttempt) = safeApiCall { CBOnlineLib.api.resetProgress(attemptId) }
+
+    private suspend fun clearCart() = safeApiCall { CBOnlineLib.api.clearCart() }
+
+    suspend fun addToCart(id: String) = safeApiCall {
+        clearCart()
+        CBOnlineLib.api.addToCart(id)
+    }
+
+    suspend fun fetchLeaderboard(runId: String) = safeApiCall { CBOnlineLib.api.leaderboardById(runId) }
+
+    suspend fun fetchSections(attemptId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.enrolledCourseById(attemptId) }
+
+    suspend fun getStats(id: String) = safeApiCall { CBOnlineLib.api.getMyStats(id) }
+
+    suspend fun requestApproval(attemptId: String) = safeApiCall { CBOnlineLib.api.requestApproval(attemptId) }
+
+    suspend fun getPerformance() = safeApiCall { CBOnlineLib.api.getHackerBlocksPerformance() }
+
+    suspend fun pauseCourse(id: String?) = safeApiCall {
+        checkNotNull(id) { "RunAttempt Id cannot be null" }
+        CBOnlineLib.onlineV2JsonApi.pauseCourse(id)
+    }
+
+    suspend fun unPauseCourse(id: String?) = safeApiCall {
+        checkNotNull(id) { "RunAttempt Id cannot be null" }
+        CBOnlineLib.onlineV2JsonApi.unPauseCourse(id)
+    }
+
+    suspend fun updateRunAttempt(runAttempt: RunAttempts) {
+        attemptDao.updatePause(runAttempt.id, runAttempt.paused, runAttempt.pauseTimeLeft, runAttempt.lastPausedLeft)
+    }
+
+    fun getRunAttempt(id: String) = attemptDao.getRunAttempt(id)
 }

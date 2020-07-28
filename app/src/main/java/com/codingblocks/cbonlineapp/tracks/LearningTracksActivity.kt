@@ -8,19 +8,18 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
-import com.codingblocks.cbonlineapp.course.ItemClickListener
+import com.codingblocks.cbonlineapp.course.adapter.ItemClickListener
 import com.codingblocks.cbonlineapp.course.batches.BatchListAdapter
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.PROFESSIONAL
 import com.codingblocks.cbonlineapp.util.STUDENT
-import com.codingblocks.cbonlineapp.util.extensions.nonNull
-import com.codingblocks.cbonlineapp.util.extensions.observeOnce
-import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.codingblocks.cbonlineapp.util.extensions.setRv
-import com.codingblocks.cbonlineapp.util.extensions.setToolbar
-import com.codingblocks.cbonlineapp.util.extensions.showHelpDialog
+import com.codingblocks.cbonlineapp.util.extensions.*
+import com.codingblocks.cbonlineapp.util.livedata.nonNull
+import com.codingblocks.cbonlineapp.util.livedata.observeOnce
+import com.codingblocks.cbonlineapp.util.livedata.observer
+import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Professions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.activity_learning_tracks.*
@@ -61,18 +60,29 @@ class LearningTracksActivity : BaseCBActivity() {
         setToolbar(tracksToolbar)
         setUpBottomSheet()
         setChips()
+        activityLearningShimmer.showShimmer(true)
         tracksRv.setRv(this, tracksListAdapter)
+
         vm.fetchTracks().observer(this) { courses ->
             tracksListAdapter.submitList(courses)
         }
         vm.fetchProfessions().observer(this) {
             it?.takeIf { it.isNotEmpty() }?.get(0)?.let { it1 -> setProfession(it1) }
             batchListAdapter.submitList(it)
+            activityLearningShimmer.hideAndStop()
         }
 
         needHelp.setOnClickListener {
-            showHelpDialog(type = "Track") { b: Boolean, name: String, number: String ->
+            showHelpDialog { _: Boolean, name: String, number: String ->
                 vm.generateLead(name, number)
+                root.showSnackbar("Your response has been submitted successfully", action = false)
+            }
+        }
+        vm.errorLiveData.observer(this) {
+            when (it) {
+                ErrorStatus.NO_CONNECTION -> {
+                    showOffline()
+                }
             }
         }
 

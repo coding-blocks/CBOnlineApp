@@ -1,0 +1,72 @@
+name: CI Lint and Tests
+
+# Controls when the action will run. Triggers the workflow on pull request
+# events or push events in the develop branch.
+on:
+  pull_request:
+  push:
+    branches:
+      # Push events on develop branch
+      - development
+
+jobs:
+  linters:
+    name: Lint Tests
+    runs-on:  ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download Ktlint
+        run: |
+          KTLINT="0.37.0"
+          echo Using Ktlint $KTLINT
+          curl -sSLO https://github.com/pinterest/ktlint/releases/download/$KTLINT/ktlint
+          chmod a+x ktlint
+
+      - name: Kotlin lint check
+        run: ./ktlint --android onlineapi/src/**/*.kt app/src/**/*.kt && echo "Lint completed successfully"
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Grant Permission to Execute
+        run: chmod +x gradlew
+
+      - name: Unit tests
+        run: bash ./gradlew test --stacktrace
+
+  apk:
+    name: Generate APK
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Grant Permission to Execute
+        run: chmod +x gradlew
+
+      - name: Install NDK
+        run: echo "y" | sudo /usr/local/lib/android/sdk/tools/bin/sdkmanager --install "ndk;20.0.5594570" --sdk_root=${ANDROID_SDK_ROOT}
+
+      - name: Build debug APK
+        run: bash ./gradlew assembleDebug --stacktrace
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: app/build/outputs/apk/debug/app-debug.apk

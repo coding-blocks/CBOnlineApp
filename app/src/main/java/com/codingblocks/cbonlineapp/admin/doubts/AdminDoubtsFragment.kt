@@ -9,21 +9,18 @@ import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
-import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showEmptyView
 import com.codingblocks.cbonlineapp.util.extensions.showShimmer
-import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Doubts
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.activity_admin.*
 import kotlinx.android.synthetic.main.doubts_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -115,7 +112,7 @@ class AdminDoubtsFragment : BaseCBFragment(), TabLayout.OnTabSelectedListener {
             setRv(requireContext(), doubtsAdapter)
         }
 
-        viewModel.listDoubtsResponse.observer(viewLifecycleOwner) {
+        viewModel.listDoubtsResponse.observer(thisLifecycleOwner) {
             if (it.isNullOrEmpty()) {
                 if (adminTabLayout.selectedTabPosition == 0) {
                     emptyMessageTv.text = getString(R.string.empty_live_doubt)
@@ -128,26 +125,26 @@ class AdminDoubtsFragment : BaseCBFragment(), TabLayout.OnTabSelectedListener {
             changeViewState(adminDoubtRv, internetll, emptyll, doubtShimmer, it.isEmpty())
         }
 
-        viewModel.errorLiveData.observer(viewLifecycleOwner) {
+        viewModel.errorLiveData.observer(thisLifecycleOwner) {
             when (it) {
                 ErrorStatus.NO_CONNECTION -> {
                     showEmptyView(internetll, emptyll, doubtShimmer)
                 }
                 ErrorStatus.UNAUTHORIZED -> {
-                    Components.showConfirmation(requireContext(), UNAUTHORIZED) {
+                    CustomDialog.showConfirmation(requireContext(), UNAUTHORIZED) {
                         requireActivity().finish()
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
-                    root.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin) {
-                        fetchDoubts(adminTabLayout.selectedTabPosition)
-                    }
+//                    root.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin) {
+//                        fetchDoubts(adminTabLayout.selectedTabPosition)
+//                    }
                 }
             }
         }
 
-        viewModel.barMessage.observer(viewLifecycleOwner) {
-            root.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin, false)
+        viewModel.barMessage.observer(thisLifecycleOwner) {
+//            root.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin, false)
         }
 
         doubtsAdapter.apply {
@@ -156,14 +153,14 @@ class AdminDoubtsFragment : BaseCBFragment(), TabLayout.OnTabSelectedListener {
             onDiscussClick = discussClickListener
             onResolveClick = resolveClickListener
         }
-        viewModel.nextOffSet.observer(viewLifecycleOwner) { offSet ->
+        viewModel.nextOffSet.observer(thisLifecycleOwner) { offSet ->
             nextBtn.isEnabled = offSet != -1
             nextBtn.setOnClickListener {
                 viewModel.fetchLiveDoubts(offSet)
             }
         }
 
-        viewModel.prevOffSet.observer(viewLifecycleOwner) { offSet ->
+        viewModel.prevOffSet.observer(thisLifecycleOwner) { offSet ->
             prevBtn.isEnabled = offSet != -1
             prevBtn.setOnClickListener {
                 viewModel.fetchLiveDoubts(offSet)

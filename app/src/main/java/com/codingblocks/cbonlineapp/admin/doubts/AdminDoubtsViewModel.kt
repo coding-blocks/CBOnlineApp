@@ -1,8 +1,8 @@
 package com.codingblocks.cbonlineapp.admin.doubts
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
@@ -12,10 +12,9 @@ import com.github.jasminb.jsonapi.JSONAPIDocument
 import kotlinx.coroutines.async
 import retrofit2.Response
 
-class AdminDoubtsViewModel(private val repo: AdminDoubtRepository) : ViewModel() {
+class AdminDoubtsViewModel(private val repo: AdminDoubtRepository) : BaseCBViewModel() {
 
     var listDoubtsResponse: MutableLiveData<List<Doubts>> = MutableLiveData()
-    var errorLiveData: MutableLiveData<String> = MutableLiveData()
     var nextOffSet: MutableLiveData<Int> = MutableLiveData(-1)
     var prevOffSet: MutableLiveData<Int> = MutableLiveData(-1)
     var barMessage: MutableLiveData<String> = MutableLiveData()
@@ -68,10 +67,6 @@ class AdminDoubtsViewModel(private val repo: AdminDoubtRepository) : ViewModel()
                 }
             }
         }
-    }
-
-    private fun setError(error: String) {
-        errorLiveData.postValue(error)
     }
 
     suspend fun requestChat(doubtId: String): String = viewModelScope.async {

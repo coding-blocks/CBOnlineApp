@@ -8,15 +8,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.SystemClock
-import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.codingblocks.cbonlineapp.CBOnlineApp
-import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.appContext
+import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
 import com.codingblocks.cbonlineapp.util.ADMIN_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.extensions.isotomillisecond
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.safeApiCall
 import kotlinx.coroutines.Dispatchers
@@ -44,12 +42,11 @@ class DoubtReceiver : BroadcastReceiver() {
         notificationMgr = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         GlobalScope.launch {
-            when (val response = safeApiCall(Dispatchers.IO) { Clients.onlineV2JsonApi.getLiveDoubts() }) {
+            when (val response = safeApiCall(Dispatchers.IO) { CBOnlineLib.onlineV2JsonApi.getLiveDoubts() }) {
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful)
                         if (!body()?.get().isNullOrEmpty()) {
                             body()?.get()?.get(0)?.apply {
-                                Log.i("Notification Worker", "CurrentTime ${System.currentTimeMillis()} AckTime ${createdAt.isotomillisecond()}")
                                 if ((System.currentTimeMillis() - createdAt.isotomillisecond()) < 900000) {
                                     showNotification(context)
                                 }
@@ -61,9 +58,9 @@ class DoubtReceiver : BroadcastReceiver() {
     }
 
     private fun showNotification(context: Context) {
-        val intent = Intent(CBOnlineApp.appContext, AdminActivity::class.java)
+        val intent = Intent(mInstance, AdminActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
-            appContext, 0 /* Request code */, intent,
+            mInstance, 0 /* Request code */, intent,
             PendingIntent.FLAG_ONE_SHOT
         )
         val notification = NotificationCompat.Builder(context, ADMIN_CHANNEL_ID).apply {

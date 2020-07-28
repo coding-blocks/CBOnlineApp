@@ -50,12 +50,12 @@
 
 
                 <TextView
+                    android:id="@+id/confirmReset"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/reset"
-                    android:id="@+id/confirmReset"
                     android:textAlignment="viewEnd"
                     android:textColor="#ff6666"
                     android:textSize="12sp" />
@@ -99,15 +99,25 @@
             android:id="@+id/chart1"
             android:layout_width="match_parent"
             android:layout_height="160dp"
-            android:layout_marginTop="@dimen/margin_large"
             android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
             android:layout_marginEnd="@dimen/margin_large" />
 
-        <LinearLayout
-            android:visibility="gone"
+        <include
+            android:id="@+id/hbRankContainer"
+            layout="@layout/item_hb_performance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <View
                 android:layout_width="match_parent"
@@ -178,6 +188,109 @@
             android:layout_marginTop="@dimen/margin_large"
             android:background="@drawable/dividerthick" />
 
+        <LinearLayout
+            android:id="@+id/courseLeaderboardll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/course_leaderboard"
+                    android:src="@drawable/ic_leaderboard_gradient" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:text="@string/course_leaderboard"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/gilroy_medium"
+                        android:text="@string/leaderboard_desc"
+                        android:textColor="@color/brownish_grey"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_weight="0.2"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/rank"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/user"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:layout_weight="0.2"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/score"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/courseLeaderboardRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:overScrollMode="never"
+                tools:itemCount="5"
+                tools:listitem="@layout/item_course_leaderboard" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="@dimen/margin_large"
+                android:background="@drawable/dividerthick" />
+        </LinearLayout>
+
         <include
             layout="@layout/item_certificate"
             android:layout_width="match_parent"
@@ -187,9 +300,9 @@
             android:layout_marginEnd="@dimen/margin_large" />
 
         <HorizontalScrollView
-            android:layout_marginTop="@dimen/margin_medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium"
             android:layout_marginBottom="@dimen/margin_large"
             android:scrollbars="none">
 
@@ -203,15 +316,19 @@
                 android:paddingBottom="@dimen/margin_medium_small">
 
                 <LinearLayout
-                    android:visibility="gone"
+                    android:id="@+id/goodiesContainer"
                     android:layout_width="210dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/margin_medium_small"
                     android:background="@drawable/background_purple"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:orientation="vertical"
                     android:paddingStart="@dimen/margin_medium_small"
                     android:paddingTop="@dimen/margin_large"
                     android:paddingEnd="@dimen/margin_medium"
-                    android:paddingBottom="@dimen/margin_large">
+                    android:paddingBottom="@dimen/margin_large"
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -230,22 +347,24 @@
                         app:startColor="#fa8733" />
 
                     <TextView
+                        android:id="@+id/goodiesTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_medium_small"
                         android:fontFamily="@font/gilroy_medium"
-                        android:text="@string/goodie_desc"
+                        android:text="@string/goodiedesc"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/goodiesRequestTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_medium"
-                        android:drawableEnd="@drawable/ic_dropright"
+                        android:drawableEnd="@drawable/ic_request_selector"
                         android:drawablePadding="10dp"
-                        android:text="@string/request_now"
                         android:fontFamily="@font/gilroy_bold"
+                        android:text="@string/request_now"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -253,17 +372,18 @@
 
                 <LinearLayout
                     android:id="@+id/whatsappContainer"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:layout_width="210dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_medium"
                     android:background="@drawable/background_green"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:orientation="vertical"
                     android:paddingStart="@dimen/margin_medium_small"
                     android:paddingTop="@dimen/margin_large"
                     android:paddingEnd="@dimen/margin_medium"
-                    android:paddingBottom="@dimen/margin_large">
+                    android:paddingBottom="@dimen/margin_large"
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -275,18 +395,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_medium_small"
+                        android:fontFamily="@font/gilroy_bold"
                         android:text="@string/join_group"
                         android:textColor="@color/white"
-                        android:fontFamily="@font/gilroy_bold"
                         android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_medium_small"
-                        android:textColor="@color/white"
                         android:fontFamily="@font/gilroy_medium"
                         android:text="@string/whatsapp_desc"
+                        android:textColor="@color/white"
                         android:textSize="12sp" />
 
                     <TextView

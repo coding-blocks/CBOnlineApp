@@ -24,14 +24,13 @@
         <item name="radioButtonStyle">@style/MyRadioButtonStyle</item>
         <!--        <item name="chipStyle">@style/ThinChip</item>-->
         <!--        <item name="materialButtonStyle">@style/MaterialButton</item>-->
-        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+        <!--        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>-->
         <!-- enable window content transitions -->
         <item name="android:windowActivityTransitions">true</item>
         <!-- specify enter and exit transitions -->
         <item name="android:windowEnterTransition">@transition/explode</item>
         <item name="android:windowExitTransition">@transition/explode</item>
         <item name="android:lineSpacingExtra">4dp</item>
-        <item name="android:ellipsize">end</item>
     </style>
 
     <style name="NewAppTheme.Dark" parent="NewAppTheme">
@@ -163,15 +162,22 @@
     </style>
 
 
-    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/AppModalStyle</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowSoftInputMode">adjustPan</item>
     </style>
 
     <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/rounded_dialog</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 
+    <style name="RoundedBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/RoundedModalStyle</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="RoundedModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_dialog</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -243,6 +249,43 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">12sp</item>
         <item name="cornerRadius">20dp</item>
+    </style>
+
+    <style name="CustomMaterialDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="materialAlertDialogTitleTextStyle">
+            @style/MyTitle_MaterialAlertDialog.MaterialComponents.Title.Text
+        </item>
+    </style>
+
+    <style name="MyTitle_MaterialAlertDialog.MaterialComponents.Title.Text" parent="@style/MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="fontFamily">@font/gilroy_semibold</item>
+    </style>
+
+    <style name="BottomNavigationViewTextStyle">
+        <item name="fontFamily">@font/gilroy_medium</item>
+        <item name="fontSize">10sp</item>
+    </style>
+
+    <style name="BottomNavigationViewInActiveTextStyle">
+        <item name="fontFamily">@font/gilroy_medium</item>
+        <item name="fontSize">10sp</item>
+    </style>
+
+    <style name="BottomNavigationTextApperance">
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="CardShapeApperance">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">10dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeTopRight">10dp</item>
+    </style>
+
+    <style name="roundedImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
     </style>
 
 

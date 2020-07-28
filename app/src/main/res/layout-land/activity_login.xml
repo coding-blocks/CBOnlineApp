@@ -33,8 +33,7 @@
         android:layout_marginEnd="@dimen/margin_xxxl"
         app:layout_constraintBottom_toTopOf="@+id/skipBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <TextView

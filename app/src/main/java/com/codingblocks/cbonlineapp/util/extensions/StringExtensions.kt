@@ -1,19 +1,14 @@
 package com.codingblocks.cbonlineapp.util.extensions
 
+import android.graphics.Color
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
 import androidx.core.text.color
-import com.codingblocks.cbonlineapp.R
-import com.codingblocks.onlineapi.models.Note
-import com.google.gson.Gson
 import org.ocpsoft.prettytime.PrettyTime
 import java.io.File
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.TimeZone
-import java.util.Locale
-import java.util.Calendar
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.NoSuchElementException
 import kotlin.math.floor
@@ -21,7 +16,7 @@ import kotlin.math.log10
 
 fun folderSize(directory: File): Long {
     var length: Long = 0
-    for (file in directory.listFiles()) {
+    directory.listFiles()?.forEach { file ->
         length += if (file.isFile)
             file.length()
         else
@@ -47,7 +42,7 @@ fun String.greater(): Boolean {
 }
 
 fun String.timeAgo(): String {
-    return if (this.isNullOrEmpty())
+    return if (this.isEmpty())
         ""
     else {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
@@ -113,8 +108,8 @@ fun Double.secToTime(): String {
 }
 
 fun getDateForTime(time: String): String {
-    val dateFormat = SimpleDateFormat("dd-MMM-yy", Locale.US)
-    dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+    val dateFormat = SimpleDateFormat("dd MMM " + "''" + "yy", Locale.US)
+    dateFormat.timeZone = TimeZone.getTimeZone("IST")
 
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = time.toLong() * 1000
@@ -132,6 +127,16 @@ fun getDate(): String {
     return dateFormat.format(calendar.time)
 }
 
+fun getDateForRun(time: String): String {
+    val dateFormat = SimpleDateFormat("MMM " + "''" + "yy", Locale.getDefault())
+    dateFormat.timeZone = TimeZone.getDefault()
+
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = time.toLong() * 1000
+    calendar.timeZone = TimeZone.getTimeZone("IST")
+    return dateFormat.format(calendar.time)
+}
+
 fun getSpannableSring(boldText: String, normalText: String): SpannableStringBuilder =
     SpannableStringBuilder()
         .bold { append(boldText) }
@@ -139,8 +144,9 @@ fun getSpannableSring(boldText: String, normalText: String): SpannableStringBuil
 
 fun getSpannableString(text: String): SpannableStringBuilder =
     SpannableStringBuilder()
-        .color(R.color.brownish_grey) {}
-        .append(text)
+        .color(Color.parseColor("#f2734c")) {
+            append(text)
+        }
 
 fun getSpannableStringSecondBold(normalText: String, boldText: String): SpannableStringBuilder =
     SpannableStringBuilder()
@@ -174,11 +180,6 @@ fun timeAgo(time: Long): String {
         return "$interval Minutes Ago"
     }
     return "Just Now"
-}
-
-// Deserialize to single object.
-fun String.deserializeNoteFromJson(): Note {
-    return Gson().fromJson(this, Note::class.java)
 }
 
 fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()

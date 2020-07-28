@@ -43,7 +43,7 @@
     <string name="phone3_2">9811228053</string>
     <string name="email3_1">rajesh@codingblocks.com</string>
     <string name="dwarka_head">Mr. Rajesh Sachdev</string>
-    <string name="noida_head">Varun Kohli</string>
+    <string name="noida_head">Mr. Varun Kohli</string>
     <string name="pitampura_head">Mrs. Priyanka Dagar</string>
     <string name="pitampura">Pitampura\n(Corporate Office)</string>
     <string name="noida_center">NOIDA CENTER</string>
@@ -54,7 +54,7 @@
     <string name="clean_dialog_title">You have reached your data limit!</string>
     <string name="clean_dialog_description">If you want to continue with the download, Please clear the oldest download.</string>
     <string name="clean_dialog_okBtn">Clear Oldest Download</string>
-    <string name="clean_dialog_cancelBtn">Cancel Current Download</string>
+    <string name="clean_dialog_cancelBtn">Change Settings</string>
     <string name="recommended_courses_description">Based on the industry trends, you should complete these courses</string>
     <string name="applied">Applied</string>
     <string name="job_eligible">Status:  Eligible</string>
@@ -83,11 +83,12 @@
     <string name="chat_with_ta">Chat with TA</string>
     <string name="comment">Comment</string>
     <string name="doubts">Doubts</string>
-    <string name="my_courses">My Courses</string>
+    <string name="my_courses">MyCourses</string>
     <string name="explore">Explore</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="no_doubts">No Doubts</string>
+    <string name="click_to_add_doubt">Click on + to ask a doubt.</string>
     <string name="go_to_classroom">Go to Classroom</string>
     <string name="doubts_that_you_ask_appear_here">Doubts that you ask appear here</string>
     <string name="reopen_doubt">Reopen Doubt</string>
@@ -98,6 +99,10 @@
     <string name="recently_accessed">Recently Accessed</string>
     <string name="wishlisted_courses">Wishlisted Courses</string>
     <string name="all_courses">All Courses</string>
+    <string name="free_trials">Free Trials</string>
+    <string name="active">Active</string>
+    <string name="premium">Premium</string>
+
     <string name="expired_courses">Expired Courses</string>
     <string name="buy_extension">Buy Extension</string>
     <string name="doubt_resolved_title">Your doubt has been marked Resolved</string>
@@ -134,9 +139,9 @@
     <string name="explore_courses">Explore Courses</string>
     <string name="nothing_to_show">Nothing to show</string>
     <string name="empty_library">Your library will start showing once you enroll in any course</string>
-    <string name="cancel">Cancel</string>
     <string name="save">Save</string>
-    <string name="continue_with_mobile_number">Continue With Mobile Number</string>
+    <string name="login_with">Login with</string>
+    <string name="mobile_or_email">Mobile Number or Email ID</string>
     <string name="google">Google</string>
     <string name="facebook">Facebook</string>
     <string name="performance_graph">Performance Graph</string>
@@ -193,14 +198,14 @@
     <string name="whatsapp">Whatsapp</string>
     <string name="course_leaderboard">Course Leaderboard</string>
     <string name="claim_goodies">Claim Goodies</string>
-    <string name="goodie_desc">You have completed 70% of the course. You can claim your goodies now!</string>
+    <string name="goodiedesc">You have completed %d%% of the course. You can claim your goodies now!</string>
     <string name="request_now">Request Now</string>
     <string name="reset">Reset</string>
-    <string name="certificate_desc">Complete 90% of the course to unlock certificate</string>
+    <string name="certificate_desc">Complete %d%% of the course to unlock certificate</string>
     <string name="generate_certificate">Generate Certificate</string>
-    <string name="mentor_approval_pending">Mentor Approval - Pending</string>
-    <string name="generate">Generate</string>
-    <string name="threshold_completion_90">Threshold Completion: 90%+</string>
+    <string name="mentorapproval">Mentor Approval - %s</string>
+    <string name="request">Request</string>
+    <string name="thresholdcompletion">Threshold Completion: %d%%+</string>
     <string name="percentile">Percentile</string>
     <string name="my_wishlist">My Wishlist</string>
     <string name="wishlisted_desc">Your wishlisted courses appear here</string>
@@ -208,7 +213,7 @@
     <string name="commenting_as">Commenting as</string>
     <string name="my_couurse_logged_out">Your enrolled courses will appear here.\nLogin now to explore more!</string>
     <string name="my_doubts_logged_out">All your course related doubts will appear here.\nLogin now to explore more!</string>
-    <string name="my_dashboard_logged_out">Your dashboard consists of uour course performance,\n your wishlisted courses, your applied jobs \n and many more</string>
+    <string name="my_dashboard_logged_out">Your dashboard consists of your course performance,\n your wishlisted courses, your applied jobs \n and many more</string>
     <string name="learning_tracks">Learning Tracks</string>
     <string name="invite_earn"><![CDATA[Invite & Earn]]></string>
     <string name="your_referral_code">Your Referral Code</string>
@@ -237,6 +242,7 @@
     <string name="username">Username</string>
     <string name="back">Back</string>
     <string name="your_courses_will_start_showing_once_you_enroll_nin_any_course">Your Courses will start showing once you enroll\nin any course</string>
+    <string name="your_courses_will_start_showing_once_you_purchase_any_course">Your Courses will start showing once you purchase any course</string>
     <string name="frequently_asked_questions">Frequently Asked Questions</string>
     <string name="student">Student</string>
     <string name="professional">Professional</string>
@@ -244,17 +250,22 @@
     <string name="i_want_to_become">I want to become</string>
     <string name="choose_track">Choose Track</string>
     <string name="purchase">"You need to buy this course to access this content"</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
     <string name="wait">"Your course will start on "</string>
     <string name="expired">This section is unavailable as your course has been expired.Please buy an extension to watch your videos</string>
     <string name="unavailable">This section is unavailable on mobile, please view it on the browser instead!</string>
-    <string name="confirm">Confirmation</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="confirm">Confirm</string>
     <string name="country">Country</string>
     <string name="state">State</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="delete_confrim">Are your sure you want to delete selected items.</string>
+    <string name="delete_video_desc">Are your sure you want to delete this video.</string>
+    <string name="delete_all_video_desc">Are your sure you want to delete all videos.</string>
+    <string name="delete_all_notifications">Are your sure you want to delete all notifications.</string>
     <string name="proceed_to_pay">Proceed to Pay</string>
     <string name="coupon_code">Coupon Code</string>
     <string name="onlineUrl">online.codingblocks.com/app/courses/</string>
@@ -264,6 +275,63 @@
     <string name="note_your_downloads_will_be_deleted_automatically_after_15_days_of_download">Note: Your downloads will be deleted automatically after 15 days of download.</string>
     <string name="certified">"Certified in "</string>
     <string name="certified_desc">At the end of the track, you will be job ready and can start applying for jobs!</string>
-
-
+    <string name="edit_profile">Edit Profile</string>
+    <string name="logout">Logout</string>
+    <string name="logout_dialog_title">Logout Confirmation</string>
+    <string name="logout_dialog_description">Logging out will remove all your downloaded course videos. Are you sure ?</string>
+    <string name="goodiedesclocked">Complete %d%% of your course to unlock and claim goodies</string>
+    <string name="goodieFormNote">1. Provide correct postal address where there will be someone to collect.\n2. We will send bags only in India.\n3. In case, bag is returned back to us then you have to collect the same from our center.\n3. We will send the goodies within next 10 days and will share the tracking ids as soon it is in transit.</string>
+    <string name="section_name">Section %s</string>
+    <string name="rupee_price">₹ %s</string>
+    <string name="batch_starting">"Batch starting %s"</string>
+    <string name="compare">Compare</string>
+    <string name="submit">Submit</string>
+    <string name="back_press">Please click Back again to exit</string>
+    <string name="progress">%d %%</string>
+    <string name="completed">%d %% Completed</string>
+    <string name="continue_from_where_you_left">Continue from where you left</string>
+    <string name="input_format">Input Format</string>
+    <string name="constraints">Constraints</string>
+    <string name="output_format">Output Format</string>
+    <string name="sample_input">Sample Input</string>
+    <string name="sample_output">Sample Output</string>
+    <string name="explanation">Explanation</string>
+    <string name="clear">Remove Product</string>
+    <string name="no_notes">No Notes</string>
+    <string name="click_on_to_add_a_new_note">Click on + to add a new note.</string>
+    <string name="payment_failed">Your payment has failed!</string>
+    <string name="internet_connection_error">Please check your internet connection</string>
+    <string name="retry">Retry Now</string>
+    <string name="rank">Rank</string>
+    <string name="user">User</string>
+    <string name="score">Score</string>
+    <string name="hb_report">Hacker Blocks Report</string>
+    <string name="coding_skills">Improve your coding skills</string>
+    <string name="current_rank">Your Current Rank</string>
+    <string name="hb_performance">Your Monthly Score</string>
+    <string name="ranks">%d Ranks</string>
+    <string name="points">%d Points</string>
+    <string name="policy_text"><![CDATA[By logging in you agree to Coding Blocks’s\n Privacy Policy & Terms of Service]]></string>
+    <string name="spin_wheel">Spin Wheel</string>
+    <string name="winnings">Winnings</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="rules">Rules</string>
+    <string name="logged_in">Logged in successfully !!</string>
+    <string name="requested">Requested</string>
+    <string name="download_share"><![CDATA[Download & Share]]></string>
+    <string name="pause_course">Pause Course</string>
+    <string name="upgrade_course">Upgrade Course</string>
+    <string name="no_take_me_back">No, Take me back</string>
+    <string name="pause_now">Pause Now</string>
+    <string name="login_desc">You have been logged out of this account.Please login again to Continue</string>
+    <string name="log_in">Log In</string>
+    <string name="share_course">Share Course</string>
+    <string name="rate_course">Rate Course</string>
+    <string name="about_course">About Course</string>
+    <string name="are_you_sure_you_want_to_pause">Are you sure you want to pause?</string>
+    <string name="pause_desc">Pause feature allows to \'pause\' your course during important days such as exam-time. Your course expiry date will be extended by X days if you pause your course for X days (up to 30 days max). Course can be paused-unpaused multiple times.\n\nAll progress related to course material including assignments bookmarks, notes and your doubts that you asked will remain. However, you won\'t be able access course until you unpause.\n</string>
+    <string name="pause_time_left">\nYou have a %s of time left.</string>
+    <string name="update">Update</string>
+    <string name="notes_info">%s | %s</string>
+    <string name="post">Post</string>
 </resources>

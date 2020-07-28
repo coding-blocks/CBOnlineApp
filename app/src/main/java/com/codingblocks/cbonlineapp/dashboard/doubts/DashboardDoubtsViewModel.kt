@@ -2,32 +2,18 @@ package com.codingblocks.cbonlineapp.dashboard.doubts
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
-import com.codingblocks.cbonlineapp.util.ALL
-import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Doubts
 
-class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : ViewModel() {
+class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : BaseCBViewModel() {
+    val attemptId = MutableLiveData<String>()
 
-    var errorLiveData: MutableLiveData<String> = MutableLiveData()
-    var barMessage: MutableLiveData<String> = MutableLiveData()
-    var type: MutableLiveData<String> = MutableLiveData(ALL)
-    var attemptId: MutableLiveData<String> = MutableLiveData()
-
-    val doubts by lazy {
-        Transformations.switchMap(DoubleTrigger(type, attemptId)) {
-            fetchDoubts()
-            repo.getDoubtsByCourseRun(it.first, it.second ?: "")
-        }
-    }
-
-    fun fetchDoubts() {
+    private fun fetchDoubts() {
         runIO {
             if (!attemptId.value.isNullOrEmpty())
                 when (val response = repo.fetchDoubtsByCourseRun(attemptId.value ?: "")) {
@@ -43,10 +29,6 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
                     }
                 }
         }
-    }
-
-    private fun setError(error: String) {
-        errorLiveData.postValue(error)
     }
 
     fun resolveDoubt(doubt: DoubtsModel, saveToDb: Boolean = false) {
@@ -67,9 +49,6 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
             }
         }
     }
-
-//    fun getRunId() = repo.getRuns()
-
     fun getDoubt(doubtId: String): LiveData<DoubtsModel> {
         fetchComments(doubtId)
         return repo.getDoubtById(doubtId)
@@ -107,6 +86,4 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
             }
         }
     }
-
-    fun getRuns() = repo.getRuns()
 }

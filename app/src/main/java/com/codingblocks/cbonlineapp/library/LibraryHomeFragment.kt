@@ -39,8 +39,6 @@ class LibraryHomeFragment : BaseCBFragment(), View.OnClickListener {
                     LibraryViewFragment(),
                     "LibraryView",
                     containerViewId = R.id.libraryContainer,
-                    enterAnimation = R.animator.slide_in_right,
-                    exitAnimation = R.animator.slide_out_left,
                     addToStack = true
                 )
             }
@@ -50,8 +48,6 @@ class LibraryHomeFragment : BaseCBFragment(), View.OnClickListener {
                     LibraryViewFragment(),
                     "LibraryView",
                     containerViewId = R.id.libraryContainer,
-                    enterAnimation = R.animator.slide_in_right,
-                    exitAnimation = R.animator.slide_out_left,
                     addToStack = true
                 )
             }
@@ -61,8 +57,6 @@ class LibraryHomeFragment : BaseCBFragment(), View.OnClickListener {
                     LibraryViewFragment(),
                     "LibraryView",
                     containerViewId = R.id.libraryContainer,
-                    enterAnimation = R.animator.slide_in_right,
-                    exitAnimation = R.animator.slide_out_left,
                     addToStack = true
                 )
             }

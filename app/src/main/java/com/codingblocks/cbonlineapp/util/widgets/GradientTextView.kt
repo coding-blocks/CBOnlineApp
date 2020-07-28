@@ -4,15 +4,14 @@ import android.content.Context
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.util.AttributeSet
-
 import androidx.core.content.ContextCompat
-
 import com.codingblocks.cbonlineapp.R
 
 class GradientTextView : androidx.appcompat.widget.AppCompatTextView {
 
     var startColor = R.color.pastel_red
     var endColor = R.color.dusty_orange
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)

@@ -1,122 +1,109 @@
 package com.codingblocks.onlineapi.api
 
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineCommunicator
+import com.codingblocks.onlineapi.CBOnlineLib
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 class OnlineJsonApiAuthenticatedTest {
-    val jsonapi = Clients.onlineV2JsonApi
 
     @Before
-    fun `set JWT`() {
-        Clients.authJwt =
-            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiQXJuYXYiLCJsYXN0bmFtZSI6Ikd1cHRhIiwidXNlcm5hbWUiOiJjaGFtcGlvbnN3aW1tZXItdCIsImVtYWlsIjoiYXJuYXZAY29kaW5nYmxvY2tzLmNvbSIsInZlcmlmaWVkZW1haWwiOiJhcm5hdkBjb2RpbmdibG9ja3MuY29tIiwidmVyaWZpZWRtb2JpbGUiOiIrOTEtODgwMDIzMzI2NiIsIm1vYmlsZSI6Iis5MS04ODAwMjMzMjY2Iiwib25lYXV0aF9pZCI6IjQiLCJsYXN0X3JlYWRfbm90aWZpY2F0aW9uIjoiMCIsInBob3RvIjoiaHR0cHM6Ly9taW5pby5jb2RpbmdibG9ja3MuY29tL29uZWF1dGgtYXNzZXRzL3VzZXI0XzE1Mzg1ODI0OTg2OTMucG5nIiwiY29sbGVnZSI6IkRlbGhpIFRlY2hub2xvZ2ljYWwgVW5pdmVyc2l0eSAoTmV3LURlbGhpKSIsImdyYWR1YXRpb255ZWFyIjpudWxsLCJvcmdhbml6YXRpb24iOm51bGwsInJvbGVJZCI6MSwiY3JlYXRlZEF0IjoiMjAxNy0wNC0wM1QwNzoxNTo1MS43MDVaIiwidXBkYXRlZEF0IjoiMjAxOS0xMi0yMlQxODoxMzozMi42ODBaIiwiY2xpZW50SWQiOiIxNmM5ZThjNC03MWNmLTQ5NWMtYjYwZS1kMmVmNzliYzI1YjciLCJjbGllbnQiOiJ3ZWIiLCJpc1Rva2VuRm9yQWRtaW4iOmZhbHNlLCJpYXQiOjE1NzgxODE1MjUsImV4cCI6MTU3ODE4MzAyNX0.MMbLbvFE_xpayBBa8ecQw9zWLPgLf7WXTDOyWY38dn1rGZK6GiaX9_SLRTO3YantjDLa9X6L9lJi8ywfHFvqizdE8x3ghi2KPJgUDSBRAkThN5lPmYBqUMsnGfxKPTiHID6sAdejWf3ObAibvbzTfTSxTpouwKsGSiPhtk8e78NkY1_mWx9WEhdGJ_rUT2q3Vi9Zl1Mf3DI4BHHJpghW2q3bKwAJgQekf29TgH61OcjJSntw2DhUoaQ2UDa6ZCI4thl4zve-ueWZVmMr4GuuSWjola3ipz6wQMuQn9jHAOM7s86ZkrAT7L26tQR3RPpd4K-fNyAd_eIBY5RqhQ9f9A"
+    fun `SET JWT`() {
+
+        val jwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjAzNDMxLCJmaXJzdG5hbWUiOiJQdWxraXQiLCJsYXN0bmFtZSI6IkFnZ2Fyd2FsIiwidXNlcm5hbWUiOiJwdWxraXQxMjM0IiwiZW1haWwiOiJwdWxraXQubWNhMTkuZHVAZ21haWwuY29tIiwidmVyaWZpZWRlbWFpbCI6InB1bGtpdC5tY2ExOS5kdUBnbWFpbC5jb20iLCJ2ZXJpZmllZG1vYmlsZSI6Iis5MS04NTk1MzUyNjQ3IiwibW9iaWxlIjoiKzkxLTk1ODIwNTQ2NjQiLCJvbmVhdXRoX2lkIjoiOTMwMjciLCJsYXN0X3JlYWRfbm90aWZpY2F0aW9uIjoiMCIsInBob3RvIjpudWxsLCJjb2xsZWdlIjoiMC0tLU9USEVSIC8gTk9UIExJU1RFRCAvIE5PIENPTExFR0UgLS0tMCIsImJyYW5jaCI6bnVsbCwiZ3JhZHVhdGlvbnllYXIiOiIyMDE5Iiwib3JnYW5pemF0aW9uIjpudWxsLCJyb2xlSWQiOjMsImNyZWF0ZWRBdCI6IjIwMjAtMDMtMTFUMTM6MDM6MDIuNjg3WiIsInVwZGF0ZWRBdCI6IjIwMjAtMDctMjdUMTM6MzY6NDEuMzY1WiIsInJvbGUiOnsiaWQiOjMsIm5hbWUiOiJNb2RlcmF0b3IiLCJjcmVhdGVkQXQiOiIyMDE4LTA5LTA0VDEzOjM4OjMxLjg4NVoiLCJ1cGRhdGVkQXQiOiIyMDE4LTA5LTA0VDEzOjM4OjMxLjg4NVoifSwiY2xpZW50SWQiOiI0MGY3YWJhNS02ZmQ4LTRlZGQtYjExZC05NGExZGZlN2VlYjAiLCJjbGllbnQiOiJhbmRyb2lkIiwiaWF0IjoxNTk1ODU3MDAxLCJleHAiOjE2MDEyNTcwMDF9.n1ZobWSZCjau_4y4sCpxv8zfKkqaYxELA0D4-clKIgjEdTwkYQMPHXaQJ38B5Vv5Nlnt0MD21z0ZQc41fo-ZP7THttbxUDA_da30jalzY3sIeafQoegalj2GDLGUx_OyVOYsHzv0v_dYfBkc1cMwJ1cVpdWI814RK-LFFdl8ToQHm2ZPVBQSIM4b5_rRXfeYtypCptH-C3lrueAWbrch7KITOGd8DK3RC292aU6NBNFf9IpyGXDaSfHSXPOOIpoqmg4tn8ZrcsIPebnCiWZXizqxdBWqXrjrQox2W6xhp1ghF0cQitiNyt7uKg-aOn27hn4LwgPqWq4-xPyRG3CRsQ"
+        val refreshToken = "57672e90-dada-4345-b596-d4133cb473d9"
+
+        CBOnlineLib.initialize(object : CBOnlineCommunicator {
+            override var authJwt: String
+                get() = jwt
+                set(value) {}
+            override var refreshToken: String
+                get() = refreshToken
+                set(value) {}
+            override var baseUrl: String
+                get() = "api-online.codingblocks.xyz"
+                set(value) {}
+        })
     }
-
-
-//    @Test
-//    fun getSectionContent() {
-//        runBlocking {
-//            val content = GlobalScope.async { Clients.onlineV2JsonApi.getSectionContents(sectionId = "19702") }
-//            val response = content.await()
-//            assertNotNull(response.body())
-//
-//        }
-//    }
-//
-//    @Test
-//    fun `GET section`() {
-//        runBlocking {
-//            val courses = jsonapi.getSections("795")
-//            assertNotNull(courses)
-//        }
-//    }
-//
-//
-//    @Test
-//    fun `GET myCourses`() {
-//        runBlocking {
-//            val courses = jsonapi.getMyCourses().body()?.get()
-//            assertNotNull(courses)
-//            assertTrue(courses?.isNotEmpty() == true)
-//        }
-//    }
-//
-//    @Test
-//    fun `GET enrolledCourse`() {
-//        val course = jsonapi.enrolledCourseById("22684").execute().body()
-//        assertNotNull(course)
-//    }
-
-//    @Test
-//    fun `GET getSectionContents`() {
-//        val section = jsonapi.getSectionContents("/sections/6874/relationships/contents").execute().body()
-//        assertNotNull(section)
-//    }
-
-//    @Test
-//    fun `GET QuizById`() {
-//        val quiz = jsonapi.getQuizById("23").execute().body()
-//        assertNotNull(quiz)
-//    }
-//
-//    @Test
-//    fun `GET Quiz`() {
-//        val quizzes = jsonapi.getQuizAttempt("3").execute().body()
-//        assertNotNull(quizzes)
-//    }
-//
-//    @Test
-//    fun `GET getQuizAttempById`() {
-//        val quiz = jsonapi.getQuizAttemptById("6443").execute().body()
-//        assertNotNull(quiz)
-//    }
-//
-//
-//    @Test
-//    fun `GET Question`() {
-//        val questions = jsonapi.getQuestionById("22").execute().body()
-//        assertNotNull(questions)
-//    }
-//
-//    @Test
-//    fun `GET Quiz Attempt`() {
-//        val quizAttempt = jsonapi.getQuizAttempt("23").execute().body()
-//        assertNotNull(quizAttempt)
-//    }
-
-//    @Test
-//    fun `GET DoubtByAttemptId `() {
-//        val doubts = jsonapi.getDoubtByAttemptId("22684").execute().body()
-//        assertNotNull((doubts))
-//    }
-//
-//    @Test
-//    fun `GET NoteById `() {
-//        val notes = jsonapi.getNotesByAttemptId("22684").execute().body()
-//        assertNotNull(notes)
-//    }
-
-//    @Test
-//    fun `POST createNote`() {
-//
-//        val runAttemt = RunAttemptsId("22685")
-//        val contentsId = ContentsId("233")
-//        val note = Notes()
-//        note.text = "demo note"
-//        note.duration = 1.2
-//        note.runAttempt = runAttemt
-//        note.content = contentsId
-//
-//        val noteResponse = jsonapi.createNote(note).execute().body()
-//        assertNotNull(noteResponse)
-//    }
 
     @Test
-    fun `GET Jobs `() {
-//        val jobs = jsonapi.getJobs().execute().body()
-//        jobs?.let {
-//            assertNotNull(it)
-//        }
+    fun `GET ContentList`() {
+        val content = runBlocking { CBOnlineLib.onlineV2JsonApi.getSectionContents(sectionId = "93064").body() }
+        assertNotNull(content)
+        assertTrue(content!!.isNotEmpty())
     }
+
+    @Test
+    fun `GET myCourses`() {
+        val courses = runBlocking { CBOnlineLib.onlineV2JsonApi.getMyCourses().body()?.get() }
+        assertNotNull(courses)
+        assertTrue(courses!!.isNotEmpty())
+    }
+
+    @Test
+    fun `GET enrolledCourse`() {
+        val runAttempt = runBlocking { CBOnlineLib.onlineV2JsonApi.enrolledCourseById("80179").body() }
+        assertNotNull(runAttempt)
+        assertTrue(runAttempt!!.id == "80179")
+    }
+
+    @Test
+    fun `GET fetchNotes`() {
+        val notes = runBlocking { CBOnlineLib.onlineV2JsonApi.getNotesByAttemptId("80179").body() }
+        assertNotNull(notes)
+        assertTrue(notes!!.isEmpty())
+    }
+
+    @Test
+    fun `PATCH pauseCourse`() {
+        val runAttempt = runBlocking { CBOnlineLib.onlineV2JsonApi.pauseCourse("80179").body() }
+        assertNotNull(runAttempt)
+        assertTrue(runAttempt!!.paused)
+    }
+
+    @Test
+    fun `PATCH unPauseCourse`() {
+        val runAttempt = runBlocking { CBOnlineLib.onlineV2JsonApi.unPauseCourse("80179").body() }
+        assertNotNull(runAttempt)
+        assert(!runAttempt!!.paused)
+    }
+
+//    @Test
+//    fun `GET addWishlist`() {
+//        //89 Course is C++ Fundamentals Course
+//        val wishlistAdd = runBlocking { CBOnlineLib.onlineV2JsonApi.addWishlist(Wishlist(Course("89"))).body() }
+//        assertNotNull(wishlistAdd)
+//        assertTrue(wishlistAdd?.course?.id == "89")
+//    }
+//
+//    @Test
+//    fun `GET getWishlist`() {
+//        //per page limit is set to 3 by default, so it is increased to 100 for all wishlist courses
+//        val wishlistGet = runBlocking { CBOnlineLib.onlineV2JsonApi.getWishlist(page = "100").body()?.get() }
+//        assertNotNull(wishlistGet)
+//        var found = false
+//        for (item in wishlistGet!!)
+//            if (item.course?.id == "89") {
+//                found = true
+//                break
+//            }
+//        assertTrue(found)
+//    }
+
+//    @Test
+//    fun `GET checkWishlist`() {
+//        val wishlistCheck = runBlocking { CBOnlineLib.onlineV2JsonApi.checkIfWishlisted("89").body() }
+//        assertNotNull(wishlistCheck)
+//        assertTrue(wishlistCheck?.id != null)
+//    }
+
+//    @Test
+//    fun `GET removeWishlist`() {
+//        val id = runBlocking { CBOnlineLib.onlineV2JsonApi.checkIfWishlisted("89").body()?.id }
+//        val wishlistRemove = runBlocking { CBOnlineLib.onlineV2JsonApi.removeWishlist(id ?: "").code() }
+//        assertTrue(wishlistRemove == 204)
+//    }
 }

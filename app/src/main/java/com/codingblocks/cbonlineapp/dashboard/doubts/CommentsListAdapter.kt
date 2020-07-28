@@ -16,6 +16,9 @@ import kotlinx.android.synthetic.main.item_comment.view.*
 
 class CommentsListAdapter : ListAdapter<CommentModel, ItemViewHolder>(DiffCallback()) {
 
+    init {
+        setHasStableIds(true)
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
             LayoutInflater.from(parent.context)
@@ -25,6 +28,10 @@ class CommentsListAdapter : ListAdapter<CommentModel, ItemViewHolder>(DiffCallba
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

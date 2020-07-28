@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:animateLayoutChanges="true"
     android:paddingTop="@dimen/dashboard_toolbar_comp"
-    tools:context="com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsFragment">
+    tools:context="com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesFragment">
 
 
     <LinearLayout
@@ -87,6 +87,7 @@
                 android:textSize="16sp" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/dashboardMyCoursesExploreBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_medium"

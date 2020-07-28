@@ -3,15 +3,13 @@ package com.codingblocks.cbonlineapp.settings
 import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
+import android.util.Log
 import android.widget.SeekBar
 import androidx.lifecycle.lifecycleScope
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
-import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.extensions.folderSize
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
-import com.codingblocks.cbonlineapp.util.extensions.readableFileSize
-import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.FileUtils
+import com.codingblocks.cbonlineapp.util.extensions.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,20 +42,33 @@ class SettingsActivity : BaseCBActivity() {
         }
         updateSpaceStats()
         deleteAllTv.setOnClickListener {
-            lifecycleScope.launch {
-                val files = viewModel.getDownloads()
-                files.forEach { content ->
+            showDialog(
+                type = "Delete",
+                image = R.drawable.ic_info,
+                cancelable = false,
+                primaryText = R.string.confirmation,
+                secondaryText = R.string.delete_video_desc,
+                primaryButtonText = R.string.confirm,
+                secondaryButtonText = R.string.cancel,
+                callback = { confirmed ->
+                    if (confirmed) {
+                        lifecycleScope.launch {
+                            val files = viewModel.getDownloads()
+                            files.forEach { content ->
 
-                    val folderFile = File(file, "/${content.contentLecture.lectureId}")
+                                val folderFile = File(file, "/${content.contentLecture.lectureId}")
 
-                    withContext(Dispatchers.IO) {
-                        MediaUtils.deleteRecursive(folderFile)
+                                withContext(Dispatchers.IO) {
+                                    FileUtils.deleteRecursive(folderFile)
+                                }
+                                runOnUiThread { updateSpaceStats() }
+                            }
+                        }
                     }
-                    runOnUiThread { updateSpaceStats() }
                 }
-            }
+            )
         }
-
+        setSeekbarMaxValue()
         seekbarLimit.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser)
@@ -83,16 +94,30 @@ class SettingsActivity : BaseCBActivity() {
     private fun updateSpaceStats() {
         val bytesAvailable = stat.blockSizeLong * stat.availableBlocksLong
         spaceFreeTv.text = String.format("%s free", bytesAvailable.readableFileSize())
-        spaceUsedTv.text = String.format("%s used", file?.let {
-            folderSize(
-                it
-            ).readableFileSize()
-        })
+        spaceUsedTv.text = String.format(
+            "%s used",
+            file?.let {
+                folderSize(
+                    it
+                ).readableFileSize()
+            }
+        )
+
+        val usedSpace: Double = ((file?.let { folderSize(it) }?.toDouble()?.div(1048576) ?: 0.0))
+        Log.v("usedSpace", "Used Space is $usedSpace")
+        storageProgress.max = bytesAvailable.toInt() / 1048576
+        storageProgress.progress = usedSpace.toInt()
     }
 
     private fun setSeekbarProgress(progress: Int) {
         val size = (1 + progress / 100.toDouble()).toFloat()
         seekbarTv.text = "${size}GB"
         getPrefs().SP_DATA_LIMIT = size
+    }
+
+    private fun setSeekbarMaxValue() {
+        val bytesAvailable = stat.blockSizeLong * stat.availableBlocksLong
+        val progressValue = (100 * bytesAvailable / Math.pow(1024.0, 3.0)).toInt() - 100
+        seekbarLimit.max = progressValue
     }
 }

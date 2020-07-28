@@ -8,28 +8,39 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.dashboard.home.setGradientColor
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
+import com.codingblocks.cbonlineapp.util.glide.loadImage
 import kotlinx.android.synthetic.main.item_courses.view.*
 
 class MyCourseListAdapter(val type: String = "DEFAULT") : ListAdapter<CourseInstructorPair, RecyclerView.ViewHolder>(DiffCallback()) {
 
     var onItemClick: ItemClickListener? = null
 
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (type) {
             "RUN" -> {
                 RunViewHolder(
                     LayoutInflater.from(parent.context)
-                        .inflate(R.layout.item_courses, parent, false))
+                        .inflate(R.layout.item_courses, parent, false)
+                )
             }
             else -> {
                 DefaultViewHolder(
                     LayoutInflater.from(parent.context)
-                        .inflate(R.layout.item_courses, parent, false))
+                        .inflate(R.layout.item_courses, parent, false)
+                )
             }
         }
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -48,24 +59,24 @@ class MyCourseListAdapter(val type: String = "DEFAULT") : ListAdapter<CourseInst
             }
         }
     }
+}
 
-    class RunViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var itemClickListener: ItemClickListener? = null
+class RunViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    var itemClickListener: ItemClickListener? = null
 
-        fun bind(item: CourseInstructorPair) = with(itemView) {
-            courseTitleTv.text = item.courseRun.course.title
-            courseInstructorTv.text = item.courseRun.run.crName
-            progressContainer.isVisible = false
-            courseLogoImg.loadImage(item.courseRun.course.logo)
+    fun bind(item: CourseInstructorPair) = with(itemView) {
+        courseTitleTv.text = item.courseRun.course.title
+        courseInstructorTv.text = item.courseRun.run.crName
+        progressContainer.isVisible = false
+        courseLogoImg.loadImage(item.courseRun.course.logo)
 
-            setOnClickListener {
-                itemClickListener?.onClick(
-                    item.courseRun.course.cid,
-                    item.courseRun.run.crUid,
-                    item.courseRun.runAttempt.attemptId,
-                    item.courseRun.course.title
-                )
-            }
+        setOnClickListener {
+            itemClickListener?.onClick(
+                item.courseRun.course.cid,
+                item.courseRun.run.crUid,
+                item.courseRun.runAttempt.attemptId,
+                item.courseRun.course.title
+            )
         }
     }
 }
@@ -85,22 +96,16 @@ class DefaultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         progressContainer.isVisible = !expired
         openBtn.isVisible = !expired
         extensionTv.isVisible = expired
-        val progress = if (item.courseRun.runAttempt.completedContents > 0) (item.courseRun.runAttempt.completedContents / item.courseRun.run.totalContents.toDouble()) * 100 else 0.0
-        progressTv.text = "${progress.toInt()} %"
-        progressView1.progress = progress.toFloat()
-        if (progress > 90) {
-            progressView1.highlightView.colorGradientStart = context.getColor(R.color.kiwigreen)
-            progressView1.highlightView.colorGradientEnd = context.getColor(R.color.tealgreen)
-        } else {
-            progressView1.highlightView.colorGradientStart = context.getColor(R.color.pastel_red)
-            progressView1.highlightView.colorGradientEnd = context.getColor(R.color.dusty_orange)
-        }
+        val progress = item.courseRun.getProgress()
+        progressTv.text = context.getString(R.string.progress, progress.toInt())
+        progressView1.setGradientColor(progress)
         setOnClickListener {
-                itemClickListener?.onClick(
-                    item.courseRun.course.cid,
-                    item.courseRun.run.crUid,
-                    item.courseRun.runAttempt.attemptId,
-                    item.courseRun.course.title)
+            itemClickListener?.onClick(
+                item.courseRun.course.cid,
+                item.courseRun.run.crUid,
+                item.courseRun.runAttempt.attemptId,
+                item.courseRun.course.title
+            )
         }
     }
 }

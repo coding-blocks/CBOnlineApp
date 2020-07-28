@@ -9,12 +9,16 @@ import com.codingblocks.cbonlineapp.database.ListObject
 
 @Entity(
     indices = [Index("run_id")],
-    foreignKeys = [(ForeignKey(
-        entity = RunModel::class,
-        parentColumns = ["crUid"],
-        childColumns = ["run_id"],
-        onDelete = ForeignKey.CASCADE // or CASCADE
-    ))]
+    foreignKeys = [
+        (
+            ForeignKey(
+                entity = RunModel::class,
+                parentColumns = ["crUid"],
+                childColumns = ["run_id"],
+                onDelete = ForeignKey.CASCADE // or CASCADE
+            )
+            )
+    ]
 )
 data class SectionModel(
     @PrimaryKey
@@ -30,13 +34,17 @@ data class SectionModel(
     override fun getType(): Int = TYPE_SECTION
 
     @Ignore
-    var idList = ArrayList<String>()
+    var isSectionDownloadEnabled: Boolean = false
+
     @Ignore
     var totalContent = 0
+
     @Ignore
     var completedContent = 0
+
     @Ignore
     var totalTime = 0L
+
     @Ignore
     var pos = 0
 }

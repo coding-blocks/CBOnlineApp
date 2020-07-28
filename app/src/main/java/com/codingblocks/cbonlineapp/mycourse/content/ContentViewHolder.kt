@@ -8,7 +8,6 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.DownloadStarter
 import com.codingblocks.cbonlineapp.database.models.ContentModel
@@ -29,10 +28,11 @@ import org.jetbrains.anko.yesButton
 import java.io.File
 
 class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.item_content, parent, false)) {
+    LayoutInflater.from(parent.context).inflate(R.layout.item_content, parent, false)
+) {
 
     var starterListener: DownloadStarter? = null
-    lateinit var contentModel: ContentModel
+    private lateinit var contentModel: ContentModel
 
     /**
      * Items might be null if they are not paged in yet. PagedListAdapter will re-bind the
@@ -50,12 +50,6 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                 contentType.isActivated = false
                 title.textColor = getColor(context, R.color.black)
             }
-//            if(expired.second < System.currentTimeMillis()){
-//                downloadBtn.setImageResource(R.drawable.ic_lock)
-//                itemView.isClickable = false
-//            }else{
-//                itemView.isClickable = true
-//            }
             setOnClickListener {
                 onItemClick?.invoke(contentModel)
             }
@@ -80,7 +74,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                     downloadBtn.isVisible = true
                     contentType.setImageResource(R.drawable.ic_video)
                     val id = content.contentLecture.lectureUid.isEmpty()
-                    val downloadStatus = if (id) false else FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, content.contentLecture.lectureId)
+                    val downloadStatus = if (id) false else content.contentLecture.isDownloaded
                     downloadBtn.setImageResource(R.drawable.download_states_content)
                     downloadBtn.isActivated = downloadStatus
                     downloadBtn.setOnClickListener {
@@ -98,13 +92,16 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
     private fun checkDownloadStatus(it: ImageView) {
         if (FileUtils.checkIfCannotDownload(itemView.context)) {
-            FileUtils.showIfCleanDialog(itemView.context, object : OnCleanDialogListener {
-                override fun onComplete() {
-                    downloadFile(it)
+            FileUtils.showIfCleanDialog(
+                itemView.context,
+                object : OnCleanDialogListener {
+                    override fun onComplete() {
+                        downloadFile()
+                    }
                 }
-            })
+            )
         } else {
-            downloadFile(it)
+            downloadFile()
         }
     }
 
@@ -118,15 +115,14 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                     "/${contentModel.contentLecture.lectureId}"
 
                 )
-                MediaUtils.deleteRecursive(folderFile)
+                FileUtils.deleteRecursive(folderFile)
             }
             noButton { it.dismiss() }
         }.show()
     }
 
-    private fun downloadFile(downloadBtn: ImageView) {
+    private fun downloadFile() {
         if (MediaUtils.checkPermission(itemView.context)) {
-            downloadBtn.isEnabled = false
             starterListener?.startDownload(
                 contentModel.contentLecture.lectureId,
                 contentModel.ccid,
@@ -134,7 +130,6 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                 contentModel.attempt_id,
                 contentModel.sectionId
             )
-//            (downloadBtn.background as AnimationDrawable).start()
         }
     }
 }

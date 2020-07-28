@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <TextView
                         android:id="@+id/priceTv"
@@ -308,16 +308,38 @@
 
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/removeProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="@string/clear"
+            android:drawableStart="@drawable/ic_cross"
+            android:drawablePadding="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/orangish"
+            android:textSize="18sp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/emptyCart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginTop="150dp"
+        android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -361,6 +383,109 @@
             android:textSize="16sp" />
 
     </LinearLayout>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/checkoutShimmer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/loadingLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginTop="@dimen/margin_large"
+                android:background="@drawable/skeleton_bg_rounded" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/margin_medium_small"
+                android:background="@drawable/divider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large">
+
+                <View
+                    android:layout_width="95dp"
+                    android:layout_height="95dp"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:background="@drawable/skeleton_bg_rounded" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="16dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/skeleton_bg_rounded" />
+
+                    <View
+                        android:layout_width="150dp"
+                        android:layout_height="16dp"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:background="@drawable/skeleton_bg_rounded" />
+
+                    <View
+                        android:layout_width="200dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/skeleton_bg_rounded" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/margin_large"
+                android:background="@drawable/divider" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/skeleton_bg_rounded" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/skeleton_bg_rounded" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/skeleton_bg_rounded" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/skeleton_bg_rounded" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/skeleton_bg_rounded" />
+
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 
 </LinearLayout>

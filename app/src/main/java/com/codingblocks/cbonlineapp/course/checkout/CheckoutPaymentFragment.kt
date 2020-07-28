@@ -1,101 +1,136 @@
 package com.codingblocks.cbonlineapp.course.checkout
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.google.gson.JsonObject
-import com.razorpay.Checkout
+import com.codingblocks.cbonlineapp.util.livedata.observer
+import kotlinx.android.synthetic.main.dialog_coupon.view.*
 import kotlinx.android.synthetic.main.fragment_checkout_payment.*
-import org.json.JSONObject
+import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class CheckoutPaymentFragment : BaseCBFragment() {
 
     val vm by sharedViewModel<CheckoutViewModel>()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ):
+    private lateinit var couponDialog: AlertDialog
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = inflater.inflate(R.layout.fragment_checkout_payment, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        vm.getCart()
         super.onViewCreated(view, savedInstanceState)
+        vm.getCart()
+
         useBalance.setOnClickListener {
-            vm.map["applyCredits"] = vm.map["applyCredits"] != "true"
+            vm.map["applyCredits"] = !vm.creditsApplied
             payBtn.isEnabled = false
             vm.updateCart()
-            vm.getCart()
         }
-        numberLayout.setEndIconOnClickListener {
-            vm.map["coupon"] = numberLayout.editText?.text.toString()
+
+        errorDrawableTv.setOnClickListener {
+            if (errorDrawableTv.text == "Apply Coupon") {
+                vm.map["coupon"] = numberLayout.editText?.text.toString().toUpperCase()
+            } else {
+                vm.map["coupon"] = ""
+                vm.map["coupon_id"] = vm.couponApplied
+                vm.map["cart_id"] = vm.cartId
+            }
             payBtn.isEnabled = false
             vm.updateCart()
-            vm.getCart()
         }
-        vm.cart.observer(viewLifecycleOwner) { json ->
-            json.getAsJsonArray("cartItems")?.get(0)?.asJsonObject?.run {
-                payBtn.isEnabled = true
-                val credits = get("credits_used")?.asInt?.div(100) ?: 0
-                if (credits != 0) {
-                    vm.map["applyCredits"] = true.toString()
-                } else {
-                    vm.map["applyCredits"] = false.toString()
+        vm.errorLiveData.observer(thisLifecycleOwner) {
+            if (it.contains("coupon")) {
+                vm.map.remove("coupon")
+                if (it.contains("credits")) {
+                    vm.map.remove("applyCredits")
                 }
-                creditsTv.text = "- ${getString(R.string.rupee_sign)} $credits"
-                totalTv.text = "${getString(R.string.rupee_sign)} ${json["totalAmount"].asString}"
-                finalPriceTv.text =
-                    "${getString(R.string.rupee_sign)} ${json["totalAmount"].asString}"
-                walletBal.text =
-                    "${getString(R.string.rupee_sign)} ${json?.get("user")?.asJsonObject?.get("wallet_amount")?.asInt?.div(
-                        100
-                    )
-                        ?: 0}"
+            } else if (it.contains("credits")) {
+                vm.map.remove("applyCredits")
+            }
+            payBtn.isEnabled = false
+            rootPayment.snackbar(it)
+        }
+        numberLayout.editText?.addTextChangedListener {
+            if (it != null && it.length >= 3) {
+                errorDrawableTv.apply {
+                    isVisible = true
+                    text = "Apply Coupon"
+                }
+            }
+        }
+        vm.cart.observer(thisLifecycleOwner) { res ->
+            vm.map.clear()
+            res.getAsJsonObject("cartItems")?.run {
+                vm.map["invoice_id"] = get("invoice_id").asString
+                vm.cartId = get("id").asString
+
+                payBtn.isEnabled = true
+
+                val credits = get("credits_used").asInt.div(100)
+                val totalAmount = res["totalAmount"].asString
+                val wallet = res.getAsJsonObject("user").get("wallet_amount").asInt.div(100).toString()
+                if (credits != 0) {
+                    if (!vm.creditsApplied)
+                        rootPayment.snackbar("Credits Applied Successfully")
+                    vm.creditsApplied = true
+                    useBalance.text = "Remove Wallet Balance"
+                } else {
+                    if (vm.creditsApplied)
+                        rootPayment.snackbar("Credits Removed")
+                    vm.creditsApplied = false
+                    useBalance.text = "Use Wallet Balance"
+                }
+                get("coupon_code")?.let {
+                    numberLayout.editText?.setText(it.asString)
+                    vm.couponApplied = get("coupon_id").asString
+                    val discountPrice = "${getString(R.string.rupee_sign)} ${get("discount")?.asInt?.div(100)}"
+                    showCouponDialog(discountPrice, it.asString)
+                    couponDiscount.text = "- $discountPrice"
+                    errorDrawableTv.apply {
+                        isVisible = true
+                        text = "Remove Coupon"
+                    }
+                } ?: run {
+                    couponDiscount.text = "- ${getString(R.string.rupee_price, "0")}"
+
+                    numberLayout.editText?.setText("")
+                    errorDrawableTv.isVisible = false
+                }
+
+                creditsTv.text = getString(R.string.rupee_price, credits.toString())
+                totalTv.text = getString(R.string.rupee_price, totalAmount)
+                finalPriceTv.text = getString(R.string.rupee_price, totalAmount)
+
+                walletBal.text = getString(R.string.rupee_price, wallet)
 
                 payBtn.setOnClickListener {
-                    vm.paymentMap["amount"] = json["totalAmount"].asString!!
+                    vm.paymentMap["amount"] = totalAmount
                     vm.paymentStart.value = true
-                    showRazorPayCheckoutForm(this)
                 }
             }
         }
     }
 
-    /** Call this function at the last step after applying coupon and everything.
-    Razorpay will automatically call either of the methods on CheckoutActivity.kt
-
-    override fun onPaymentSuccess(p0: String?)  - p0: is razorpay_payment_id that needs to be sent to capture payment API
-
-    override fun onPaymentError(p0: Int, p1: String?) - Show retry payment or payment declined.
-
-     */
-    private fun showRazorPayCheckoutForm(json: JsonObject) {
-        val checkout = Checkout()
-        val activity = activity
-        try {
-            val options = JSONObject()
-            options.put("name", "Coding Blocks")
-            options.put("description", json.get("productName")?.asString) // Use products name
-            options.put("currency", "INR")
-            options.put(
-                "order_id",
-                json.get("razorpay_order_id")?.asString
-            ) // razorpay_order_id from API
-            options.put("image", "https://codingblocks.com/assets/images/cb/cblogo.png")
-            options.put(
-                "amount",
-                json.get("final_price")?.asString
-            ) // Amount in paise from carts API after applying coupon and everything
-            checkout.open(activity, options)
-        } catch (e: Exception) {
-            Log.e("CheckoutFragment.kt", "Error in starting Razorpay Checkout", e)
+    private fun showCouponDialog(discountPrice: String, coupon: String) {
+        couponDialog = AlertDialog.Builder(requireContext()).create()
+        val view = layoutInflater.inflate(R.layout.dialog_coupon, null)
+        view.couponTv.text = coupon
+        view.couponDiscountTv.text = discountPrice
+        view.posBtn.setOnClickListener {
+            couponDialog.dismiss()
+        }
+        couponDialog.apply {
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            setView(view)
+            setCancelable(true)
+            show()
         }
     }
 }

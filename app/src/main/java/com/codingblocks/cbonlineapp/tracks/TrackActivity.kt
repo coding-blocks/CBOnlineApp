@@ -9,23 +9,27 @@ import androidx.core.view.ViewCompat
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.course.CourseActivity
-import com.codingblocks.cbonlineapp.course.CourseListAdapter
-import com.codingblocks.cbonlineapp.course.ItemClickListener
+import com.codingblocks.cbonlineapp.course.adapter.CourseListAdapter
+import com.codingblocks.cbonlineapp.course.adapter.ItemClickListener
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.glide.loadImage
+import com.codingblocks.cbonlineapp.util.livedata.observer
+import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.android.synthetic.main.activity_course.courseToolbar
-import kotlinx.android.synthetic.main.activity_track.*
 import kotlinx.android.synthetic.main.activity_track.appbar
+import kotlinx.android.synthetic.main.activity_track.certifiedTv
 import kotlinx.android.synthetic.main.activity_track.courseBackdrop
 import kotlinx.android.synthetic.main.activity_track.courseLogo
 import kotlinx.android.synthetic.main.activity_track.shortTv
+import kotlinx.android.synthetic.main.activity_track.trackCourseNumTv
+import kotlinx.android.synthetic.main.activity_track.trackCourseRv
+import kotlinx.android.synthetic.main.activity_track.trackShimmer
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {
@@ -37,7 +41,7 @@ class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {
     }
 
     private val courseLogoUrl by lazy {
-        intent.getStringExtra(COURSE_LOGO)
+        intent.getStringExtra(COURSE_LOGO)!!
     }
     private val viewModel by viewModel<TrackViewModel>()
 
@@ -66,8 +70,9 @@ class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {
         setContentView(R.layout.activity_track)
         supportPostponeEnterTransition()
         setToolbar(courseToolbar)
-        viewModel.id = courseId
+        viewModel.id = courseId!!
         viewModel.fetchCurrentTrack()
+        trackShimmer.showShimmer(true)
         trackCourseRv.setRv(
             this@TrackActivity,
             courseCardListAdapter,
@@ -92,9 +97,17 @@ class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {
 
         viewModel.courses.observer(this) { courses ->
             courseCardListAdapter.submitList(courses)
+            trackShimmer.hideAndStop()
         }
         courseCardListAdapter.onItemClick = itemClickListener
         appbar.addOnOffsetChangedListener(this)
+        viewModel.errorLiveData.observer(this) {
+            when (it) {
+                ErrorStatus.NO_CONNECTION -> {
+                    showOffline()
+                }
+            }
+        }
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {

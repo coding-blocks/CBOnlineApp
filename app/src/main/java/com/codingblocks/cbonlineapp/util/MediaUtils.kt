@@ -14,34 +14,26 @@ import android.graphics.drawable.PictureDrawable
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import java.io.File
-import java.util.regex.Pattern
 
 object MediaUtils {
 
-    fun deleteRecursive(fileOrDirectory: File) {
-
-        if (fileOrDirectory.isDirectory) {
-            for (child in fileOrDirectory.listFiles()) {
-                deleteRecursive(child)
-            }
+    fun getYoutubeVideoId(videoUrl: String): String {
+        var videoId: String
+        val url = videoUrl.split("v=")
+        videoId = if (url.size == 1) {
+            videoUrl.split("embed/")[1]
+        } else {
+            url[1]
         }
-
-        fileOrDirectory.delete()
-    }
-
-    fun getYotubeVideoId(videoUrl: String): String {
-        var vId = ""
-        // TODO fix regex pattern
-        val pattern = Pattern.compile(
-            "^https?://.*(?:youtu.be/|v/|u/\\w/|embed/|watch?v=)([^#&?]*).*$",
-            Pattern.CASE_INSENSITIVE
-        )
-        val matcher = pattern.matcher(videoUrl)
-        if (matcher.matches()) {
-            vId = matcher.group(1)
+        val ampersandPosition = videoId.indexOf('&')
+        if (ampersandPosition != -1) {
+            videoId = videoId.substring(0, ampersandPosition)
         }
-        return vId
+        val questionPosition = videoId.indexOf('?')
+        if (questionPosition != -1) {
+            videoId = videoId.substring(0, questionPosition)
+        }
+        return videoId
     }
 
     fun checkPermission(context: Context): Boolean {
@@ -86,8 +78,8 @@ object MediaUtils {
     }
 
     fun getCircularBitmap(bitmap: Bitmap): Bitmap {
-        val circlebitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(circlebitmap)
+        val circleBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(circleBitmap)
         val paint = Paint()
         val rect = Rect(0, 0, bitmap.width, bitmap.height)
 
@@ -97,6 +89,6 @@ object MediaUtils {
         paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
         canvas.drawBitmap(bitmap, rect, rect, paint)
 
-        return circlebitmap
+        return circleBitmap
     }
 }

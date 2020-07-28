@@ -8,15 +8,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.course.ItemClickListener
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
+import com.codingblocks.cbonlineapp.course.adapter.ItemClickListener
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
+import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.onlineapi.models.CareerTracks
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.item_track.view.trackCourseNumTv
 import kotlinx.android.synthetic.main.item_track.view.trackLogo
 import kotlinx.android.synthetic.main.item_track.view.trackTitleTv
-import kotlinx.android.synthetic.main.item_track_card.view.*
+import kotlinx.android.synthetic.main.item_track_card.view.course_card_share
+import kotlinx.android.synthetic.main.item_track_card.view.ratingTv
+import kotlinx.android.synthetic.main.item_track_card.view.trackChips
+import kotlinx.android.synthetic.main.item_track_card.view.trackCover
 import org.jetbrains.anko.share
 
 class TracksListAdapter(val type: String = "") : ListAdapter<CareerTracks, TracksListAdapter.ItemViewHolder>(DiffCallback()) {
@@ -26,10 +29,12 @@ class TracksListAdapter(val type: String = "") : ListAdapter<CareerTracks, Track
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
             when (type) {
-                "LIST" -> LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_track_card, parent, false)
-                else -> LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_track, parent, false)
+                "LIST" ->
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_track_card, parent, false)
+                else ->
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_track, parent, false)
             }
         )
     }

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/profileRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.AppBarLayout
+            style="@style/ToolBarStyleDark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                style="@style/ToolBarStyleDark"
+                android:id="@+id/profileToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:title="View Profile">
+
+                <TextView
+                    android:id="@+id/ediBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:text="@string/edit_profile"
+                    android:textColor="@color/orangish"
+                    android:textSize="16sp" />
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userImgView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="@dimen/margin_large"
+            android:src="@drawable/defaultavatar" />
+
+        <TextView
+            android:id="@+id/nameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium_small"
+            android:fontFamily="@font/gilroy_bold"
+            android:textSize="18sp"
+            tools:text="Siddharth Jain" />
+
+        <TextView
+            android:id="@+id/userNameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_medium"
+            android:textColor="@color/brownish_grey"
+            android:textSize="14sp"
+            tools:text="sidjin2294924" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            app:endIconDrawable="@drawable/ic_tick"
+            app:endIconMode="none"
+            app:endIconTint="@color/kiwigreen">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/white"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:fontFamily="@font/gilroy_medium"
+                android:hint="@string/email_address"
+                android:inputType="textEmailAddress"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:textColorHighlight="@color/orangish"
+                android:textColorHint="@color/black"
+                android:textSize="16sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/phoneLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_large"
+            app:endIconDrawable="@drawable/ic_tick"
+            app:endIconMode="none"
+            app:endIconTint="@color/kiwigreen">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/mobile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/white"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:fontFamily="@font/gilroy_medium"
+                android:hint="@string/mobile_number"
+                android:inputType="number"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:textColorHighlight="@color/orangish"
+                android:textColorHint="@color/black"
+                android:textSize="16sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_large">
+
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/college"
+                style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/white"
+                android:completionThreshold="1"
+                android:fontFamily="@font/gilroy_medium"
+                android:hint="@string/college"
+                android:lines="1"
+                android:singleLine="true"
+                android:scrollHorizontally="false"
+                android:inputType="text"
+                android:ellipsize="end"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:textColorHighlight="@color/orangish"
+                android:textColorHint="@color/black"
+                android:textSize="16sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_large">
+
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/branch"
+                android:isScrollContainer="false"
+                style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/white"
+                android:completionThreshold="1"
+                android:fontFamily="@font/gilroy_medium"
+                android:hint="@string/branch"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:textColorHighlight="@color/orangish"
+                android:textColorHint="@color/black"
+                android:textSize="16sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_large">
+
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/graduation"
+                style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/gilroy_medium"
+                android:hint="@string/graduation_year"
+                android:inputType="number"
+                android:maxLength="4"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:textColorHighlight="@color/orangish"
+                android:textColorHint="@color/black"
+                android:textSize="16sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/updateBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_xl"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_xl"
+            android:onClick="updateProfile"
+            android:text="Save Changes"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/logoutBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_xl"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_xl"
+            android:onClick="logout"
+            android:text="@string/logout"
+            android:textSize="16sp"
+            android:visibility="visible" />
+
+
+    </LinearLayout>
+</ScrollView>

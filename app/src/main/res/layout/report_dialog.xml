@@ -78,7 +78,6 @@
                     android:backgroundTint="@color/white"
                     android:fontFamily="@font/gilroy_medium"
                     android:hint="Enter Description"
-                    android:maxLength="10"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
                     android:textColorHighlight="@color/orangish"

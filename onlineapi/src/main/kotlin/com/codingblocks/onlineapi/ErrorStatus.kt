@@ -30,7 +30,5 @@ class ErrorStatus {
         const val NOT_DEFINED = "Please Report Bug"
         const val TIMEOUT = "Request has been Timed out"
         const val EMPTY_RESPONSE = "no data available in repository"
-
-
     }
 }
