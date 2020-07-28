@@ -101,12 +101,12 @@ class OnlineJsonApiAuthenticatedTest {
 //        assertTrue(wishlistCheck?.id != null)
 //    }
 
-    @Test
-    fun `GET removeWishlist`() {
-        val id = runBlocking { CBOnlineLib.onlineV2JsonApi.checkIfWishlisted("89").body()?.id }
-        val wishlistRemove = runBlocking { CBOnlineLib.onlineV2JsonApi.removeWishlist(id ?: "").code() }
-        assertTrue(wishlistRemove == 204)
-    }
+//    @Test
+//    fun `GET removeWishlist`() {
+//        val id = runBlocking { CBOnlineLib.onlineV2JsonApi.checkIfWishlisted("89").body()?.id }
+//        val wishlistRemove = runBlocking { CBOnlineLib.onlineV2JsonApi.removeWishlist(id ?: "").code() }
+//        assertTrue(wishlistRemove == 204)
+//    }
 
     @Test
     fun `POST sendFeedback`(){
