@@ -92,6 +92,7 @@ class SettingsActivity : BaseCBActivity() {
     private fun updateDeleteAllTv() {
         if (isSomethingDownloaded) {
             deleteAllTv.visibility = View.VISIBLE
+            lineDeleteAllView.visibility = View.VISIBLE
             deleteAllTv.setOnClickListener {
                 showDialog(
                     type = "Delete",
@@ -112,7 +113,10 @@ class SettingsActivity : BaseCBActivity() {
                                     withContext(Dispatchers.IO) {
                                         FileUtils.deleteRecursive(folderFile)
                                     }
-                                    runOnUiThread { updateSpaceStats() }
+                                    runOnUiThread {
+                                        updateSpaceStats()
+                                        updateDeleteAllTv()
+                                    }
                                 }
                             }
                         }
@@ -121,6 +125,7 @@ class SettingsActivity : BaseCBActivity() {
             }
         } else {
             deleteAllTv.visibility = View.INVISIBLE
+            lineDeleteAllView.visibility = View.GONE
         }
     }
 
