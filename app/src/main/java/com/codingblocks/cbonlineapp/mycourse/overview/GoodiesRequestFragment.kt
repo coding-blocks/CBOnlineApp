@@ -50,10 +50,12 @@ class GoodiesRequestFragment : BottomSheetDialogFragment() {
     @NonNull
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog: Dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setOnShowListener(DialogInterface.OnShowListener { dialogInterface ->
-            val bottomSheetDialog = dialogInterface as BottomSheetDialog
-            setupFullHeight(bottomSheetDialog)
-        })
+        dialog.setOnShowListener(
+            DialogInterface.OnShowListener { dialogInterface ->
+                val bottomSheetDialog = dialogInterface as BottomSheetDialog
+                setupFullHeight(bottomSheetDialog)
+            }
+        )
 //        dialog.onBackPressed()
         return dialog
     }

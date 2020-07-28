@@ -170,8 +170,7 @@ interface OnlineJsonApi {
     suspend fun getNotesForContent(
         @Query("filter[runAttemptId]") attemptId: String,
         @Query("filter[contentId]") contentId: String
-        ): Response<List<Note>>
-
+    ): Response<List<Note>>
 
     @GET("doubts")
     suspend fun getDoubtsForContent(
@@ -386,15 +385,15 @@ interface OnlineJsonApi {
     ): Response<JSONAPIDocument<List<Wishlist>>>
 
     @POST("user_course_wishlists")
-    suspend fun addWishlist(@Body params: Wishlist) : Response<Wishlist>
+    suspend fun addWishlist(@Body params: Wishlist): Response<Wishlist>
 
     @GET("courses/{id}/relationships/user_course_wishlist")
     suspend fun checkIfWishlisted(
         @Path("id") id: String
-    ) : Response<Wishlist>
+    ): Response<Wishlist>
 
     @DELETE("user_course_wishlists/{id}")
     suspend fun removeWishlist(
         @Path("id") id: String
-    ) : Response<Wishlist>
+    ): Response<Wishlist>
 }

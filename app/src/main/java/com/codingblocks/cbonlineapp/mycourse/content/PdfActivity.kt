@@ -9,23 +9,22 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.PersistableBundle
 import android.widget.LinearLayout
-import android.widget.Toast
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.database.LibraryDao
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.SECTION_ID
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import org.jetbrains.anko.toast
 import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.receivers.DownloadBroadcastReceiver
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import es.voghdev.pdfviewpager.library.PDFViewPager
 import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter
 import kotlinx.android.synthetic.main.activity_pdf.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.toast
 import org.koin.android.ext.android.inject
 import java.io.File
 
@@ -44,15 +43,15 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pdf)
-        if(savedInstanceState == null){
-            contentID = intent.getStringExtra(CONTENT_ID)
-            sectionId = intent.getStringExtra(SECTION_ID)
+        if (savedInstanceState == null) {
+            contentID = intent.getStringExtra(CONTENT_ID)!!
+            sectionId = intent.getStringExtra(SECTION_ID)!!
         }
 
-        if (!contentID.isNullOrEmpty()){
-            GlobalScope.launch(Dispatchers.Main){
+        if (!contentID.isNullOrEmpty()) {
+            GlobalScope.launch(Dispatchers.Main) {
                 val pdfModel = libraryDao.getPDF(contentID)
-                if (pdfModel==null){
+                if (pdfModel == null) {
                     toast("Error fetching document")
                     finish()
                 }
@@ -60,7 +59,7 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
                 fileName = pdfModel.documentName
                 checkFile()
             }
-        }else{
+        } else {
             toast("Error fetching document")
             finish()
         }
@@ -103,7 +102,7 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
         sectionId = savedInstanceState.getString(SECTION_ID).toString()
     }
 
-    private fun checkFile(){
+    private fun checkFile() {
         fileName?.replace(" ", "_")
 
         if (MediaUtils.checkPermission(this)) {
@@ -134,7 +133,6 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
                 onBackPressed()
             }
         }
-
     }
 
     private fun showpdf(downloadedFile: File) {

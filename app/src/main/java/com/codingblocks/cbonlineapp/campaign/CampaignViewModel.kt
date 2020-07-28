@@ -28,7 +28,7 @@ class CampaignViewModel(
     private var spinsLeft by savedStateValue<Int>(handle, SPINS_LEFT)
     var spinsLiveData = MutableLiveData<Int>(spinsLeft)
     var referral by savedStateValue<String>(handle, REFERRAL)
-    var spinResponse : SpinResponse? = null
+    var spinResponse: SpinResponse? = null
 
     var myWinnings = MutableLiveData<List<Spins>>()
     private var leaderBoard: LiveData<PagedList<Spins>>
@@ -40,7 +40,6 @@ class CampaignViewModel(
             .build()
         leaderBoard = initializedPagedListBuilder(config).build()
         fetchReferralCode()
-
     }
 
     fun fetchSpins() {
@@ -77,7 +76,7 @@ class CampaignViewModel(
                         response.value.body()?.let {
                             spinResponse = it
                         }
-                    else{
+                    else {
                         setError(fetchError(response.value.code()))
                     }
                 }
@@ -112,7 +111,7 @@ class CampaignViewModel(
                         response.value.body()?.let {
                             myWinnings.postValue(it.get())
                         }
-                    }else{
+                    } else {
                         setError(fetchError(response.value.code()))
                     }
                 }
@@ -120,24 +119,20 @@ class CampaignViewModel(
         }
     }
 
-
     fun fetchRules() = liveData(Dispatchers.IO) {
         emit(repo.getRules())
     }
-
 
     fun getLeaderBoard(): LiveData<PagedList<Spins>> = leaderBoard
 
     private fun initializedPagedListBuilder(config: PagedList.Config):
         LivePagedListBuilder<String, Spins> {
 
-        val dataSourceFactory = object : DataSource.Factory<String, Spins>() {
-            override fun create(): DataSource<String, Spins> {
-                return CampaignDataSource(viewModelScope)
+            val dataSourceFactory = object : DataSource.Factory<String, Spins>() {
+                override fun create(): DataSource<String, Spins> {
+                    return CampaignDataSource(viewModelScope)
+                }
             }
+            return LivePagedListBuilder(dataSourceFactory, config)
         }
-        return LivePagedListBuilder(dataSourceFactory, config)
-
-    }
-
 }

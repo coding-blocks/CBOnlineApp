@@ -123,23 +123,26 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             chart1.loadData(it.averageProgress, it.userProgress)
         }
 
-        viewModel.getHackerBlocksPerformance().distinctUntilChanged().observe(thisLifecycleOwner, Observer {
-            if (it != null) {
-                hbRankContainer.isVisible = true
-                currentOverallRank.text = it.currentOverallRank.toString()
-                currentMonthScore.text = requireContext().getString(R.string.points, it.currentMonthScore)
-                val rankDelta = it.currentOverallRank - it.previousOverallRank
-                val pointsDelta = it.currentMonthScore - it.previousMonthScore
-                previousRank.apply {
-                    isActivated = rankDelta >= 0
-                    text = context.getString(R.string.ranks, kotlin.math.abs(rankDelta))
-                }
-                previousMonthlyScore.apply {
-                    isActivated = pointsDelta >= 0
-                    text = context.getString(R.string.points, pointsDelta)
+        viewModel.getHackerBlocksPerformance().distinctUntilChanged().observe(
+            thisLifecycleOwner,
+            Observer {
+                if (it != null) {
+                    hbRankContainer.isVisible = true
+                    currentOverallRank.text = it.currentOverallRank.toString()
+                    currentMonthScore.text = requireContext().getString(R.string.points, it.currentMonthScore)
+                    val rankDelta = it.currentOverallRank - it.previousOverallRank
+                    val pointsDelta = it.currentMonthScore - it.previousMonthScore
+                    previousRank.apply {
+                        isActivated = rankDelta >= 0
+                        text = context.getString(R.string.ranks, kotlin.math.abs(rankDelta))
+                    }
+                    previousMonthlyScore.apply {
+                        isActivated = pointsDelta >= 0
+                        text = context.getString(R.string.points, pointsDelta)
+                    }
                 }
             }
-        })
+        )
 
         confirmReset.setOnClickListener {
             CustomDialog.showConfirmation(requireContext(), "reset") {
@@ -166,7 +169,6 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 negativeBtnClickListener { requireActivity().finish() }
             }
         confirmDialog?.show()
-
     }
 
     private fun downloadCertificate(context: Context, certificateUrl: String, name: String) {

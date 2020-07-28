@@ -91,7 +91,7 @@ data class NotesModel(
     var createdAt: String = "",
     var deletedAt: String? = "",
     val contentTitle: String = ""
-) : BaseModel(),Serializable
+) : BaseModel(), Serializable
 
 @Entity
 data class Notification(
@@ -118,12 +118,16 @@ data class HBRankModel(
 
 @Entity(
     indices = [Index("contentId")],
-    foreignKeys = [(ForeignKey(
-        entity = ContentModel::class,
-        parentColumns = ["ccid"],
-        childColumns = ["contentId"],
-        onDelete = ForeignKey.CASCADE
-    ))]
+    foreignKeys = [
+        (
+            ForeignKey(
+                entity = ContentModel::class,
+                parentColumns = ["ccid"],
+                childColumns = ["contentId"],
+                onDelete = ForeignKey.CASCADE
+            )
+            )
+    ]
 )
 data class BookmarkModel(
     @PrimaryKey

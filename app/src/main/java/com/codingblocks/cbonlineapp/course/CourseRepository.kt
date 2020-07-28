@@ -1,7 +1,7 @@
 package com.codingblocks.cbonlineapp.course
 
-import com.codingblocks.onlineapi.models.Wishlist
 import com.codingblocks.onlineapi.CBOnlineLib
+import com.codingblocks.onlineapi.models.Wishlist
 import com.codingblocks.onlineapi.safeApiCall
 import org.jetbrains.anko.AnkoLogger
 

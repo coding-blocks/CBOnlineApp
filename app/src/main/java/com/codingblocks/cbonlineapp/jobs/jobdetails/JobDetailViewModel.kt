@@ -46,54 +46,58 @@ class JobDetailViewModel(
     fun fetchJob(jobId: String) {
         CBOnlineLib.onlineV2JsonApi.getJobById(
             jobId
-        ).enqueue(retrofitCallback { _, response ->
-            response?.body().let {
-                if (response?.isSuccessful == true) {
-                    response.body()?.run {
-                        eligibleLiveData.value = if (eligible) "eligible" else "not eligible"
-                        acceptingLiveData.value = accepting
-                        formData.value = form
-                        val job = JobsModel(
-                            id,
-                            coverImage,
-                            ctc,
-                            deadline,
-                            description,
-                            eligibility,
-                            experience,
-                            location,
-                            postedOn,
-                            type,
-                            title,
-                            with(company!!) {
-                                inactiveLiveData.value = inactive
-                                Companies(
-                                    id,
-                                    name,
-                                    logo,
-                                    description,
-                                    website
-                                )
-                            },
-                            courses ?: arrayListOf<Course>()
-                        )
-                        if (application != null) {
-                            eligibleLiveData.value = mInstance.getString(R.string.applied)
-                        }
-                        viewModelScope.launch(Dispatchers.IO) {
-                            jobsDao.insert(job)
+        ).enqueue(
+            retrofitCallback { _, response ->
+                response?.body().let {
+                    if (response?.isSuccessful == true) {
+                        response.body()?.run {
+                            eligibleLiveData.value = if (eligible) "eligible" else "not eligible"
+                            acceptingLiveData.value = accepting
+                            formData.value = form
+                            val job = JobsModel(
+                                id,
+                                coverImage,
+                                ctc,
+                                deadline,
+                                description,
+                                eligibility,
+                                experience,
+                                location,
+                                postedOn,
+                                type,
+                                title,
+                                with(company!!) {
+                                    inactiveLiveData.value = inactive
+                                    Companies(
+                                        id,
+                                        name,
+                                        logo,
+                                        description,
+                                        website
+                                    )
+                                },
+                                courses ?: arrayListOf<Course>()
+                            )
+                            if (application != null) {
+                                eligibleLiveData.value = mInstance.getString(R.string.applied)
+                            }
+                            viewModelScope.launch(Dispatchers.IO) {
+                                jobsDao.insert(job)
+                            }
                         }
                     }
                 }
             }
-        })
+        )
     }
 
     fun applyJob(application: Applications) {
-        CBOnlineLib.onlineV2JsonApi.applyJob(application).enqueue(retrofitCallback { _, response ->
-            if (response?.isSuccessful == true) {
-                eligibleLiveData.value = mInstance.getString(R.string.applied)
+        CBOnlineLib.onlineV2JsonApi.applyJob(application).enqueue(
+            retrofitCallback { _, response ->
+                if (response?.isSuccessful == true) {
+                    eligibleLiveData.value = mInstance.getString(R.string.applied)
+                }
             }
-        })
+        )
     }
 }

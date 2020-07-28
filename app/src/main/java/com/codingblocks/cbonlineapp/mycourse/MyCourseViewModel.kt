@@ -203,7 +203,7 @@ class MyCourseViewModel(
     }
 
     fun requestGoodies(name: String, address: String, postal: String, mobile: String?) {
-        //Todo - Complete this
+        // Todo - Complete this
     }
 
     fun downloadCertificateAndShow(context: Context, certificateUrl: String, fileName: String) {

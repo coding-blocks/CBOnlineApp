@@ -8,8 +8,8 @@ import android.widget.ArrayAdapter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.FileUtils.loadJsonObjectFromAsset
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.fragment_checkout_personal_details.*
 import org.jetbrains.anko.AnkoLogger
 import org.json.JSONArray

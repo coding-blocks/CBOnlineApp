@@ -14,13 +14,12 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.NotificationClickListener
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.activity_notifications.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
@@ -85,7 +84,7 @@ class NotificationsActivity : BaseCBActivity() {
                     // get the id of element which needs to be deleted
                     val deleteUID = notifications[position].id
                     // remove the item from database
-                    launch (Dispatchers.IO) { notificationDao.deleteNotificationByID(deleteUID) }
+                    launch(Dispatchers.IO) { notificationDao.deleteNotificationByID(deleteUID) }
                 }
             }
         }

@@ -26,14 +26,9 @@ class Clients internal constructor(
     private val communicator: CBOnlineCommunicator
 ) {
     companion object {
-        private const val LOCAL = "192.168.1.13:3000"
-        private const val DEBUG = "api-online.codingblocks.xyz"
-        private const val PROD = "online-api.codingblocks.com"
-        private const val URL = "online-api.codingblocks.com"
         const val CONNECT_TIMEOUT = 15
         const val READ_TIMEOUT = 15
     }
-
 
     private val om = jacksonObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -88,8 +83,12 @@ class Clients internal constructor(
 
     // type resolver
     init {
-        onlineApiResourceConverter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_INCLUSIONS)
-        onlineApiResourceConverter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_TYPE_IN_RELATIONSHIP)
+        onlineApiResourceConverter.enableDeserializationOption(
+            com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_INCLUSIONS
+        )
+        onlineApiResourceConverter.enableDeserializationOption(
+            com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_TYPE_IN_RELATIONSHIP
+        )
     }
 
     private val logging = HttpLoggingInterceptor().apply {
@@ -103,6 +102,7 @@ class Clients internal constructor(
             else
                 HttpLoggingInterceptor.Level.NONE
     }
+
     fun getHttpLogging(): Boolean = when (logging.level) {
         HttpLoggingInterceptor.Level.BODY -> true
         else -> false
@@ -116,15 +116,16 @@ class Clients internal constructor(
         .addInterceptor { chain ->
             if (communicator.authJwt.isEmpty())
                 chain.proceed(chain.request())
-            else chain.proceed(chain.request().newBuilder()
-                .addHeader("Authorization", "JWT ${communicator.authJwt}").build()
+            else chain.proceed(
+                chain.request().newBuilder()
+                    .addHeader("Authorization", "JWT ${communicator.authJwt}").build()
             )
         }
         .build()
 
     private val onlineV2JsonRetrofit = Retrofit.Builder()
         .client(clientInterceptor)
-        .baseUrl("http://$DEBUG/api/v2/")
+        .baseUrl("http://${communicator.baseUrl}/api/v2/")
         .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
         .addConverterFactory(JacksonConverterFactory.create(om))
         .build()
@@ -138,7 +139,7 @@ class Clients internal constructor(
 
     private val retrofit = Retrofit.Builder()
         .client(clientInterceptor)
-        .baseUrl("http://$DEBUG/api/")
+        .baseUrl("http://${communicator.baseUrl}/api/")
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
     val api: OnlineRestApi = retrofit.create(OnlineRestApi::class.java)

@@ -18,12 +18,7 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.google.gson.JsonObject
 import com.vdocipher.aegis.media.ErrorDescription
-import com.vdocipher.aegis.offline.DownloadOptions
-import com.vdocipher.aegis.offline.DownloadRequest
-import com.vdocipher.aegis.offline.DownloadSelections
-import com.vdocipher.aegis.offline.DownloadStatus
-import com.vdocipher.aegis.offline.OptionsDownloader
-import com.vdocipher.aegis.offline.VdoDownloadManager
+import com.vdocipher.aegis.offline.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -93,9 +88,11 @@ class SectionDownloadWorker(val context: Context, private val workerParameters: 
     }
 
     override fun onChanged(p0: String?, p1: DownloadStatus?) {
-        notification.apply {
-            setContentText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded( Current ${p1?.downloadPercent}% )")
-        }
+        notification.setContentText(
+            "${downloadList.filterValues {
+                it.isDownloaded
+            }.size} out of ${downloadList.size} downloaded( Current ${p1?.downloadPercent}% )"
+        )
         notificationManager.notify(1, notification.build())
     }
 
@@ -116,7 +113,9 @@ class SectionDownloadWorker(val context: Context, private val workerParameters: 
         }
         notification.apply {
             setProgress(downloadList.size, downloadList.filterValues { it.isDownloaded }.size, false)
-            setContentText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded")
+            setContentText(
+                "${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded"
+            )
         }
         notificationManager.notify(1, notification.build())
         if (downloadList.filterValues { !it.isDownloaded }.isEmpty()) {
@@ -175,6 +174,7 @@ class SectionDownloadWorker(val context: Context, private val workerParameters: 
                     // there was an error downloading the available options
                     Log.e("Service Error", "onOptionsNotReceived : $errDesc")
                 }
-            })
+            }
+        )
     }
 }

@@ -94,4 +94,3 @@ class LibraryActivity : BaseCBActivity() {
         confirmDialog.show()
     }
 }
-

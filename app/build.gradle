@@ -1,10 +1,10 @@
 apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
 
 ext {
     ankoVersion = '0.10.6'
@@ -33,12 +33,12 @@ def DISCUSS_URL = System.getenv('DISCUSS_URL') ?: "https://discuss.codingblocks.
 apply from: './signingconfigs.gradle'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 101010000
+        targetSdkVersion 30
+        versionCode 101010001
         // 1 (versioning scheme)
         // 00 (major version)
         // 00 (minor version)
@@ -47,7 +47,7 @@ android {
         versionName "1.1.0"
         signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        multiDexEnabled false
+        multiDexEnabled true
         manifestPlaceholders = [
                 onesignal_app_id               : '01d75aac-5123-4145-b655-ba8d27c5dc13',
                 onesignal_google_project_number: 'REMOTE'
@@ -63,6 +63,11 @@ android {
                 arg("room.schemaLocation", "$projectDir/schemas".toString())
             }
         }
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
     }
     lintOptions {
         abortOnError false
@@ -73,21 +78,23 @@ android {
             minifyEnabled false
             versionNameSuffix '-debug-version'
             applicationIdSuffix = '.debug'
+            buildConfigField "String", "BASE_URL", '"api-online.codingblocks.xyz"'
 
         }
         release {
             signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BASE_URL", '"online-api.codingblocks.com"'
 
         }
     }
     compileOptions {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_1_8
     }
 
     packagingOptions {

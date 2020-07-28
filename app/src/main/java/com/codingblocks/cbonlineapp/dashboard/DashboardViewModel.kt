@@ -6,10 +6,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
-import androidx.lifecycle.viewModelScope
-import androidx.paging.DataSource
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
 import androidx.work.BackoffPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
@@ -19,7 +15,6 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
-import com.codingblocks.cbonlineapp.dashboard.home.WishlistDataSource
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.database.models.CourseRunPair
@@ -28,9 +23,9 @@ import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.DELETE_DOWNLOADED_VIDEO
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.runIO
+import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
 import com.codingblocks.cbonlineapp.util.livedata.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.livedata.getDistinct
-import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
 import com.codingblocks.cbonlineapp.workers.DeleteDownloadsWorker
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
@@ -38,8 +33,8 @@ import com.codingblocks.onlineapi.getMeta
 import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Player
-import com.google.common.util.concurrent.ListenableFuture
 import com.codingblocks.onlineapi.models.Wishlist
+import com.google.common.util.concurrent.ListenableFuture
 import com.onesignal.OneSignal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -169,18 +164,18 @@ class DashboardViewModel(
     private fun checkDownloadDataWM() {
         val wm = WorkManager.getInstance()
 
-        //Will get if Auto delete downloaded video request is already started or not
+        // Will get if Auto delete downloaded video request is already started or not
         val future: ListenableFuture<List<WorkInfo>> = wm.getWorkInfosByTag(DELETE_DOWNLOADED_VIDEO)
         val list: List<WorkInfo> = future.get()
 
-        //Request to delete video files which expired after 15 days
+        // Request to delete video files which expired after 15 days
         val request: PeriodicWorkRequest =
             PeriodicWorkRequestBuilder<DeleteDownloadsWorker>(1, TimeUnit.DAYS)
                 .addTag(DELETE_DOWNLOADED_VIDEO)
                 .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
                 .build()
 
-        //If found empty then it is not started or cancelled for whatever reason, will add request to start it
+        // If found empty then it is not started or cancelled for whatever reason, will add request to start it
         if (list.isEmpty()) {
             wm.enqueue(request)
         }
@@ -334,36 +329,36 @@ class DashboardViewModel(
 
     var snackbar = MutableLiveData<String>()
     var wishlistLiveData = MutableLiveData<List<Course>>()
-    fun fetchWishList(){
-        runIO{
+    fun fetchWishList() {
+        runIO {
             when (val response = homeRepo.fetchWishlist()) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
-                    if (isSuccessful){
+                    if (isSuccessful) {
                         body()?.let {
                             val wishlist = it.get()
                             val courseList = ArrayList<Course>()
-                            for (course in wishlist!!){
+                            for (course in wishlist!!) {
                                 courseList.add(course.course!!)
                             }
                             wishlistLiveData.postValue(courseList)
                         }
-                    }else
+                    } else
                         setError(fetchError(code()))
                 }
             }
         }
     }
 
-    fun changeWishlistStatus(id: String){
+    fun changeWishlistStatus(id: String) {
         runIO {
             when (val response = homeRepo.checkWishlisted(id)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
-                        if (response.value.body()?.id!=null){
+                        if (response.value.body()?.id != null) {
                             response.value.body()?.let { removeWishlist(it.id) }
-                        }else{
+                        } else {
                             addWishlist(id)
                         }
                     } else {
@@ -374,7 +369,7 @@ class DashboardViewModel(
         }
     }
 
-    fun addWishlist(id: String){
+    fun addWishlist(id: String) {
         val course = Wishlist(Course(id))
         runIO {
             when (val response = homeRepo.addWishlist(course)) {
@@ -390,7 +385,7 @@ class DashboardViewModel(
         }
     }
 
-    fun removeWishlist(id: String){
+    fun removeWishlist(id: String) {
         runIO {
             when (val response = homeRepo.removeWishlist(id)) {
                 is ResultWrapper.GenericError -> setError(response.error)

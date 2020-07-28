@@ -42,13 +42,11 @@ import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
-
 class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefreshListener {
 
     private val viewModel: MyCourseViewModel by stateViewModel()
     private val pagerAdapter: ViewPager2Adapter by lazy { ViewPager2Adapter(this) }
     private var confirmDialog: AlertDialog? = null
-
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -74,16 +72,19 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
         if (!MediaUtils.checkPermission(this)) {
             MediaUtils.isStoragePermissionGranted(this)
         }
-        viewModel.nextContent?.observe(this, Observer { content ->
-            courseResumeBtn.setOnClickListener {
-                if (content != null)
-                    when (content.contentable) {
-                        LECTURE, VIDEO -> startActivity(createVideoPlayerActivityIntent(this, content.contentId, content.sectionId))
-                    } else {
-                    toast("Please Wait while the content is being updated!")
+        viewModel.nextContent?.observe(
+            this,
+            Observer { content ->
+                courseResumeBtn.setOnClickListener {
+                    if (content != null)
+                        when (content.contentable) {
+                            LECTURE, VIDEO -> startActivity(createVideoPlayerActivityIntent(this, content.contentId, content.sectionId))
+                        } else {
+                        toast("Please Wait while the content is being updated!")
+                    }
                 }
             }
-        })
+        )
 
         viewModel.errorLiveData.observer(this) {
             when (it) {
@@ -125,15 +126,17 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
             isUserInputEnabled = false
             adapter = pagerAdapter
             offscreenPageLimit = 3
-            registerOnPageChangeCallback(pageChangeCallback { pos, _, _ ->
-                if (pos == 1) {
-                    fab.animateVisibility(View.VISIBLE)
-                } else {
-                    if (fab.visibility == View.VISIBLE) {
-                        fab.animateVisibility(View.GONE)
+            registerOnPageChangeCallback(
+                pageChangeCallback { pos, _, _ ->
+                    if (pos == 1) {
+                        fab.animateVisibility(View.VISIBLE)
+                    } else {
+                        if (fab.visibility == View.VISIBLE) {
+                            fab.animateVisibility(View.GONE)
+                        }
                     }
                 }
-            })
+            )
         }
         val badge: BadgeDrawable? = myCourseTabs.getTabAt(3)?.orCreateBadge
         badge?.isVisible = true
@@ -141,10 +144,13 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
             tab.text = resources.getStringArray(R.array.tab_titles)[position]
             coursePager.setCurrentItem(tab.position, true)
         }.attach()
-        //TODO(#1): Fix this hack
-        Handler().postDelayed({
-            coursePager.setCurrentItem(intent.getIntExtra(TAB_POS, 0), true)
-        }, 100)
+        // TODO(#1): Fix this hack
+        Handler().postDelayed(
+            {
+                coursePager.setCurrentItem(intent.getIntExtra(TAB_POS, 0), true)
+            },
+            100
+        )
     }
 
     fun showFab() {

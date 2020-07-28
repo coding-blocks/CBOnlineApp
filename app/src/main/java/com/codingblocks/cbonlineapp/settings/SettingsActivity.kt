@@ -10,14 +10,13 @@ import androidx.lifecycle.lifecycleScope
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.FileUtils
-import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.extensions.*
-import java.io.File
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
 
 class SettingsActivity : BaseCBActivity() {
 
@@ -73,14 +72,17 @@ class SettingsActivity : BaseCBActivity() {
     private fun updateSpaceStats() {
         val bytesAvailable = stat.blockSizeLong * stat.availableBlocksLong
         spaceFreeTv.text = String.format("%s free", bytesAvailable.readableFileSize())
-        spaceUsedTv.text = String.format("%s used", file?.let {
-            folderSize(
-                it
-            ).readableFileSize()
-        })
+        spaceUsedTv.text = String.format(
+            "%s used",
+            file?.let {
+                folderSize(
+                    it
+                ).readableFileSize()
+            }
+        )
 
-        val usedSpace : Double = ((file?.let { folderSize(it) }?.toDouble()?.div(1048576) ?: 0.0))
-        Log.v("usedSpace","Used Space is $usedSpace")
+        val usedSpace: Double = ((file?.let { folderSize(it) }?.toDouble()?.div(1048576) ?: 0.0))
+        Log.v("usedSpace", "Used Space is $usedSpace")
         storageProgress.max = bytesAvailable.toInt() / 1048576
         storageProgress.progress = usedSpace.toInt()
 

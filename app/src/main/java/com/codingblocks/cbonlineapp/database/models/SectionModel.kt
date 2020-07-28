@@ -9,12 +9,16 @@ import com.codingblocks.cbonlineapp.database.ListObject
 
 @Entity(
     indices = [Index("run_id")],
-    foreignKeys = [(ForeignKey(
-        entity = RunModel::class,
-        parentColumns = ["crUid"],
-        childColumns = ["run_id"],
-        onDelete = ForeignKey.CASCADE // or CASCADE
-    ))]
+    foreignKeys = [
+        (
+            ForeignKey(
+                entity = RunModel::class,
+                parentColumns = ["crUid"],
+                childColumns = ["run_id"],
+                onDelete = ForeignKey.CASCADE // or CASCADE
+            )
+            )
+    ]
 )
 data class SectionModel(
     @PrimaryKey

@@ -35,7 +35,14 @@ abstract class BaseCBActivity : AppCompatActivity(), BaseLifecycleComponent {
             // check connectivity
             topView.isVisible = false
         }
-        addContentView(topView, ViewGroup.LayoutParams(LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT)))
+        addContentView(
+            topView,
+            ViewGroup.LayoutParams(
+                LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+                )
+            )
+        )
     }
 }

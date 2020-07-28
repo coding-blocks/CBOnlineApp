@@ -39,8 +39,11 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler, KoinCompo
                 with(mInstance) { startActivity(intentFor<AdminActivity>().newTask()) }
             } else if (!doubt?.id.isNullOrEmpty()) {
                 with(mInstance) {
-                    startActivity(intentFor<DoubtCommentActivity>(DOUBT_ID to doubt.id
-                    ).newTask())
+                    startActivity(
+                        intentFor<DoubtCommentActivity>(
+                            DOUBT_ID to doubt.id
+                        ).newTask()
+                    )
                 }
             } else
                 mInstance.openChrome(url, true)
@@ -67,17 +70,19 @@ class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler, KoinC
         GlobalScope.launch {
 
             if (!doubt?.id.isNullOrEmpty()) {
-                doubtsDao.insert(DoubtsModel(
-                    dbtUid = doubt.id,
-                    title = doubt.title,
-                    body = doubt.body,
-                    contentId = doubt.content?.id ?: "",
-                    status = doubt.status,
-                    runAttemptId = doubt.runAttempt?.id ?: "",
-                    discourseTopicId = doubt.discourseTopicId,
-                    conversationId = doubt.conversationId,
-                    createdAt = doubt.createdAt
-                ))
+                doubtsDao.insert(
+                    DoubtsModel(
+                        dbtUid = doubt.id,
+                        title = doubt.title,
+                        body = doubt.body,
+                        contentId = doubt.content?.id ?: "",
+                        status = doubt.status,
+                        runAttemptId = doubt.runAttempt?.id ?: "",
+                        discourseTopicId = doubt.discourseTopicId,
+                        conversationId = doubt.conversationId,
+                        createdAt = doubt.createdAt
+                    )
+                )
             }
 //            notificationDao.insertWithId(
 //                    Notification(

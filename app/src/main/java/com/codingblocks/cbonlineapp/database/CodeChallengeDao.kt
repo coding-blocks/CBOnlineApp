@@ -13,5 +13,4 @@ interface CodeChallengeDao : BaseDao<CodeChallengeModel> {
 
     @Query("SELECT codeUid, codeContestId FROM ContentModel WHERE ccid = :contentId")
     suspend fun getCodeChallenge(contentId: String): CodeModel
-
 }

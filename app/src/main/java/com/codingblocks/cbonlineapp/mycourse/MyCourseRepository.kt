@@ -232,20 +232,22 @@ class MyCourseRepository(
             if (content.progress != null) {
                 status =
                     content.progress?.status
-                        ?: ""
+                    ?: ""
                 progressId =
                     content.progress?.id
-                        ?: ""
+                    ?: ""
             } else {
                 status =
                     "UNDONE"
             }
             content.bookmark?.let {
-                bookmark = BookmarkModel(it.id ?: "",
+                bookmark = BookmarkModel(
+                    it.id ?: "",
                     it.runAttemptId ?: "",
                     it.contentId ?: "",
                     it.sectionId ?: "",
-                    it.createdAt ?: "")
+                    it.createdAt ?: ""
+                )
             }
 
             val newContent =
@@ -353,5 +355,4 @@ class MyCourseRepository(
     }
 
     fun getRunAttempt(id: String) = attemptDao.getRunAttempt(id)
-
 }

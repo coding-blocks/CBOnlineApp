@@ -30,7 +30,6 @@ import java.text.DecimalFormat
 import kotlin.math.max
 import kotlin.math.min
 
-
 class VdoPlayerControls @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -71,7 +70,6 @@ class VdoPlayerControls @JvmOverloads constructor(
          */
         fun getNewVdoInitParams(): VdoInitParams?
     }
-
 
     private val playButton: View
     private val pauseButton: View
@@ -322,7 +320,8 @@ class VdoPlayerControls @JvmOverloads constructor(
 
     private fun showSpeedControlDialog() {
         MaterialAlertDialogBuilder(context, R.style.CustomMaterialDialog)
-            .setSingleChoiceItems(allowedSpeedStrList,
+            .setSingleChoiceItems(
+                allowedSpeedStrList,
                 chosenSpeedIndex
             ) { dialog, which ->
                 player?.let { it.playbackSpeed = allowedSpeedList[which] }
@@ -422,13 +421,15 @@ class VdoPlayerControls @JvmOverloads constructor(
                     }
                 }
             } else {
-                Log.e(TAG, "cannot retry loading params");
-                Toast.makeText(context, "cannot retry loading params", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "cannot retry loading params")
+                Toast.makeText(context, "cannot retry loading params", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private inner class UiListener : VdoPlayer.PlaybackEventListener, SeekBar.OnSeekBarChangeListener,
+    private inner class UiListener :
+        VdoPlayer.PlaybackEventListener,
+        SeekBar.OnSeekBarChangeListener,
         OnClickListener {
 
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {}
@@ -524,7 +525,7 @@ class VdoPlayerControls @JvmOverloads constructor(
 
         override fun onLoadError(vdoParams: VdoPlayer.VdoInitParams, errorDescription: ErrorDescription) {
             lastErrorParams = vdoParams
-            needNewVdoParams = ERROR_CODES_FOR_NEW_PARAMS.contains(errorDescription.errorCode);
+            needNewVdoParams = ERROR_CODES_FOR_NEW_PARAMS.contains(errorDescription.errorCode)
             showError(errorDescription)
         }
 
@@ -534,7 +535,7 @@ class VdoPlayerControls @JvmOverloads constructor(
 
         override fun onError(vdoParams: VdoPlayer.VdoInitParams, errorDescription: ErrorDescription) {
             lastErrorParams = vdoParams
-            needNewVdoParams = ERROR_CODES_FOR_NEW_PARAMS.contains(errorDescription.errorCode);
+            needNewVdoParams = ERROR_CODES_FOR_NEW_PARAMS.contains(errorDescription.errorCode)
             showError(errorDescription)
         }
 

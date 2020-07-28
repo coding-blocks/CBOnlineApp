@@ -24,9 +24,9 @@ import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.REOPENED
 import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
@@ -161,16 +161,19 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
                     }
                 }
             }
-            vm.doubts.observe(thisLifecycleOwner, Observer {
-                doubtListAdapter.submitList(it)
-                changeViewState(
-                    dashboardDoubtRv,
-                    internetll,
-                    emptyLl,
-                    dashboardDoubtShimmer,
-                    it.isEmpty()
-                )
-            })
+            vm.doubts.observe(
+                thisLifecycleOwner,
+                Observer {
+                    doubtListAdapter.submitList(it)
+                    changeViewState(
+                        dashboardDoubtRv,
+                        internetll,
+                        emptyLl,
+                        dashboardDoubtShimmer,
+                        it.isEmpty()
+                    )
+                }
+            )
         } else {
             dashboardDoubts.isVisible = false
             dashboardDoubtsLoggedOut.isVisible = true

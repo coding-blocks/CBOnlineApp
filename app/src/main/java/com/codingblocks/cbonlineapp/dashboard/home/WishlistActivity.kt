@@ -17,7 +17,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_wishlist.*
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
-class WishlistActivity : AppCompatActivity()  {
+class WishlistActivity : AppCompatActivity() {
 
     val wishlistViewModel: WishlistViewModel by stateViewModel()
     private val wishlistAdapter = WishlistPagedAdapter("LIST")
@@ -40,7 +40,7 @@ class WishlistActivity : AppCompatActivity()  {
             }
         }
     }
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wishlist)
@@ -49,7 +49,7 @@ class WishlistActivity : AppCompatActivity()  {
             layoutManager = LinearLayoutManager(applicationContext)
         }
         wishlistAdapter.onItemClick = itemClickListener
-        wishlistViewModel.fetchWishList().observer(this){wishlist->
+        wishlistViewModel.fetchWishList().observer(this) { wishlist ->
             wishlistShimmerLayout.isVisible = false
             wishlistAdapter.submitList(wishlist)
         }
