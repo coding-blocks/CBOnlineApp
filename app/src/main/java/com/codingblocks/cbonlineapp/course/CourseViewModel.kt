@@ -9,14 +9,13 @@ import androidx.paging.PagedList
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.baseclasses.STATE
 import com.codingblocks.cbonlineapp.course.adapter.CourseDataSource
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Project
 import com.codingblocks.onlineapi.models.Sections
-import com.codingblocks.cbonlineapp.util.PreferenceHelper
-import com.codingblocks.onlineapi.models.User
 import com.codingblocks.onlineapi.models.Wishlist
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -204,38 +203,38 @@ class CourseViewModel(
     /**
      * Paged Course List
      */
-    private var courseLiveData  : LiveData<PagedList<Course>>
+    private var courseLiveData: LiveData<PagedList<Course>>
 
     init {
         val config = PagedList.Config.Builder()
             .setPageSize(9)
             .setEnablePlaceholders(true)
             .build()
-        courseLiveData  = initializedPagedListBuilder(config).build()
+        courseLiveData = initializedPagedListBuilder(config).build()
     }
 
-    fun getCourses():LiveData<PagedList<Course>> = courseLiveData
+    fun getCourses(): LiveData<PagedList<Course>> = courseLiveData
 
     private fun initializedPagedListBuilder(config: PagedList.Config):
         LivePagedListBuilder<String, Course> {
 
-        val dataSourceFactory = object : DataSource.Factory<String, Course>() {
-            override fun create(): DataSource<String, Course> {
-                return CourseDataSource(viewModelScope)
+            val dataSourceFactory = object : DataSource.Factory<String, Course>() {
+                override fun create(): DataSource<String, Course> {
+                    return CourseDataSource(viewModelScope)
+                }
             }
+            return LivePagedListBuilder<String, Course>(dataSourceFactory, config)
         }
-        return LivePagedListBuilder<String, Course>(dataSourceFactory, config)
-    }
 
-    fun changeWishlistStatus(id: String){
+    fun changeWishlistStatus(id: String) {
         runIO {
             when (val response = repo.checkIfWishlisted(id)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
-                        if (response.value.body()?.id!=null){
+                        if (response.value.body()?.id != null) {
                             response.value.body()?.let { removeWishlist(it.id) }
-                        }else{
+                        } else {
                             addWishlist(id)
                         }
                     } else {
@@ -246,7 +245,7 @@ class CourseViewModel(
         }
     }
 
-    fun addWishlist(id: String){
+    fun addWishlist(id: String) {
         val wishlist = Wishlist(Course(id))
         runIO {
             when (val response = repo.addWishlist(wishlist)) {
@@ -262,7 +261,7 @@ class CourseViewModel(
         }
     }
 
-    fun removeWishlist(courseSingle: String){
+    fun removeWishlist(courseSingle: String) {
         runIO {
             when (val response = repo.removeWishlist(courseSingle)) {
                 is ResultWrapper.GenericError -> {

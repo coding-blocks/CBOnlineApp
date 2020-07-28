@@ -96,9 +96,15 @@ import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
-    VdoPlayer.InitializationListener, VdoPlayerControls.FullscreenActionListener,
-    VdoPlayerControls.ControllerVisibilityListener, YouTubePlayerFullScreenListener, View.OnClickListener {
+class VideoPlayerActivity :
+    BaseCBActivity(),
+    EditNoteClickListener,
+    AnkoLogger,
+    VdoPlayer.InitializationListener,
+    VdoPlayerControls.FullscreenActionListener,
+    VdoPlayerControls.ControllerVisibilityListener,
+    YouTubePlayerFullScreenListener,
+    View.OnClickListener {
 
     private val vm: VideoPlayerViewModel by stateViewModel()
 
@@ -138,11 +144,21 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
         contentRv.setRv(this, sectionItemsAdapter)
         vm.contentList.observer(this) {
-            sectionItemsAdapter.submitList(it.contents.filter { it.contentable == VIDEO || it.contentable == LECTURE }.sortedBy { it.order }, vm.currentContentId!!)
+            sectionItemsAdapter.submitList(
+                it.contents.filter {
+                    it.contentable == VIDEO || it.contentable == LECTURE
+                }.sortedBy { it.order },
+                vm.currentContentId!!
+            )
         }
         sectionItemsAdapter.onItemClick = {
-            startActivity(createVideoPlayerActivityIntent(this, it.ccid, vm.sectionId
-                ?: ""))
+            startActivity(
+                createVideoPlayerActivityIntent(
+                    this, it.ccid,
+                    vm.sectionId
+                        ?: ""
+                )
+            )
         }
 
         rootLayout.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
@@ -173,7 +189,12 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
                     } else {
-                        fabMenu.setBackgroundColor(ContextCompat.getColor(this@VideoPlayerActivity, R.color.white_transparent))
+                        fabMenu.setBackgroundColor(
+                            ContextCompat.getColor(
+                                this@VideoPlayerActivity,
+                                R.color.white_transparent
+                            )
+                        )
                     }
                 } else {
                     doubtFab.startAnimation(animationUtils.open)
@@ -201,9 +222,9 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         noteFab.setOnClickListener {
             val notePos: Double? =
                 if (youtubePlayerView.isVisible)
-                    (tracker.currentSecond.div(1000)).toDouble()
+                (tracker.currentSecond.div(1000)).toDouble()
                 else
-                    (videoPlayer.currentTime.div(1000)).toDouble()
+                (videoPlayer.currentTime.div(1000)).toDouble()
 
             val newNote = NotesModel(
                 duration = notePos ?: 0.0,
@@ -337,7 +358,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             setFullscreenActionListener(this@VideoPlayerActivity)
             setControllerVisibilityListener(this@VideoPlayerActivity)
             setVdoParamsGenerator(vdoParamsGenerator)
-
         }
         showControls(true)
         vm.getOtpProgress.observer(this) {
@@ -407,12 +427,14 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
     private fun showSystemUi(show: Boolean) {
         if (show) {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+            window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                )
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         }
@@ -577,8 +599,10 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             else
                 return
         }
-        updatePictureInPictureActions(R.drawable.ic_pause, "Pause",
-            CONTROL_TYPE_PAUSE, REQUEST_PAUSE)
+        updatePictureInPictureActions(
+            R.drawable.ic_pause, "Pause",
+            CONTROL_TYPE_PAUSE, REQUEST_PAUSE
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -591,8 +615,10 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             else
                 return
         }
-        updatePictureInPictureActions(R.drawable.ic_play, "Play",
-            CONTROL_TYPE_PLAY, REQUEST_PLAY)
+        updatePictureInPictureActions(
+            R.drawable.ic_play, "Play",
+            CONTROL_TYPE_PLAY, REQUEST_PLAY
+        )
     }
 
     override fun onUserLeaveHint() {
@@ -627,9 +653,13 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     ) {
         val actions = ArrayList<RemoteAction>()
 
-        val intent = PendingIntent.getBroadcast(this@VideoPlayerActivity,
-            requestCode, Intent(ACTION_MEDIA_CONTROL)
-            .putExtra(EXTRA_CONTROL_TYPE, controlType), 0)
+        val intent = PendingIntent.getBroadcast(
+            this@VideoPlayerActivity,
+            requestCode,
+            Intent(ACTION_MEDIA_CONTROL)
+                .putExtra(EXTRA_CONTROL_TYPE, controlType),
+            0
+        )
         val icon = Icon.createWithResource(this@VideoPlayerActivity, iconId)
         actions.add(RemoteAction(icon, title, title, intent))
 
@@ -658,15 +688,17 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         mPIPParams = PictureInPictureParams.Builder()
         mPIPParams.setAspectRatio(aspectRatio)
 
-        updatePictureInPictureActions(R.drawable.ic_pause, "Pause",
-            CONTROL_TYPE_PAUSE, REQUEST_PAUSE)
+        updatePictureInPictureActions(
+            R.drawable.ic_pause, "Pause",
+            CONTROL_TYPE_PAUSE, REQUEST_PAUSE
+        )
 
         enterPictureInPictureMode(mPIPParams.build())
     }
 
-
     private fun navToLauncherTask(appContext: Context) {
-        val activityManager: ActivityManager = (appContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
+        val activityManager: ActivityManager =
+            (appContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
         val appTasks: List<ActivityManager.AppTask> = activityManager.appTasks
         for (task in appTasks) {
             val baseIntent: Intent = task.taskInfo.baseIntent
@@ -728,7 +760,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         args.putSerializable("type", VideoSheetType.DOUBT_CREATE)
         doubtSheet.arguments = args
         doubtSheet.show(supportFragmentManager, doubtSheet.tag)
-
     }
 
     override fun onStop() {
@@ -805,24 +836,24 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
     }
 
-    private val vdoParamsGenerator: VdoPlayerControls.VdoParamsGenerator = object : VdoPlayerControls.VdoParamsGenerator {
+    private val vdoParamsGenerator: VdoPlayerControls.VdoParamsGenerator =
+        object : VdoPlayerControls.VdoParamsGenerator {
 
+            override fun getNewVdoInitParams(): VdoPlayer.VdoInitParams? {
+                return try {
+                    getVdoParams()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    log("Error generating new otp and playbackInfo")
+                    null
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                    log("Error generating new otp and playbackInfo")
 
-        override fun getNewVdoInitParams(): VdoPlayer.VdoInitParams? {
-            return try {
-                getVdoParams()
-            } catch (e: IOException) {
-                e.printStackTrace()
-                log("Error generating new otp and playbackInfo")
-                null
-            } catch (e: JSONException) {
-                e.printStackTrace()
-                log("Error generating new otp and playbackInfo")
-
-                null
+                    null
+                }
             }
         }
-    }
 
     fun hideVideoFab() {
         noteFabTv.isVisible = false
@@ -839,11 +870,17 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
     companion object {
 
-        fun createVideoPlayerActivityIntent(context: Context, contentId: String, sectionId: String, position: Long = 0): Intent {
+        fun createVideoPlayerActivityIntent(
+            context: Context,
+            contentId: String,
+            sectionId: String,
+            position: Long = 0
+        ): Intent {
             return context.intentFor<VideoPlayerActivity>(
                 CONTENT_ID to contentId,
                 VIDEO_POSITION to position,
-                SECTION_ID to sectionId).singleTop().apply { if (getPrefs(context).SP_PIP) excludeFromRecents() }
+                SECTION_ID to sectionId
+            ).singleTop().apply { if (getPrefs(context).SP_PIP) excludeFromRecents() }
         }
 
         private val ACTION_MEDIA_CONTROL = "media_control"
@@ -855,6 +892,5 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     }
 
     override fun onClick(v: View) {
-
     }
 }

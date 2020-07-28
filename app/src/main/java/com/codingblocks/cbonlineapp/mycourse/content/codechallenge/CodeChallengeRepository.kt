@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.mycourse.content.codechallenge
 
 import com.codingblocks.cbonlineapp.database.CodeChallengeDao
-import com.codingblocks.cbonlineapp.database.LibraryDao
 import com.codingblocks.cbonlineapp.database.models.CodeChallengeModel
 import com.codingblocks.cbonlineapp.database.models.CodeDetailsModel
 import com.codingblocks.cbonlineapp.database.models.ProblemModel
@@ -17,7 +16,10 @@ import com.codingblocks.onlineapi.safeApiCall
 class CodeChallengeRepository(
     private val codeDao: CodeChallengeDao
 ) {
-    suspend fun fetchCodeChallenge(codeId: Int, contestId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getCodeChallenge(codeId, contestId) }
+    suspend fun fetchCodeChallenge(
+        codeId: Int,
+        contestId: String
+    ) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getCodeChallenge(codeId, contestId) }
 
     suspend fun getOfflineContent(codeId: String): CodeChallenge? {
         val model: CodeChallengeModel? = codeDao.getCodeChallengeById(codeId)

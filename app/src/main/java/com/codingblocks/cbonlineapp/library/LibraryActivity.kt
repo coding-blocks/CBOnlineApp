@@ -30,7 +30,9 @@ class LibraryActivity : BaseCBActivity() {
     val vm: LibraryViewModel by stateViewModel()
     private var confirmDialog: AlertDialog? = null
 
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+    private val startForResult = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             confirmDialog?.dismiss()
             toast(getString(R.string.logged_in))
@@ -94,4 +96,3 @@ class LibraryActivity : BaseCBActivity() {
         confirmDialog.show()
     }
 }
-

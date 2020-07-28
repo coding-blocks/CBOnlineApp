@@ -36,7 +36,7 @@ import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.ocpsoft.prettytime.PrettyTime
 import java.io.File
-import java.util.*
+import java.util.Date
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
@@ -60,7 +60,9 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             val progressValue = courseAndRun.getProgress()
             homeProgressTv.text = getString(R.string.progress, progressValue.toInt())
             homeProgressView.setGradientColor(progressValue)
-            certificate_descTv.apply { text = getString(R.string.certificate_desc, courseAndRun.run.completionThreshold) }
+            certificate_descTv.apply {
+                text = getString(R.string.certificate_desc, courseAndRun.run.completionThreshold)
+            }
             progressTv.apply {
                 text = getString(R.string.thresholdcompletion, courseAndRun.run.completionThreshold)
                 isActivated = courseAndRun.run.completionThreshold < progressValue
@@ -77,7 +79,11 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                     setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_share, 0)
                     setOnClickListener {
-                        downloadCertificate(requireContext(), courseAndRun.runAttempt.certificateUrl, "${viewModel.name}.pdf")
+                        downloadCertificate(
+                            requireContext(),
+                            courseAndRun.runAttempt.certificateUrl,
+                            "${viewModel.name}.pdf"
+                        )
                     }
                 }
             } else if (progressTv.isActivated && !mentorApprovalTv.isActivated) {
@@ -101,7 +107,9 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             }
 
             if (courseAndRun.run.crStart > "1574985600") {
-                if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium && RUNTIERS.LITE.name != courseAndRun.runAttempt.runTier)
+                if (courseAndRun.run.crPrice > 10.toString() &&
+                    courseAndRun.runAttempt.premium && RUNTIERS.LITE.name != courseAndRun.runAttempt.runTier
+                )
                     setGoodiesCard(courseAndRun.run.goodiesThreshold, progressValue)
             }
             viewModel.getLeaderboard().observer(thisLifecycleOwner) { leaderboard ->
@@ -111,7 +119,12 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     it.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
                     if (leaderboard.size > 5) {
                         courseLeaderboardll.isVisible = true
-                        leaderBoardListAdapter.submitList(mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5))
+                        leaderBoardListAdapter.submitList(
+                            mutableListOf(currUserLeaderboard) + leaderboard.subList(
+                                0,
+                                5
+                            )
+                        )
                     }
                 }
             }
@@ -123,23 +136,26 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             chart1.loadData(it.averageProgress, it.userProgress)
         }
 
-        viewModel.getHackerBlocksPerformance().distinctUntilChanged().observe(thisLifecycleOwner, Observer {
-            if (it != null) {
-                hbRankContainer.isVisible = true
-                currentOverallRank.text = it.currentOverallRank.toString()
-                currentMonthScore.text = requireContext().getString(R.string.points, it.currentMonthScore)
-                val rankDelta = it.currentOverallRank - it.previousOverallRank
-                val pointsDelta = it.currentMonthScore - it.previousMonthScore
-                previousRank.apply {
-                    isActivated = rankDelta >= 0
-                    text = context.getString(R.string.ranks, kotlin.math.abs(rankDelta))
-                }
-                previousMonthlyScore.apply {
-                    isActivated = pointsDelta >= 0
-                    text = context.getString(R.string.points, pointsDelta)
+        viewModel.getHackerBlocksPerformance().distinctUntilChanged().observe(
+            thisLifecycleOwner,
+            Observer {
+                if (it != null) {
+                    hbRankContainer.isVisible = true
+                    currentOverallRank.text = it.currentOverallRank.toString()
+                    currentMonthScore.text = requireContext().getString(R.string.points, it.currentMonthScore)
+                    val rankDelta = it.currentOverallRank - it.previousOverallRank
+                    val pointsDelta = it.currentMonthScore - it.previousMonthScore
+                    previousRank.apply {
+                        isActivated = rankDelta >= 0
+                        text = context.getString(R.string.ranks, kotlin.math.abs(rankDelta))
+                    }
+                    previousMonthlyScore.apply {
+                        isActivated = pointsDelta >= 0
+                        text = context.getString(R.string.points, pointsDelta)
+                    }
                 }
             }
-        })
+        )
 
         confirmReset.setOnClickListener {
             CustomDialog.showConfirmation(requireContext(), "reset") {
@@ -166,7 +182,6 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 negativeBtnClickListener { requireActivity().finish() }
             }
         confirmDialog?.show()
-
     }
 
     private fun downloadCertificate(context: Context, certificateUrl: String, name: String) {

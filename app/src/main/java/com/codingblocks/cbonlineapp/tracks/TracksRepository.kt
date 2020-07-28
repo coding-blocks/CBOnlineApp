@@ -14,6 +14,9 @@ class TracksRepository {
     suspend fun getTracks() = safeApiCall { CBOnlineLib.onlineV2JsonApi.getTracks() }
 
     suspend fun getProfessions() = safeApiCall { CBOnlineLib.onlineV2JsonApi.getProfessions() }
-    suspend fun getRecommendedTrack(map: HashMap<String, String>) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getRecommendedTrack(map) }
+    suspend fun getRecommendedTrack(map: HashMap<String, String>) = safeApiCall {
+        CBOnlineLib.onlineV2JsonApi.getRecommendedTrack(map)
+    }
+
     suspend fun generateLead(body: HashMap<String, Any>) = safeApiCall { CBOnlineLib.api.generateLead(body) }
 }

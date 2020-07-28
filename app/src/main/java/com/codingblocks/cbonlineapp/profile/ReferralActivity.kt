@@ -5,7 +5,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
@@ -43,10 +42,16 @@ class ReferralActivity : BaseCBActivity() {
                         runOnUiThread {
                             referralTv.append(body()?.get("code")?.asString)
                             shareReferral.setOnClickListener {
-                                share(referralTv.text.toString() + "\n You get 500 CB Credits on your successful Sign Up.")
+                                share(
+                                    referralTv.text.toString() +
+                                        "\n You get 500 CB Credits on your successful Sign Up."
+                                )
                             }
                             shareWhatsapp.setOnClickListener {
-                                share(referralTv.text.toString() + "\n You get 500 CB Credits on your successful Sign Up.")
+                                share(
+                                    referralTv.text.toString() +
+                                        "\n You get 500 CB Credits on your successful Sign Up."
+                                )
                             }
                         }
                     }
@@ -61,5 +66,4 @@ class ReferralActivity : BaseCBActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 }

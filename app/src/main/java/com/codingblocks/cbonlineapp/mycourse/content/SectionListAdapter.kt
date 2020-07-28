@@ -9,16 +9,20 @@ import com.codingblocks.cbonlineapp.commons.SectionListClickListener
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import kotlinx.android.synthetic.main.item_section_list.view.*
 
-class SectionListAdapter(private val sectionList: ArrayList<SectionModel>) : RecyclerView.Adapter<SectionListAdapter.SectionListViewHolder>() {
+class SectionListAdapter(
+    private val sectionList: ArrayList<SectionModel>
+) : RecyclerView.Adapter<SectionListAdapter.SectionListViewHolder>() {
 
     var onSectionListClick: SectionListClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionListViewHolder {
-        return SectionListViewHolder(LayoutInflater.from(parent.context).inflate(
-            R.layout.item_section_list,
-            parent,
-            false
-        ))
+        return SectionListViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item_section_list,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int = sectionList.size

@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.dashboard.home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.adapter.WishlistListener
-import com.codingblocks.cbonlineapp.util.extensions.*
+import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
+import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.onlineapi.models.Wishlist
 import de.hdodenhof.circleimageview.CircleImageView
@@ -38,11 +38,17 @@ class WishlistPagedAdapter(val type: String = "") : PagedListAdapter<Wishlist, W
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WishListPagedItemViewHolder {
 
-        return when(type){
-            "LIST"-> WishListPagedItemViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_course_card_list, parent, false))
-            else-> WishListPagedItemViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_course_wishlist, parent, false))
+        return when (type) {
+            "LIST" ->
+                WishListPagedItemViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_course_card_list, parent, false)
+                )
+            else ->
+                WishListPagedItemViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_course_wishlist, parent, false)
+                )
         }
     }
 
@@ -57,10 +63,10 @@ class WishListPagedItemViewHolder(itemView: View) : RecyclerView.ViewHolder(item
     var itemClickListener: WishListItemClickListener? = null
     var wishlistListener: WishlistListener? = null
     fun bind(item: Wishlist?, type: Int) = with(itemView) {
-        with(item?.course!!){
+        with(item?.course!!) {
             courseLogo.loadImage(logo)
             ViewCompat.setTransitionName(courseLogo, title)
-            val ratingText = getSpannableSring("${rating}/5.0", ", ${reviewCount} ratings")
+            val ratingText = getSpannableSring("$rating/5.0", ", $reviewCount ratings")
             ratingTv.text = ratingText
             courseCardTitleTv.text = title
             setOnClickListener {
@@ -76,12 +82,12 @@ class WishListPagedItemViewHolder(itemView: View) : RecyclerView.ViewHolder(item
                 else -> "Beginner"
             }
 
-            if(type == 0){
+            if (type == 0) {
                 courseCardInstructorsTv.isVisible = false
                 courseCardMrpTv.isVisible = false
                 courseCardPriceTv.isVisible = false
-            }else{
-                courseCover.loadImage(coverImage?:"")
+            } else {
+                courseCover.loadImage(coverImage ?: "")
                 course_card_like.setOnClickListener {
                     wishlistListener?.onWishListClickListener(id)
                 }

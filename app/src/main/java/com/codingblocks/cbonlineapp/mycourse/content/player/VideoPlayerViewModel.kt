@@ -63,8 +63,6 @@ class VideoPlayerViewModel(
     var getOtpProgress: MutableLiveData<Boolean> = MutableLiveData()
     var isDownloaded = false
 
-
-
     val runAttempts = Transformations.distinctUntilChanged(attemptId).switchMap {
         repoDoubts.getRunAttempt(it)
     }
@@ -117,7 +115,7 @@ class VideoPlayerViewModel(
 
     private fun fetchDoubts(contentId: String?) {
         runIO {
-            when (val response = repo.fetchCourseContentDoubts(attemptId.value!!,contentId!!)) {
+            when (val response = repo.fetchCourseContentDoubts(attemptId.value!!, contentId!!)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
@@ -151,8 +149,14 @@ class VideoPlayerViewModel(
 
     fun markBookmark() {
         runIO {
-            val bookmark = Bookmark(RunAttempts(attemptId.value ?: ""), LectureContent(currentContentId
-                ?: ""), Sections(sectionId ?: ""))
+            val bookmark = Bookmark(
+                RunAttempts(attemptId.value ?: ""),
+                LectureContent(
+                    currentContentId
+                        ?: ""
+                ),
+                Sections(sectionId ?: "")
+            )
             when (val response = repo.markDoubt(bookmark)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
@@ -211,7 +215,11 @@ class VideoPlayerViewModel(
     }
 
     fun updateNote(note: NotesModel) {
-        val newNote = Note(note.nttUid, note.duration, note.text, RunAttempts(note.runAttemptId), LectureContent(note.contentId))
+        val newNote = Note(
+            note.nttUid, note.duration,
+            note.text,
+            RunAttempts(note.runAttemptId), LectureContent(note.contentId)
+        )
         runIO {
             when (val response = repo.updateNote(newNote)) {
                 is ResultWrapper.GenericError ->
@@ -249,8 +257,13 @@ class VideoPlayerViewModel(
 
     fun getOtp() {
         runIO {
-            when (val response = repo.getOtp(currentVideoId.value ?: "", attemptId.value ?: "", sectionId
-                ?: "")) {
+            when (
+                val response = repo.getOtp(
+                    currentVideoId.value ?: "", attemptId.value ?: "",
+                    sectionId
+                        ?: ""
+                )
+            ) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
@@ -284,15 +297,21 @@ class VideoPlayerViewModel(
     }
 
     fun createDoubt(title: String, body: String, function: (message: String) -> Unit) {
-        val doubt = Doubts(null, title, body, RunAttempts(attemptId.value ?: ""), LectureContent(currentContentId
-            ?: ""))
+        val doubt = Doubts(
+            null, title, body, RunAttempts(attemptId.value ?: ""),
+            LectureContent(
+                currentContentId
+                    ?: ""
+            )
+        )
         runIO {
             when (val response = repo.addDoubt(doubt)) {
-                is ResultWrapper.GenericError -> if (response.code in 100..103)
-                    createDoubtOffline(doubtModel = doubt)
-                else {
-                    setError(response.error)
-                }
+                is ResultWrapper.GenericError ->
+                    if (response.code in 100..103)
+                        createDoubtOffline(doubtModel = doubt)
+                    else {
+                        setError(response.error)
+                    }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
                         offlineSnackbar.postValue(("Doubt Created Successfully !"))

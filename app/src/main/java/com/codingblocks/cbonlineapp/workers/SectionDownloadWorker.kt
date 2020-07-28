@@ -94,7 +94,10 @@ class SectionDownloadWorker(val context: Context, private val workerParameters: 
 
     override fun onChanged(p0: String?, p1: DownloadStatus?) {
         notification.apply {
-            setContentText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded( Current ${p1?.downloadPercent}% )")
+            setContentText(
+                "${downloadList.filterValues { it.isDownloaded }.size}" +
+                    " out of ${downloadList.size} downloaded( Current ${p1?.downloadPercent}% )"
+            )
         }
         notificationManager.notify(1, notification.build())
     }
@@ -116,7 +119,10 @@ class SectionDownloadWorker(val context: Context, private val workerParameters: 
         }
         notification.apply {
             setProgress(downloadList.size, downloadList.filterValues { it.isDownloaded }.size, false)
-            setContentText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded")
+            setContentText(
+                "${downloadList.filterValues { it.isDownloaded }.size}" +
+                    " out of ${downloadList.size} downloaded"
+            )
         }
         notificationManager.notify(1, notification.build())
         if (downloadList.filterValues { !it.isDownloaded }.isEmpty()) {
@@ -175,6 +181,7 @@ class SectionDownloadWorker(val context: Context, private val workerParameters: 
                     // there was an error downloading the available options
                     Log.e("Service Error", "onOptionsNotReceived : $errDesc")
                 }
-            })
+            }
+        )
     }
 }

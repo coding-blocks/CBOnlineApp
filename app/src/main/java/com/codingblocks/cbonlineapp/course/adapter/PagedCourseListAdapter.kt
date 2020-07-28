@@ -17,14 +17,18 @@ class PagedCourseListAdapter(val type: String = "") : PagedListAdapter<Course, C
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
         return CourseViewHolder(
             when (type) {
-                "POPULAR" -> LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_course_card_secondary, parent, false)
-                "LIST" -> LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_course_card_list, parent, false)
-                "TRACKS" -> LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_track_course, parent, false)
-                else -> LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_course_card, parent, false)
+                "POPULAR" ->
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_course_card_secondary, parent, false)
+                "LIST" ->
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_course_card_list, parent, false)
+                "TRACKS" ->
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_track_course, parent, false)
+                else ->
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_course_card, parent, false)
             }
         )
     }

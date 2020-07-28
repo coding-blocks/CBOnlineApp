@@ -25,9 +25,9 @@ import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
+import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.cbonlineapp.util.livedata.observer
-import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.onlineapi.models.ProgressItem
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
@@ -51,7 +51,12 @@ class DashboardHomeFragment : BaseCBFragment() {
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
             override fun onClick(sectionId: String, contentId: String, postition: Long) {
-                startActivity(VideoPlayerActivity.createVideoPlayerActivityIntent(requireContext(), contentId, sectionId, postition))
+                startActivity(
+                    VideoPlayerActivity.createVideoPlayerActivityIntent(
+                        requireContext(),
+                        contentId, sectionId, postition
+                    )
+                )
             }
         }
     }
@@ -59,7 +64,7 @@ class DashboardHomeFragment : BaseCBFragment() {
     private val wishlistListener: WishlistListener by lazy {
         object : WishlistListener {
             override fun onWishListClickListener(id: String) {
-                if (vm.isLoggedIn == true){
+                if (vm.isLoggedIn == true) {
                     vm.changeWishlistStatus(id)
                 }
             }
@@ -77,10 +82,10 @@ class DashboardHomeFragment : BaseCBFragment() {
                 val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     requireActivity(),
                     logo,
-                    ViewCompat.getTransitionName(logo)!!)
+                    ViewCompat.getTransitionName(logo)!!
+                )
                 startActivity(intent, options.toBundle())
             }
-
         }
     }
 
@@ -97,7 +102,12 @@ class DashboardHomeFragment : BaseCBFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recentPlayedRv.setRv(requireContext(), recentlyPlayedAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
+        recentPlayedRv.setRv(
+            requireContext(),
+            recentlyPlayedAdapter,
+            orientation = RecyclerView.HORIZONTAL,
+            space = 28f
+        )
         wishRv.setRv(requireContext(), wishlistAdapter, orientation = RecyclerView.HORIZONTAL, space = 20f)
         recentlyPlayedAdapter.onItemClick = itemClickListener
         wishlistAdapter.onItemClick = wishListItemClickListener
@@ -108,7 +118,7 @@ class DashboardHomeFragment : BaseCBFragment() {
             startActivity(intentFor<LoginActivity>())
             requireActivity().finish()
         }
-        viewAllTv.setOnClickListener{
+        viewAllTv.setOnClickListener {
             startActivity(Intent(requireContext(), WishlistActivity::class.java))
         }
     }
@@ -121,39 +131,44 @@ class DashboardHomeFragment : BaseCBFragment() {
     override fun onResume() {
         super.onResume()
         if (vm.isLoggedIn == true) {
-            vm.fetchTopRunWithStats().observe(thisLifecycleOwner, Observer { coursePair ->
-                dashboardProgressContainer.isVisible = coursePair != null
-                dashboardEmptyProgress.isVisible = coursePair == null
-                dashboardHomeShimmer.hideAndStop()
-                dashboardHome.isVisible = true
-                if (coursePair != null) {
-                    vm.getStats(coursePair.runAttempt.attemptId)
+            vm.fetchTopRunWithStats().observe(
+                thisLifecycleOwner,
+                Observer { coursePair ->
+                    dashboardProgressContainer.isVisible = coursePair != null
+                    dashboardEmptyProgress.isVisible = coursePair == null
+                    dashboardHomeShimmer.hideAndStop()
+                    dashboardHome.isVisible = true
+                    if (coursePair != null) {
+                        vm.getStats(coursePair.runAttempt.attemptId)
 
-                    homeCourseLogoImg.loadImage(coursePair.course.logo)
-                    coursePair.getProgress().let { progress ->
-                        homeProgressTv.text = getString(R.string.progress, progress.toInt())
-                        homeProgressView.setGradientColor(progress)
-                    }
+                        homeCourseLogoImg.loadImage(coursePair.course.logo)
+                        coursePair.getProgress().let { progress ->
+                            homeProgressTv.text = getString(R.string.progress, progress.toInt())
+                            homeProgressView.setGradientColor(progress)
+                        }
 
-                    with(requireActivity()) {
-                        toolbarCourseTitleTv?.text = coursePair.course.title
-                        toolbarCourseTitleTv?.isVisible = true
-                        toolbarCourseResumeTv?.isVisible = true
-                        dashboardToolbarSecondary?.setOnClickListener {
-                            startActivity(MyCourseActivity.createMyCourseActivityIntent(
-                                requireContext(),
-                                coursePair.runAttempt.attemptId,
-                                coursePair.course.title
-                            ))
+                        with(requireActivity()) {
+                            toolbarCourseTitleTv?.text = coursePair.course.title
+                            toolbarCourseTitleTv?.isVisible = true
+                            toolbarCourseResumeTv?.isVisible = true
+                            dashboardToolbarSecondary?.setOnClickListener {
+                                startActivity(
+                                    MyCourseActivity.createMyCourseActivityIntent(
+                                        requireContext(),
+                                        coursePair.runAttempt.attemptId,
+                                        coursePair.course.title
+                                    )
+                                )
+                            }
+                        }
+                        vm.getPerformance(coursePair.runAttempt.attemptId).observer(thisLifecycleOwner) {
+                            homePerformanceTv.text = it.remarks
+                            homePercentileTv.text = it.percentile.toString()
+                            chart1.loadData(it.averageProgress, it.userProgress)
                         }
                     }
-                    vm.getPerformance(coursePair.runAttempt.attemptId).observer(thisLifecycleOwner) {
-                        homePerformanceTv.text = it.remarks
-                        homePercentileTv.text = it.percentile.toString()
-                        chart1.loadData(it.averageProgress, it.userProgress)
-                    }
                 }
-            })
+            )
 
             vm.fetchRecentlyPlayed().observer(thisLifecycleOwner) {
                 recentlyPlayedContainer.isVisible = it.isNotEmpty()
@@ -161,12 +176,11 @@ class DashboardHomeFragment : BaseCBFragment() {
             }
 
             vm.fetchWishList()
-            vm.wishlistLiveData.observer(viewLifecycleOwner){wishlist->
+            vm.wishlistLiveData.observer(viewLifecycleOwner) { wishlist ->
                 noWishListLayout.isVisible = wishlist.isEmpty()
                 wishlistHolder.isVisible = wishlist.isNotEmpty()
                 wishlistAdapter.submitList(wishlist)
             }
-
         } else {
             dashboardHomeShimmer.hideAndStop()
             dashboardHome.isVisible = false

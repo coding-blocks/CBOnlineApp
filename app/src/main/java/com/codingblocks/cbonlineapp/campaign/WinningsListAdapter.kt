@@ -11,22 +11,23 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
+import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.onlineapi.models.Spins
 import kotlinx.android.synthetic.main.item_winnings.view.*
 import org.jetbrains.anko.toast
 
-class WinningsListAdapter : ListAdapter<Spins, WinningsListAdapter.CampaignViewHolder>(object : DiffUtil.ItemCallback<Spins>() {
-    override fun areItemsTheSame(oldItem: Spins, newItem: Spins): Boolean {
-        return oldItem.id == newItem.id
-    }
+class WinningsListAdapter : ListAdapter<Spins, WinningsListAdapter.CampaignViewHolder>(
+    object : DiffUtil.ItemCallback<Spins>() {
+        override fun areItemsTheSame(oldItem: Spins, newItem: Spins): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-    override fun areContentsTheSame(oldItem: Spins, newItem: Spins): Boolean {
-        return oldItem.sameAndEqual(newItem)
+        override fun areContentsTheSame(oldItem: Spins, newItem: Spins): Boolean {
+            return oldItem.sameAndEqual(newItem)
+        }
     }
-}
 ) {
     private lateinit var myClipboard: ClipboardManager
 
@@ -36,7 +37,8 @@ class WinningsListAdapter : ListAdapter<Spins, WinningsListAdapter.CampaignViewH
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CampaignViewHolder {
         myClipboard = parent.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        return CampaignViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_winnings, parent, false)
+        return CampaignViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_winnings, parent, false)
         )
     }
 
@@ -67,10 +69,6 @@ class WinningsListAdapter : ListAdapter<Spins, WinningsListAdapter.CampaignViewH
             } ?: run {
                 couponCard.isVisible = false
             }
-
-
         }
     }
 }
-
-

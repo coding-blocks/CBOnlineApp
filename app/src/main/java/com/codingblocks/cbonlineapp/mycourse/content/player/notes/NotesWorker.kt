@@ -12,7 +12,10 @@ import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
-class NotesWorker(context: Context, private val workerParameters: WorkerParameters) : CoroutineWorker(context, workerParameters), KoinComponent {
+class NotesWorker(
+    context: Context,
+    private val workerParameters: WorkerParameters
+) : CoroutineWorker(context, workerParameters), KoinComponent {
 
     override suspend fun doWork(): Result {
         val notesDao: NotesDao by inject()
@@ -28,7 +31,9 @@ class NotesWorker(context: Context, private val workerParameters: WorkerParamete
                 withContext(Dispatchers.IO) { CBOnlineLib.onlineV2JsonApi.deleteNoteById(noteId) }
             }
             else -> {
-                withContext(Dispatchers.IO) { CBOnlineLib.onlineV2JsonApi.createDoubt(doubtJson?.deserializeNoteFromJson()!!) }
+                withContext(Dispatchers.IO) {
+                    CBOnlineLib.onlineV2JsonApi.createDoubt(doubtJson?.deserializeNoteFromJson()!!)
+                }
             }
         }
 

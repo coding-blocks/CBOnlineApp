@@ -8,9 +8,9 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
+import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.cbonlineapp.util.livedata.observer
-import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.onlineapi.ErrorStatus
 import kotlinx.android.synthetic.main.admin_overview_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel

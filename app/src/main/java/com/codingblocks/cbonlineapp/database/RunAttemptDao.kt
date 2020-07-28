@@ -20,6 +20,9 @@ interface RunAttemptDao : BaseDao<RunAttemptModel> {
     @Query("SElECT attemptId FROM RunAttemptModel where attemptId = :id")
     fun getAttemptId(id: String): String?
 
-    @Query("UPDATE RunAttemptModel SET paused = :paused, pauseTimeLeft = :pausedTimeLeft,lastPausedLeft = :lastPausedLeft  WHERE attemptId =:id")
+    @Query(
+        "UPDATE RunAttemptModel SET paused = :paused, pauseTimeLeft = :pausedTimeLeft," +
+            "lastPausedLeft = :lastPausedLeft  WHERE attemptId =:id"
+    )
     suspend fun updatePause(id: String, paused: Boolean, pausedTimeLeft: String?, lastPausedLeft: String?)
 }

@@ -22,7 +22,6 @@ import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.setRv
-import com.codingblocks.onlineapi.models.Course
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -52,7 +51,12 @@ class CourseSearchFragment : BottomSheetDialogFragment() {
 
         courseCardListAdapter.onItemClick = itemClickListener
 
-        view.courseSearchRv.setRv(requireContext(), courseCardListAdapter, orientation = RecyclerView.VERTICAL, setDivider = true)
+        view.courseSearchRv.setRv(
+            requireContext(),
+            courseCardListAdapter,
+            orientation = RecyclerView.VERTICAL,
+            setDivider = true
+        )
         return view
     }
 
@@ -67,7 +71,8 @@ class CourseSearchFragment : BottomSheetDialogFragment() {
                 val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     requireActivity(),
                     logo,
-                    ViewCompat.getTransitionName(logo)!!)
+                    ViewCompat.getTransitionName(logo)!!
+                )
                 startActivity(intent, options.toBundle())
             }
         }
@@ -76,10 +81,12 @@ class CourseSearchFragment : BottomSheetDialogFragment() {
     @NonNull
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog: Dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setOnShowListener(OnShowListener { dialogInterface ->
-            val bottomSheetDialog = dialogInterface as BottomSheetDialog
-            setupFullHeight(bottomSheetDialog)
-        })
+        dialog.setOnShowListener(
+            OnShowListener { dialogInterface ->
+                val bottomSheetDialog = dialogInterface as BottomSheetDialog
+                setupFullHeight(bottomSheetDialog)
+            }
+        )
         return dialog
     }
 

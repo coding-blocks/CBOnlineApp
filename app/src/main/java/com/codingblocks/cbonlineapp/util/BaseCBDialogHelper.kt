@@ -6,7 +6,6 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-
 abstract class BaseCBDialogHelper {
 
     abstract val dialogView: View

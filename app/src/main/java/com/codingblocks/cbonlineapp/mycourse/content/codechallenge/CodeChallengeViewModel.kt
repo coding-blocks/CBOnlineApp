@@ -1,8 +1,13 @@
 package com.codingblocks.cbonlineapp.mycourse.content.codechallenge
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.liveData
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
-import com.codingblocks.cbonlineapp.util.*
+import com.codingblocks.cbonlineapp.util.CODE_ID
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.CONTEST_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper

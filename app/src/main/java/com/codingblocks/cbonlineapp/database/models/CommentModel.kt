@@ -7,12 +7,16 @@ import androidx.room.PrimaryKey
 
 @Entity(
     indices = [Index("dbtId")],
-    foreignKeys = [(ForeignKey(
-        entity = DoubtsModel::class,
-        parentColumns = ["dbtUid"],
-        childColumns = ["dbtId"],
-        onDelete = ForeignKey.CASCADE // or CASCADE
-    ))]
+    foreignKeys = [
+        (
+            ForeignKey(
+                entity = DoubtsModel::class,
+                parentColumns = ["dbtUid"],
+                childColumns = ["dbtId"],
+                onDelete = ForeignKey.CASCADE // or CASCADE
+            )
+            )
+    ]
 )
 class CommentModel(
     @PrimaryKey

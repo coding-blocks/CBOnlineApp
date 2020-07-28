@@ -7,7 +7,10 @@ import android.widget.TextView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableString
 
-class ExpandableTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : androidx.appcompat.widget.AppCompatTextView(context, attrs) {
+class ExpandableTextView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : androidx.appcompat.widget.AppCompatTextView(context, attrs) {
 
     var originalText: CharSequence? = null
         private set

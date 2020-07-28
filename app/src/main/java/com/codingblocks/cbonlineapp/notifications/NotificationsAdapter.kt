@@ -19,7 +19,9 @@ class NotificationsAdapter(diffCallback: NotificationsDiffCallback) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationsViewHolder {
 
-        return NotificationsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_admin_doubt, parent, false))
+        return NotificationsViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_admin_doubt, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: NotificationsViewHolder, position: Int) {

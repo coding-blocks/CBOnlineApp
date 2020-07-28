@@ -27,9 +27,7 @@ import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallenge
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.CODE
-import com.codingblocks.cbonlineapp.util.CODE_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.CONTEST_ID
 import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.QNA
@@ -192,7 +190,10 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                     if (content.progress == "DONE") {
                         sectionComplete++
                     }
-                    if (content.contentable == "lecture" && content.contentLecture.lectureUid.isNotEmpty() && !content.contentLecture.isDownloaded) {
+                    if (
+                        content.contentable == "lecture" &&
+                        content.contentLecture.lectureUid.isNotEmpty() && !content.contentLecture.isDownloaded
+                    ) {
                         isDownloadEnabled = true
                     }
 
@@ -227,7 +228,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                         textview4_20.visibility = View.VISIBLE
                     } else {
                         if ((activity as MyCourseActivity).myCourseTabs.selectedTabPosition == 1)
-                            (activity as MyCourseActivity).showFab()
+                        (activity as MyCourseActivity).showFab()
                         rvExpendableView.visibility = View.VISIBLE
                         textview4_20.visibility = View.GONE
                     }
@@ -254,7 +255,6 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
         } else {
             SectionDownloadService.startService(requireContext(), sectionId, viewModel.attemptId!!)
         }
-
     }
 
     private fun popUpWindowSection(): PopupWindow {
@@ -290,7 +290,8 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                                 startActivity(
                                     intentFor<PdfActivity>(
                                         CONTENT_ID to ccid,
-                                        SECTION_ID to sectionId)
+                                        SECTION_ID to sectionId
+                                    )
                                 )
                             } else
                                 checkSection(premium)

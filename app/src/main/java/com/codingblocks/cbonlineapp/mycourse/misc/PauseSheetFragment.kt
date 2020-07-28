@@ -23,8 +23,7 @@ import kotlinx.android.synthetic.main.course_pause_fragment.*
 import org.jetbrains.anko.startActivity
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.ocpsoft.prettytime.PrettyTime
-import java.util.*
-
+import java.util.Date
 
 class PauseSheetFragment : BottomSheetDialogFragment() {
 

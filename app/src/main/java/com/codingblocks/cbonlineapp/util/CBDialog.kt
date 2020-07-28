@@ -28,7 +28,6 @@ class CBDialog(context: Context, type: DIALOG_TYPE?) : BaseCBDialogHelper() {
         dialogView.findViewById<TextView>(R.id.dialogDescTv)
     }
 
-
     val negativeBtn: Button by lazy {
         dialogView.findViewById<Button>(R.id.dialogNegativeBtn)
     }

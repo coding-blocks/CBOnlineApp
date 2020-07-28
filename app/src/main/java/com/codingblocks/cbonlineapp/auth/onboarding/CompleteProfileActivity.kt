@@ -107,7 +107,11 @@ class CompleteProfileActivity : BaseCBActivity() {
                     }
                     is ResultWrapper.Success -> {
                         if (response.value.isSuccessful) {
-                            startActivity(DashboardActivity.createDashboardActivityIntent(this@CompleteProfileActivity, true))
+                            startActivity(
+                                DashboardActivity.createDashboardActivityIntent(
+                                    this@CompleteProfileActivity, true
+                                )
+                            )
                             finish()
                         } else
                             runOnUiThread {

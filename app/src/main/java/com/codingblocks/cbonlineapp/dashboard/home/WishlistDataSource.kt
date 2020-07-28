@@ -1,8 +1,11 @@
 package com.codingblocks.cbonlineapp.dashboard.home
 
 import androidx.paging.PageKeyedDataSource
-import com.codingblocks.onlineapi.*
+import com.codingblocks.onlineapi.CBOnlineLib
+import com.codingblocks.onlineapi.ResultWrapper
+import com.codingblocks.onlineapi.getMeta
 import com.codingblocks.onlineapi.models.Wishlist
+import com.codingblocks.onlineapi.safeApiCall
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -28,7 +31,10 @@ class WishlistDataSource(private val scope: CoroutineScope, private val pageSize
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, Wishlist>) {
         scope.launch {
-            when (val response = safeApiCall { CBOnlineLib.onlineV2JsonApi.getWishlist(offset = params.key, page = pageSize) }) {
+            when (
+                val response =
+                    safeApiCall { CBOnlineLib.onlineV2JsonApi.getWishlist(offset = params.key, page = pageSize) }
+            ) {
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful)
                         body()?.let {
@@ -45,7 +51,6 @@ class WishlistDataSource(private val scope: CoroutineScope, private val pageSize
     }
 
     override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<String, Wishlist>) {
-
     }
 
     override fun invalidate() {

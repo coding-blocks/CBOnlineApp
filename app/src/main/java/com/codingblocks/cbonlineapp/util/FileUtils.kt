@@ -6,11 +6,11 @@ import android.util.Log
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.util.extensions.folderSize
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
-import java.io.File
-import java.io.InputStream
 import org.jetbrains.anko.intentFor
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.File
+import java.io.InputStream
 
 const val FILE_THRESHOLD = 256000
 const val GB_TO_KB = 1024 * 1024
@@ -58,9 +58,11 @@ object FileUtils {
             for (file in files)
                 mutableFiles.add(file)
 
-            mutableFiles.sortWith(Comparator { o1, o2 ->
-                o1.lastModified().compareTo(o2.lastModified())
-            })
+            mutableFiles.sortWith(
+                Comparator { o1, o2 ->
+                    o1.lastModified().compareTo(o2.lastModified())
+                }
+            )
             mutableFiles[0].delete()
         }
     }
@@ -77,7 +79,10 @@ object FileUtils {
     }
 
     fun checkDownloadFileExists(context: Context, lectureId: String): Boolean {
-        return File(getCommonPath(context), "/$lectureId").exists() && File(getCommonPath(context), "/$lectureId").totalSpace > 100000
+        return File(
+            getCommonPath(context),
+            "/$lectureId"
+        ).exists() && File(getCommonPath(context), "/$lectureId").totalSpace > 100000
     }
 
     fun loadJsonObjectFromAsset(context: Context, assetName: String, jsonType: String = "array"): Any? {

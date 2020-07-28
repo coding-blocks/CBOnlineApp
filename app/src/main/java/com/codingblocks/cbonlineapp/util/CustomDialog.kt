@@ -49,8 +49,8 @@ object CustomDialog {
             }
             "expired" -> {
                 updateView.dialogPositiveBtn.text = "Ok"
-                updateView.dialogDescTv.text =
-                    "This section is unavailable as your course has been expired.Please buy an extension to watch your videos"
+                updateView.dialogDescTv.text = "This section is unavailable as your course has been expired." +
+                    " Please buy an extension to watch your videos"
             }
             "logout" -> {
                 updateView.dialogPositiveBtn.text = "Yes"
@@ -60,7 +60,8 @@ object CustomDialog {
             "reset" -> {
                 updateView.dialogPositiveBtn.text = "Yes"
                 updateView.dialogNegativeBtn.text = "No"
-                updateView.dialogDescTv.text = "You will lose all your course progress.\nAre you sure you want to reset ?"
+                updateView.dialogDescTv.text =
+                    "You will lose all your course progress.\nAre you sure you want to reset ?"
             }
             "quiz" -> {
                 updateView.dialogPositiveBtn.text = "Yes"
@@ -80,7 +81,7 @@ object CustomDialog {
                 updateView.dialogDescTv.text =
                     "You have been logged out of this account.Please login again to Continue"
             }
-            LOGIN->{
+            LOGIN -> {
                 updateView.dialogPositiveBtn.text = "Log In"
                 updateView.dialogDescTv.text =
                     "Please login to use this feature."
@@ -89,7 +90,9 @@ object CustomDialog {
         updateView.dialogPositiveBtn.setOnClickListener {
             confirmDialog.dismiss()
             when (type) {
-                "trial" -> context.startActivity(context.intentFor<DashboardActivity>("courseRun" to "mycourses").singleTop())
+                "trial" -> context.startActivity(
+                    context.intentFor<DashboardActivity>("courseRun" to "mycourses").singleTop()
+                )
                 "verify" -> {
                     context.openChrome("https://account.codingblocks.com/users/me")
                 }

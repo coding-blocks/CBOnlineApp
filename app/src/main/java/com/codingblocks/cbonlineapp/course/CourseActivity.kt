@@ -14,7 +14,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.BuildConfig
@@ -61,7 +60,6 @@ import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -88,7 +86,9 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     private var youtubePlayer: YouTubePlayer? = null
 
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+    private val startForResult = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             toast(getString(R.string.logged_in))
         }
@@ -118,7 +118,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             override fun onWishListClickListener(id: String) {
                 if (getPrefs().SP_JWT_TOKEN_KEY.isNotEmpty()) {
                     viewModel.changeWishlistStatus(id)
-                }else{
+                } else {
                     CustomDialog.showConfirmation(applicationContext, LOGIN) {
                         if (it) {
                             startActivity(intentFor<LoginActivity>())
@@ -214,7 +214,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             courseCardListAdapter.submitList(courses)
         }
 
-        viewModel.snackbar.observer(this){
+        viewModel.snackbar.observer(this) {
             courseActivity.snackbar(it)
         }
 
@@ -331,18 +331,20 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.share -> {
-            share("Check out the course *$title* by Coding Blocks!\n\n" +
-                shortTv.text + "\n\n" +
-                "Major topics covered: \n" +
-                tagsList.joinToString(separator = "\n", limit = 5) + "\n\n" +
-                "https://online.codingblocks.com/courses/$endLink/")
+            share(
+                "Check out the course *$title* by Coding Blocks!\n\n" +
+                    shortTv.text + "\n\n" +
+                    "Major topics covered: \n" +
+                    tagsList.joinToString(separator = "\n", limit = 5) + "\n\n" +
+                    "https://online.codingblocks.com/courses/$endLink/"
+            )
             true
         }
         android.R.id.home -> {
             onBackPressed()
             true
         }
-        R.id.wishlist ->{
+        R.id.wishlist -> {
             viewModel.changeWishlistStatus(courseId)
             true
         }

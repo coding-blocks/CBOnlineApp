@@ -5,6 +5,7 @@ import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
 import androidx.recyclerview.selection.SelectionPredicates
@@ -14,27 +15,28 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.database.models.BaseModel
 import com.codingblocks.cbonlineapp.database.models.BookmarkModel
-import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.LibraryTypes
+import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
+import com.codingblocks.cbonlineapp.mycourse.content.PdfActivity
+import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeActivity
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
+import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizActivity
+import com.codingblocks.cbonlineapp.util.CODE
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.FileUtils
-import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.LECTURE
+import com.codingblocks.cbonlineapp.util.QNA
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
-import android.view.WindowManager
-import com.codingblocks.cbonlineapp.mycourse.content.PdfActivity
-import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeActivity
-import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizActivity
-import com.codingblocks.cbonlineapp.util.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
-import org.jetbrains.anko.support.v4.toast
-import java.util.*
-import java.io.File
 import kotlinx.android.synthetic.main.fragment_library_view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -42,7 +44,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jetbrains.anko.support.v4.intentFor
+import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.io.File
+import java.util.Objects
 
 class LibraryViewFragment : BaseCBFragment() {
 
@@ -80,11 +85,11 @@ class LibraryViewFragment : BaseCBFragment() {
                                 )
                             CODE ->
                                 startActivity(
-                                intentFor<CodeChallengeActivity>(
-                                    CONTENT_ID to item.contentId,
-                                    SECTION_ID to item.sectionId
+                                    intentFor<CodeChallengeActivity>(
+                                        CONTENT_ID to item.contentId,
+                                        SECTION_ID to item.sectionId
+                                    )
                                 )
-                            )
                         }
                     }
                     is NotesModel -> updateNotes(item)
@@ -169,11 +174,13 @@ class LibraryViewFragment : BaseCBFragment() {
                 }
             })
         classRoomBtn.setOnClickListener {
-            startActivity(MyCourseActivity.createMyCourseActivityIntent(
-                requireContext(),
-                vm.attemptId!!,
-                vm.name!!
-            ))
+            startActivity(
+                MyCourseActivity.createMyCourseActivityIntent(
+                    requireContext(),
+                    vm.attemptId!!,
+                    vm.name!!
+                )
+            )
         }
 
         deleteAction.setOnClickListener {
@@ -254,7 +261,6 @@ class LibraryViewFragment : BaseCBFragment() {
         }
     }
 
-
     private fun setUpBottomSheet() {
         dialog.dismissWithAnimation = true
         dialog.setContentView(sheetDialog)
@@ -293,5 +299,4 @@ class LibraryViewFragment : BaseCBFragment() {
         }
         dialog.show()
     }
-
 }

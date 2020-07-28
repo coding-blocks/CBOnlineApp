@@ -19,7 +19,8 @@ data class ContentLecture(
     var lectureId: String = "",
     var lectureSectionId: String = "",
     var lectureUpdatedAt: String = "",
-    var isDownloaded: Boolean = if (lectureId.isEmpty()) false else FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, lectureId),
+    var isDownloaded: Boolean = if (lectureId.isEmpty()) false
+    else FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, lectureId),
     var date: Date = Date(0L),
     var lectureContentId: String = ""
 ) : BaseModel()
@@ -91,7 +92,7 @@ data class NotesModel(
     var createdAt: String = "",
     var deletedAt: String? = "",
     val contentTitle: String = ""
-) : BaseModel(),Serializable
+) : BaseModel(), Serializable
 
 @Entity
 data class Notification(
@@ -118,12 +119,16 @@ data class HBRankModel(
 
 @Entity(
     indices = [Index("contentId")],
-    foreignKeys = [(ForeignKey(
-        entity = ContentModel::class,
-        parentColumns = ["ccid"],
-        childColumns = ["contentId"],
-        onDelete = ForeignKey.CASCADE
-    ))]
+    foreignKeys = [
+        (
+            ForeignKey(
+                entity = ContentModel::class,
+                parentColumns = ["ccid"],
+                childColumns = ["contentId"],
+                onDelete = ForeignKey.CASCADE
+            )
+            )
+    ]
 )
 data class BookmarkModel(
     @PrimaryKey

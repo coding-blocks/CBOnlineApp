@@ -29,7 +29,8 @@ class RunListAdapter : ListAdapter<Runs, RunListAdapter.RunsViewHolder>(DiffCall
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RunListAdapter.RunsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return RunsViewHolder(
-            inflater.inflate(R.layout.item_run, parent, false))
+            inflater.inflate(R.layout.item_run, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: RunsViewHolder, position: Int) {

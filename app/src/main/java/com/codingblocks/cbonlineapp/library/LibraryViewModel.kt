@@ -19,16 +19,16 @@ import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.TYPE
 import com.codingblocks.cbonlineapp.util.extensions.runIO
-import com.codingblocks.cbonlineapp.util.extensions.serializeToJson
 import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
+import com.codingblocks.cbonlineapp.util.extensions.serializeToJson
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
-import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 
 class LibraryViewModel(
     private val handle: SavedStateHandle,
@@ -42,6 +42,7 @@ class LibraryViewModel(
     val run: LiveData<CourseRunPair>? by lazy {
         attemptId?.let { repo.getRunById(it) }
     }
+
     fun fetchNotes(): LiveData<List<NotesModel>> {
         val notes = repo.getNotes(attemptId!!)
         runIO {
@@ -139,7 +140,10 @@ class LibraryViewModel(
     }
 
     fun updateNote(note: NotesModel) {
-        val newNote = Note(note.nttUid, note.duration, note.text, RunAttempts(note.runAttemptId), LectureContent(note.contentId))
+        val newNote = Note(
+            note.nttUid, note.duration, note.text, RunAttempts(note.runAttemptId),
+            LectureContent(note.contentId)
+        )
         runIO {
             when (val response = repo.updateNote(newNote)) {
                 is ResultWrapper.GenericError -> {

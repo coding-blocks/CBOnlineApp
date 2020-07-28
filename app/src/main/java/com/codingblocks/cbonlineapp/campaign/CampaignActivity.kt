@@ -13,10 +13,8 @@ import androidx.appcompat.app.AlertDialog
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
-import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.dashboard.ViewPager2Adapter
-import com.codingblocks.cbonlineapp.dashboard.ViewPager2Adapter.*
-import com.codingblocks.cbonlineapp.dashboard.ViewPager2Adapter.FragmentName.*
+import com.codingblocks.cbonlineapp.dashboard.ViewPager2Adapter.FragmentName
 import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.ShareUtils
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
@@ -31,12 +29,13 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
-
 class CampaignActivity : BaseCBActivity() {
 
     val vm: CampaignViewModel by stateViewModel()
     private val pagerAdapter: ViewPager2Adapter by lazy { ViewPager2Adapter(this) }
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+    private val startForResult = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             toast(getString(R.string.logged_in))
         }
@@ -50,10 +49,10 @@ class CampaignActivity : BaseCBActivity() {
         setContentView(R.layout.activity_spin_win)
         setToolbar(campaignToolbar)
         pagerAdapter.apply {
-            add(CAMPAIGN_HOME)
-            add(CAMPAIGN_WINNING)
-            add(CAMPAIGN_LEADERBOARD)
-            add(CAMPAIGN_LEADERBOARD)
+            add(FragmentName.CAMPAIGN_HOME)
+            add(FragmentName.CAMPAIGN_WINNING)
+            add(FragmentName.CAMPAIGN_LEADERBOARD)
+            add(FragmentName.CAMPAIGN_LEADERBOARD)
         }
         campaignPager.apply {
             isUserInputEnabled = false
@@ -83,30 +82,26 @@ class CampaignActivity : BaseCBActivity() {
         earnMore.setOnClickListener {
             showDialog()
         }
-
     }
 
     private fun showDialog() {
         val dialog = AlertDialog.Builder(this).create()
         val view = layoutInflater.inflate(R.layout.dialog_share, null)
-        val msg = "Signup using this link to get 500 credits in your wallet and stand a chance of winning amazing prizes this Summer using my referral code: https://cb.lk/join/${vm.referral
-            ?: ""}"
+        val msg = "Signup using this link to get 500 credits in your wallet and stand a chance of winning" +
+            " amazing prizes this Summer using my referral code: https://cb.lk/join/${vm.referral ?: ""}"
         view.apply {
             view.referralTv.append(vm.referral ?: "")
             fb.setOnClickListener {
                 ShareUtils.shareToFacebook(msg, this@CampaignActivity)
                 dialog.dismiss()
-
             }
             whatsapp.setOnClickListener {
                 ShareUtils.shareToWhatsapp(msg, this@CampaignActivity)
                 dialog.dismiss()
-
             }
             twitter.setOnClickListener {
                 ShareUtils.shareToTwitter(msg, this@CampaignActivity)
                 dialog.dismiss()
-
             }
             copy_clipboard.setOnClickListener {
                 val text = referralTv?.text

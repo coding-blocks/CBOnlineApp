@@ -12,22 +12,24 @@ import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.onlineapi.models.Spins
 import kotlinx.android.synthetic.main.item_campaign_leaderboard.view.*
 
-class LeaderBoardPagedListAdapter : PagedListAdapter<Spins, LeaderBoardPagedListAdapter.CampaignViewHolder>(object : DiffUtil.ItemCallback<Spins>() {
-    override fun areItemsTheSame(oldItem: Spins, newItem: Spins): Boolean {
-        return oldItem.id == newItem.id
-    }
+class LeaderBoardPagedListAdapter : PagedListAdapter<Spins, LeaderBoardPagedListAdapter.CampaignViewHolder>(
+    object : DiffUtil.ItemCallback<Spins>() {
+        override fun areItemsTheSame(oldItem: Spins, newItem: Spins): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-    override fun areContentsTheSame(oldItem: Spins, newItem: Spins): Boolean {
-        return oldItem.sameAndEqual(newItem)
+        override fun areContentsTheSame(oldItem: Spins, newItem: Spins): Boolean {
+            return oldItem.sameAndEqual(newItem)
+        }
     }
-}
 ) {
     init {
         setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CampaignViewHolder {
-        return CampaignViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_campaign_leaderboard, parent, false)
+        return CampaignViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_campaign_leaderboard, parent, false)
         )
     }
 

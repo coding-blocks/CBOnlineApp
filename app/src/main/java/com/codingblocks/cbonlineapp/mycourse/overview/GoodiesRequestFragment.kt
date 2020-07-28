@@ -32,7 +32,11 @@ class GoodiesRequestFragment : BottomSheetDialogFragment() {
 
         bottomSheetSaveBtn.setOnClickListener {
             if (checkValid(goodieFormNameEt) && checkValid(goodieFormAddressEt) && checkValid(goodieFormPostalCodeEt)) {
-                vm.requestGoodies(goodieFormNameEt.text.toString(), goodieFormAddressEt.text.toString(), goodieFormPostalCodeEt.text.toString(), goodieFormAcnEt.text.toString())
+                vm.requestGoodies(
+                    goodieFormNameEt.text.toString(), goodieFormAddressEt.text.toString(),
+                    goodieFormPostalCodeEt.text.toString(),
+                    goodieFormAcnEt.text.toString()
+                )
             } else {
                 when (true) {
                     !checkValid(goodieFormNameEt) -> toast("Name Required")
@@ -50,10 +54,12 @@ class GoodiesRequestFragment : BottomSheetDialogFragment() {
     @NonNull
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog: Dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setOnShowListener(DialogInterface.OnShowListener { dialogInterface ->
-            val bottomSheetDialog = dialogInterface as BottomSheetDialog
-            setupFullHeight(bottomSheetDialog)
-        })
+        dialog.setOnShowListener(
+            DialogInterface.OnShowListener { dialogInterface ->
+                val bottomSheetDialog = dialogInterface as BottomSheetDialog
+                setupFullHeight(bottomSheetDialog)
+            }
+        )
 //        dialog.onBackPressed()
         return dialog
     }

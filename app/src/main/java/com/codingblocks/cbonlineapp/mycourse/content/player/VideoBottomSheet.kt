@@ -27,7 +27,6 @@ class VideoBottomSheet : RoundedBottomSheetDialogFragment(), View.OnClickListene
     lateinit var type: VideoSheetType
     var notes: NotesModel? = null
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.bottom_sheet_note, container, false)
         notes = arguments?.getSerializable("item") as NotesModel?
@@ -45,7 +44,6 @@ class VideoBottomSheet : RoundedBottomSheetDialogFragment(), View.OnClickListene
                         setText("")
                         hint = "Add a note here"
                     }
-
                 }
                 VideoSheetType.DOUBT_CREATE -> {
                     view.bottomSheetTitleTv.text = getString(R.string.ask_doubt)
@@ -56,7 +54,6 @@ class VideoBottomSheet : RoundedBottomSheetDialogFragment(), View.OnClickListene
                     }
                 }
             }
-
         }
         view.bottomSheetCancelBtn.setOnClickListener(this)
         return view
@@ -71,16 +68,19 @@ class VideoBottomSheet : RoundedBottomSheetDialogFragment(), View.OnClickListene
                     text = getString(R.string.update)
                     setOnClickListener(this@VideoBottomSheet)
                 }
-                bottomSheetInfoTv.text = getString(R.string.notes_info, notes!!.contentTitle, notes!!.duration.secToTime())
+                bottomSheetInfoTv.text = getString(
+                    R.string.notes_info,
+                    notes!!.contentTitle, notes!!.duration.secToTime()
+                )
             }
             VideoSheetType.NOTE_CREATE -> {
-                bottomSheetInfoTv.text = getString(R.string.notes_info, notes!!.contentTitle, notes!!.duration.secToTime())
+                bottomSheetInfoTv.text =
+                    getString(R.string.notes_info, notes!!.contentTitle, notes!!.duration.secToTime())
 
                 bottomSheetSaveBtn.apply {
                     text = getString(R.string.save)
                     setOnClickListener(this@VideoBottomSheet)
                 }
-
             }
             VideoSheetType.DOUBT_CREATE -> {
                 view.bottomSheetInfoTv.text = "${requireActivity().findViewById<TextView>(R.id.contentTitle).text}"
@@ -90,7 +90,6 @@ class VideoBottomSheet : RoundedBottomSheetDialogFragment(), View.OnClickListene
                 }
             }
         }
-
     }
 
     override fun onClick(v: View) {
@@ -113,9 +112,11 @@ class VideoBottomSheet : RoundedBottomSheetDialogFragment(), View.OnClickListene
                         }
                     }
                     "Update" -> {
-                        vm.updateNote(notes!!.apply {
-                            text = bottoSheetDescTv.text.toString()
-                        })
+                        vm.updateNote(
+                            notes!!.apply {
+                                text = bottoSheetDescTv.text.toString()
+                            }
+                        )
                         dialog?.dismiss()
                     }
                     "Post" -> {

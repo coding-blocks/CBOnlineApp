@@ -14,20 +14,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.campaign.CampaignActivity
 import com.codingblocks.cbonlineapp.course.CourseActivity
+import com.codingblocks.cbonlineapp.course.SearchCourseActivity
 import com.codingblocks.cbonlineapp.course.adapter.CourseListAdapter
 import com.codingblocks.cbonlineapp.course.adapter.ItemClickListener
-import com.codingblocks.cbonlineapp.course.SearchCourseActivity
 import com.codingblocks.cbonlineapp.course.adapter.WishlistListener
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.tracks.TrackActivity
 import com.codingblocks.cbonlineapp.tracks.TracksListAdapter
 import com.codingblocks.cbonlineapp.util.COURSE_ID
+import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.LOGIN
-import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.cbonlineapp.util.extensions.setRv
@@ -62,18 +61,19 @@ class DashboardExploreFragment : BaseCBFragment() {
                 val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     requireActivity(),
                     logo,
-                    ViewCompat.getTransitionName(logo)!!)
+                    ViewCompat.getTransitionName(logo)!!
+                )
                 startActivity(intent, options.toBundle())
             }
         }
     }
 
     private val wishlistListener: WishlistListener by lazy {
-        object : WishlistListener{
+        object : WishlistListener {
             override fun onWishListClickListener(id: String) {
-                if (vm.isLoggedIn == true){
+                if (vm.isLoggedIn == true) {
                     vm.changeWishlistStatus(id)
-                }else{
+                } else {
                     CustomDialog.showConfirmation(requireContext(), LOGIN) {
                         if (it) {
                             startActivity(intentFor<LoginActivity>())
@@ -95,7 +95,8 @@ class DashboardExploreFragment : BaseCBFragment() {
                 val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     requireActivity(),
                     logo,
-                    ViewCompat.getTransitionName(logo)!!)
+                    ViewCompat.getTransitionName(logo)!!
+                )
                 startActivity(intent, options.toBundle())
             }
         }
@@ -113,9 +114,20 @@ class DashboardExploreFragment : BaseCBFragment() {
 //        campaignView.setOnClickListener {
 //            startActivity(CampaignActivity.createCampaignActivityIntent(requireContext()))
 //        }
-        dashboardPopularRv.setRv(requireContext(), coursePopularListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
-        courseSuggestedRv.setRv(requireContext(), courseCardListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
-        dashboardTracksRv.setRv(requireContext(), tracksListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
+        dashboardPopularRv.setRv(
+            requireContext(), coursePopularListAdapter,
+            orientation = RecyclerView.HORIZONTAL, space = 28f
+        )
+        courseSuggestedRv.setRv(
+            requireContext(),
+            courseCardListAdapter,
+            orientation = RecyclerView.HORIZONTAL,
+            space = 28f
+        )
+        dashboardTracksRv.setRv(
+            requireContext(), tracksListAdapter,
+            orientation = RecyclerView.HORIZONTAL, space = 28f
+        )
 
         vm.suggestedCourses.observe(thisLifecycleOwner) { courses ->
             if (courses.isNotEmpty()) {
@@ -138,7 +150,7 @@ class DashboardExploreFragment : BaseCBFragment() {
                 dashboardTracksRv.isVisible = true
             }
         }
-        vm.snackbar.observe(thisLifecycleOwner){
+        vm.snackbar.observe(thisLifecycleOwner) {
             swipeToRefresh.showSnackbar(it, anchorView = activity?.dashboardBottomNav, action = false)
         }
 

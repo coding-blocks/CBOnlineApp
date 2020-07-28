@@ -15,12 +15,12 @@ import com.codingblocks.cbonlineapp.util.PENDING
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.REOPENED
 import com.codingblocks.cbonlineapp.util.RESOLVED
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.google.android.material.snackbar.Snackbar
 import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.activity_doubt_comment.*
@@ -61,12 +61,18 @@ class DoubtCommentActivity : BaseCBActivity() {
             markResolvedTv.apply {
                 text = when (it.status) {
                     RESOLVED -> {
-                        setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, context.getDrawable(R.drawable.ic_reopen_small), null)
-                        setTextColor(ContextCompat.getColor(context,R.color.neon_red))
+                        setCompoundDrawablesRelativeWithIntrinsicBounds(
+                            null,
+                            null, context.getDrawable(R.drawable.ic_reopen_small), null
+                        )
+                        setTextColor(ContextCompat.getColor(context, R.color.neon_red))
                         setOnClickListener { _ ->
-                            viewModel.resolveDoubt(it.apply {
-                                status = PENDING
-                            }, true)
+                            viewModel.resolveDoubt(
+                                it.apply {
+                                    status = PENDING
+                                },
+                                true
+                            )
                             showDialog(REOPENED, cancelable = true) {
                                 onBackPressed()
                             }
@@ -74,12 +80,20 @@ class DoubtCommentActivity : BaseCBActivity() {
                         context.getString(R.string.reopen_doubt)
                     }
                     else -> {
-                        setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, context.getDrawable(R.drawable.ic_tick), null)
-                        setTextColor(ContextCompat.getColor(context,R.color.freshGreen))
+                        setCompoundDrawablesRelativeWithIntrinsicBounds(
+                            null,
+                            null,
+                            context.getDrawable(R.drawable.ic_tick),
+                            null
+                        )
+                        setTextColor(ContextCompat.getColor(context, R.color.freshGreen))
                         setOnClickListener { _ ->
-                            viewModel.resolveDoubt(it.apply {
-                                status = RESOLVED
-                            }, true)
+                            viewModel.resolveDoubt(
+                                it.apply {
+                                    status = RESOLVED
+                                },
+                                true
+                            )
                             showDialog(RESOLVED, cancelable = true) {
                                 onBackPressed()
                             }

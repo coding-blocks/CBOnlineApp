@@ -93,7 +93,7 @@ class JobDetailActivity : BaseCBActivity() {
             when (it) {
                 "eligible" -> statusTv.text = getString(R.string.job_eligible)
                 "not eligible" -> {
-                    statusTv.setTextColor(ContextCompat.getColor(this,R.color.salmon))
+                    statusTv.setTextColor(ContextCompat.getColor(this, R.color.salmon))
                     statusTv.text = getString(R.string.job_not_eligible)
                     addResumeBtn.isVisible = false
                 }
@@ -114,8 +114,9 @@ class JobDetailActivity : BaseCBActivity() {
         val sizeInDP = 8
 
         val marginInDp = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, sizeInDP.toFloat(), resources
-            .displayMetrics
+            TypedValue.COMPLEX_UNIT_DIP, sizeInDP.toFloat(),
+            resources
+                .displayMetrics
         ).toInt()
         params.setMargins(marginInDp, marginInDp / 2, marginInDp, marginInDp / 2)
         val formView = layoutInflater.inflate(R.layout.custom_form_dialog, null)
@@ -220,7 +221,10 @@ class JobDetailActivity : BaseCBActivity() {
                 setView(formView)
                 setCancelable(true)
                 show()
-                window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+                window?.clearFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                        WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
+                )
             }
         }
     }

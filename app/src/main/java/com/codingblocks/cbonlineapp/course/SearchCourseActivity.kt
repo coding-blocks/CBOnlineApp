@@ -15,9 +15,9 @@ import com.codingblocks.cbonlineapp.course.adapter.ItemClickListener
 import com.codingblocks.cbonlineapp.course.adapter.PagedCourseListAdapter
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
-import com.codingblocks.cbonlineapp.util.recyclerciew.DividerItemDecorator
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.recyclerciew.DividerItemDecorator
 import kotlinx.android.synthetic.main.activity_search_course.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -50,14 +50,25 @@ class SearchCourseActivity : BaseCBActivity() {
         setContentView(R.layout.activity_search_course)
         setToolbar(searchToolbar, title = "All Courses")
         courseSearchRv.apply {
-            layoutManager = LinearLayoutManager(this@SearchCourseActivity, RecyclerView.VERTICAL, false)
-            addItemDecoration(DividerItemDecorator(ContextCompat.getDrawable(this@SearchCourseActivity, R.drawable.divider)!!))
+            layoutManager = LinearLayoutManager(
+                this@SearchCourseActivity,
+                RecyclerView.VERTICAL,
+                false
+            )
+            addItemDecoration(
+                DividerItemDecorator(
+                    ContextCompat.getDrawable(this@SearchCourseActivity, R.drawable.divider)!!
+                )
+            )
             adapter = courseCardListAdapter
         }
 
-        viewModel.getCourses().observe(this, Observer { courses ->
-            courseCardListAdapter.submitList(courses)
-        })
+        viewModel.getCourses().observe(
+            this,
+            Observer { courses ->
+                courseCardListAdapter.submitList(courses)
+            }
+        )
 
         searchBtn.setOnClickListener {
             dialog.show(supportFragmentManager, "course_search")

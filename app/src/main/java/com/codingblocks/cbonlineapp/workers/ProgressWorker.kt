@@ -16,7 +16,10 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import retrofit2.Response
 
-class ProgressWorker(context: Context, private val workerParameters: WorkerParameters) : CoroutineWorker(context, workerParameters), KoinComponent {
+class ProgressWorker(
+    context: Context,
+    private val workerParameters: WorkerParameters
+) : CoroutineWorker(context, workerParameters), KoinComponent {
 
     override suspend fun doWork(): Result {
         val contentDao: ContentDao by inject()
@@ -26,8 +29,14 @@ class ProgressWorker(context: Context, private val workerParameters: WorkerParam
         if (progressId.isNullOrEmpty()) {
             progressId = null
         }
-        val progress = ContentProgress("DONE", RunAttempts(attemptId ?: ""), LectureContent(contentId
-            ?: ""), progressId)
+        val progress = ContentProgress(
+            "DONE", RunAttempts(attemptId ?: ""),
+            LectureContent(
+                contentId
+                    ?: ""
+            ),
+            progressId
+        )
         val response: Response<ContentProgress> = if (progressId.isNullOrEmpty()) {
             CBOnlineLib.onlineV2JsonApi.setProgress(progress)
         } else {

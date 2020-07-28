@@ -30,7 +30,6 @@ import com.vdocipher.aegis.offline.DownloadSelections
 import com.vdocipher.aegis.offline.DownloadStatus
 import com.vdocipher.aegis.offline.OptionsDownloader
 import com.vdocipher.aegis.offline.VdoDownloadManager
-import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -38,6 +37,7 @@ import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import retrofit2.Response
+import java.io.File
 
 class DownloadWorker(context: Context, private val workerParameters: WorkerParameters) :
     CoroutineWorker(context, workerParameters),
@@ -72,7 +72,7 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
                 setLargeIcon(BitmapFactory.decodeResource(applicationContext.resources, R.mipmap.ic_launcher))
                 setContentText("Waiting to Download")
                 setProgress(100, 0, false)
-                color = ContextCompat.getColor(applicationContext,R.color.colorPrimaryDark)
+                color = ContextCompat.getColor(applicationContext, R.color.colorPrimaryDark)
                 setOngoing(false) // THIS is the important line
                 setAutoCancel(false)
             }
@@ -80,7 +80,13 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
 
         notificationManager.notify(downloadData.notificationId, downloadData.notificationBuilder.build())
         val response: Response<JsonObject>
-        response = withContext(Dispatchers.IO) { CBOnlineLib.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true) }
+        response = withContext(Dispatchers.IO) {
+            CBOnlineLib.api.getOtp(
+                downloadData.videoId,
+                downloadData.sectionId,
+                downloadData.attemptId, true
+            )
+        }
         if (response.isSuccessful) {
             response.body()?.let {
                 downloadList[videoId] = (downloadData)
@@ -134,7 +140,8 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
                     // there was an error downloading the available options
                     Log.e("Service Error", "onOptionsNotReceived : $errDesc")
                 }
-            })
+            }
+        )
     }
 
     private fun sendNotification(data: DownloadData, downloadPercent: Int) {
@@ -181,7 +188,14 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
 
     private fun retryDownload(downloadData: DownloadData) {
         GlobalScope.launch {
-            val response: Response<JsonObject> = withContext(Dispatchers.IO) { CBOnlineLib.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true) }
+            val response: Response<JsonObject> = withContext(Dispatchers.IO) {
+                CBOnlineLib.api.getOtp(
+                    downloadData.videoId,
+                    downloadData.sectionId,
+                    downloadData.attemptId,
+                    true
+                )
+            }
             if (response.isSuccessful) {
                 response.body()?.let {
                     val mOtp = it.get("otp").asString

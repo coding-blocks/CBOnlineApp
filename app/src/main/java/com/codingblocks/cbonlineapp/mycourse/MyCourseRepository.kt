@@ -43,7 +43,8 @@ class MyCourseRepository(
     private val hbRankDao: HBRankDao,
     private val attemptDao: RunAttemptDao
 ) {
-    suspend fun getSectionWithContentNonLive(attemptId: String) = sectionWithContentsDao.getSectionWithContentNonLive(attemptId)
+    suspend fun getSectionWithContentNonLive(attemptId: String) =
+        sectionWithContentsDao.getSectionWithContentNonLive(attemptId)
 
     fun getSectionWithContent(attemptId: String) = sectionWithContentsDao.getSectionWithContent(attemptId)
 
@@ -232,20 +233,22 @@ class MyCourseRepository(
             if (content.progress != null) {
                 status =
                     content.progress?.status
-                        ?: ""
+                    ?: ""
                 progressId =
                     content.progress?.id
-                        ?: ""
+                    ?: ""
             } else {
                 status =
                     "UNDONE"
             }
             content.bookmark?.let {
-                bookmark = BookmarkModel(it.id ?: "",
+                bookmark = BookmarkModel(
+                    it.id ?: "",
                     it.runAttemptId ?: "",
                     it.contentId ?: "",
                     it.sectionId ?: "",
-                    it.createdAt ?: "")
+                    it.createdAt ?: ""
+                )
             }
 
             val newContent =
@@ -330,7 +333,8 @@ class MyCourseRepository(
 
     suspend fun fetchLeaderboard(runId: String) = safeApiCall { CBOnlineLib.api.leaderboardById(runId) }
 
-    suspend fun fetchSections(attemptId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.enrolledCourseById(attemptId) }
+    suspend fun fetchSections(attemptId: String) =
+        safeApiCall { CBOnlineLib.onlineV2JsonApi.enrolledCourseById(attemptId) }
 
     suspend fun getStats(id: String) = safeApiCall { CBOnlineLib.api.getMyStats(id) }
 
@@ -353,5 +357,4 @@ class MyCourseRepository(
     }
 
     fun getRunAttempt(id: String) = attemptDao.getRunAttempt(id)
-
 }

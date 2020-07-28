@@ -14,7 +14,6 @@ import android.graphics.drawable.PictureDrawable
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import java.io.File
 
 object MediaUtils {
 
@@ -53,7 +52,10 @@ object MediaUtils {
 
     fun isStoragePermissionGranted(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT >= 23) {
-            if (context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (context.checkSelfPermission(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 true
             } else {
 
@@ -70,7 +72,8 @@ object MediaUtils {
     }
 
     fun getBitmapFromPictureDrawable(picDrawable: PictureDrawable): Bitmap {
-        val bitmap = Bitmap.createBitmap(picDrawable.intrinsicWidth, picDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val bitmap =
+            Bitmap.createBitmap(picDrawable.intrinsicWidth, picDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         picDrawable.setBounds(0, 0, canvas.width, canvas.height)
         picDrawable.draw(canvas)
@@ -86,7 +89,12 @@ object MediaUtils {
 
         paint.isAntiAlias = true
         canvas.drawARGB(0, 0, 0, 0)
-        canvas.drawCircle((bitmap.width / 2).toFloat(), (bitmap.height / 2).toFloat(), (bitmap.width / 2).toFloat(), paint)
+        canvas.drawCircle(
+            (bitmap.width / 2).toFloat(),
+            (bitmap.height / 2).toFloat(),
+            (bitmap.width / 2).toFloat(),
+            paint
+        )
         paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
         canvas.drawBitmap(bitmap, rect, rect, paint)
 
