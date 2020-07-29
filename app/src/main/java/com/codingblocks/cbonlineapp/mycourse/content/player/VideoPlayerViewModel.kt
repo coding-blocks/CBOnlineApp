@@ -2,33 +2,32 @@ package com.codingblocks.cbonlineapp.mycourse.content.player
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.switchMap
+import androidx.lifecycle.Transformations
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.Data
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import androidx.work.workDataOf
+import androidx.work.WorkManager
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.mycourse.content.player.notes.NotesWorker
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.extensions.runIO
+import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
+import com.codingblocks.cbonlineapp.util.extensions.serializeToJson
 import com.codingblocks.cbonlineapp.util.LIVE
+import com.codingblocks.cbonlineapp.util.livedata.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
-import com.codingblocks.cbonlineapp.util.extensions.runIO
-import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
-import com.codingblocks.cbonlineapp.util.extensions.serializeToJson
-import com.codingblocks.cbonlineapp.util.livedata.DoubleTrigger
 import com.codingblocks.cbonlineapp.workers.ProgressWorker
-import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.models.Doubts
@@ -36,8 +35,9 @@ import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.Sections
-import org.json.JSONObject
+import com.codingblocks.onlineapi.ResultWrapper
 import java.util.concurrent.TimeUnit
+import org.json.JSONObject
 
 const val VIDEO_POSITION = "videoPos"
 

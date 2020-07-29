@@ -6,20 +6,20 @@ import android.os.StatFs
 import android.util.Log
 import android.widget.SeekBar
 import androidx.lifecycle.lifecycleScope
-import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
-import com.codingblocks.cbonlineapp.util.FileUtils
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.folderSize
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.readableFileSize
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
+import com.codingblocks.cbonlineapp.util.FileUtils
+import java.io.File
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.File
 
 class SettingsActivity : BaseCBActivity() {
 

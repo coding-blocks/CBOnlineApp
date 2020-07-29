@@ -6,11 +6,11 @@ import android.util.Log
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.util.extensions.folderSize
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
+import java.io.File
+import java.io.InputStream
 import org.jetbrains.anko.intentFor
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.File
-import java.io.InputStream
 
 const val FILE_THRESHOLD = 256000
 const val GB_TO_KB = 1024 * 1024

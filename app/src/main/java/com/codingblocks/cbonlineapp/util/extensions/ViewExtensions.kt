@@ -6,21 +6,21 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.util.TypedValue
+import android.view.animation.OvershootInterpolator
+import android.view.animation.TranslateAnimation
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
-import android.view.animation.OvershootInterpolator
-import android.view.animation.TranslateAnimation
 import android.widget.ImageButton
 import android.widget.LinearLayout
-import androidx.annotation.AnimRes
 import androidx.annotation.AnimatorRes
+import androidx.annotation.AnimRes
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
@@ -41,20 +41,20 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.REOPENED
-import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.recyclerciew.DividerItemDecorator
 import com.codingblocks.cbonlineapp.util.recyclerciew.SpacesItemDecoration
+import com.codingblocks.cbonlineapp.util.REOPENED
+import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
+import kotlin.math.hypot
 import kotlinx.android.synthetic.main.dialog.view.*
 import kotlinx.android.synthetic.main.dialog.view.primaryBtn
 import kotlinx.android.synthetic.main.dialog_help.view.mobile
 import kotlinx.android.synthetic.main.dialog_help.view.nameLayout
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.layoutInflater
-import kotlin.math.hypot
 
 fun View.applyDim(dimAmount: Float) {
     val dim = ColorDrawable(Color.BLACK)

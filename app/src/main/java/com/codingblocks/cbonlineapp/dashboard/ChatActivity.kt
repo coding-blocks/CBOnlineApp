@@ -47,41 +47,41 @@ class ChatActivity : BaseCBActivity() {
                 if (conversationId.isEmpty()) {
                     script =
                         """
-                    Talk.ready.then(function() {
-                        var me = new Talk.User({
-                            id: $userId,
-                            name: "$userName",
-                            email: "$email"
+                        Talk.ready.then(function() {
+                            var me = new Talk.User({
+                                id: $userId,
+                                name: "$userName",
+                                email: "$email"
+                            });
+                            window.talkSession = new Talk.Session({
+                                appId: "2LhQvB3j",
+                                me: me,
+                                signature: $signature
+                            });
+                            var inbox = talkSession.createInbox();
+                            inbox.mount(document.getElementById("talkjs-container"));
                         });
-                        window.talkSession = new Talk.Session({
-                            appId: "2LhQvB3j",
-                            me: me,
-                            signature: $signature
-                        });
-                        var inbox = talkSession.createInbox();
-                        inbox.mount(document.getElementById("talkjs-container"));
-                    });
-                        """.trimIndent()
+                            """.trimIndent()
                 } else {
                     script =
                         """
-                    Talk.ready.then(function() {
-                        var me = new Talk.User({
-                            id: $userId,
-                            name: "$userName",
-                            email: "$email"
+                        Talk.ready.then(function() {
+                            var me = new Talk . User ({
+                                id: $userId,
+                                name: "$userName",
+                                email: "$email"
+                            });
+                            window.talkSession = new Talk . Session ({
+                                appId: "2LhQvB3j",
+                                me: me,
+                                signature: $signature
+                            });
+                            var conversation = window.talkSession.getOrCreateConversation("$conversationId");
+                            conversation.setParticipant(me);
+                            var inbox = talkSession.createChatbox(conversation);
+                            inbox.mount(document.getElementById("talkjs-container"));
                         });
-                        window.talkSession = new Talk.Session({
-                            appId: "2LhQvB3j",
-                            me: me,
-                            signature: $signature
-                        });
-                        var conversation = window.talkSession.getOrCreateConversation("$conversationId");
-                        conversation.setParticipant(me);
-                        var inbox = talkSession.createChatbox(conversation);
-                        inbox.mount(document.getElementById("talkjs-container"));
-                    });
-                        """.trimIndent()
+                            """.trimIndent()
                 }
 
                 webView.webViewClient = object : WebViewClient() {

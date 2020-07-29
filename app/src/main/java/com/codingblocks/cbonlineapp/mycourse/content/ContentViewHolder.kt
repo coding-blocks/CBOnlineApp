@@ -8,9 +8,9 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.DownloadStarter
 import com.codingblocks.cbonlineapp.database.models.ContentModel
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.CODE
 import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.FileUtils
@@ -19,13 +19,13 @@ import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.OnCleanDialogListener
 import com.codingblocks.cbonlineapp.util.QNA
 import com.codingblocks.cbonlineapp.util.VIDEO
+import java.io.File
 import kotlinx.android.synthetic.main.item_content.view.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.textColor
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.yesButton
-import java.io.File
 
 class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_content, parent, false)

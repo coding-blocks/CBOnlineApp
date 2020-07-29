@@ -9,16 +9,17 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.PersistableBundle
 import android.widget.LinearLayout
-import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.database.LibraryDao
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.receivers.DownloadBroadcastReceiver
+import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import es.voghdev.pdfviewpager.library.PDFViewPager
 import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter
+import es.voghdev.pdfviewpager.library.PDFViewPager
+import java.io.File
 import kotlinx.android.synthetic.main.activity_pdf.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -26,7 +27,6 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.toast
 import org.koin.android.ext.android.inject
-import java.io.File
 
 class PdfActivity : BaseCBActivity(), AnkoLogger {
     lateinit var pdfViewPager: PDFViewPager
