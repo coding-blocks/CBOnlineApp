@@ -3,24 +3,20 @@ package com.codingblocks.cbonlineapp.settings
 import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
+import android.util.Log
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.FileUtils
-import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.extensions.folderSize
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
-import com.codingblocks.cbonlineapp.util.extensions.readableFileSize
-import com.codingblocks.cbonlineapp.util.extensions.setToolbar
-import com.codingblocks.cbonlineapp.util.extensions.showDialog
-import java.io.File
+import com.codingblocks.cbonlineapp.util.extensions.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
 
 class SettingsActivity : BaseCBActivity() {
 
@@ -108,11 +104,19 @@ class SettingsActivity : BaseCBActivity() {
     private fun updateSpaceStats() {
         val bytesAvailable = stat.blockSizeLong * stat.availableBlocksLong
         spaceFreeTv.text = String.format("%s free", bytesAvailable.readableFileSize())
-        spaceUsedTv.text = String.format("%s used", file?.let {
-            folderSize(
-                it
-            ).readableFileSize()
-        })
+        spaceUsedTv.text = String.format(
+            "%s used",
+            file?.let {
+                folderSize(
+                    it
+                ).readableFileSize()
+            }
+        )
+
+        val usedSpace: Double = ((file?.let { folderSize(it) }?.toDouble()?.div(1048576) ?: 0.0))
+        Log.v("usedSpace", "Used Space is $usedSpace")
+        storageProgress.max = bytesAvailable.toInt() / 1048576
+        storageProgress.progress = usedSpace.toInt()
     }
 
     private fun setSeekbarProgress(progress: Int) {

@@ -26,11 +26,13 @@ import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 
 @Database(
-    entities = [CourseModel::class, SectionModel::class, ContentModel::class, InstructorModel::class, Notification::class,
+    entities = [
+        CourseModel::class, SectionModel::class, ContentModel::class, InstructorModel::class, Notification::class,
         CourseWithInstructor::class, DoubtsModel::class, NotesModel::class, RunModel::class,
         JobsModel::class, SectionContentHolder.SectionWithContent::class, BookmarkModel::class,
         CommentModel::class, RunAttemptModel::class, RunPerformance::class, PlayerState::class, CodeChallengeModel::class, HBRankModel::class
-    ], exportSchema = true, version = 30
+    ],
+    exportSchema = true, version = 32
 )
 @TypeConverters(TimestampConverter::class, CourseIdList::class, ProgressItemConverter::class)
 abstract class AppDatabase : RoomDatabase() {

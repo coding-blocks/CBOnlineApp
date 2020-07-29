@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:card_view="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,20 +21,20 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/dialogTitleTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="8dp"
-                android:text="Confirmation"
                 android:fontFamily="@font/gilroy_bold"
+                android:text="@string/confirmation"
                 android:textColor="@color/head"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/description"
+                android:id="@+id/dialogDescTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -53,7 +52,7 @@
                 android:layout_marginTop="20dp">
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/cancelBtn"
+                    android:id="@+id/dialogNegativeBtn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -67,21 +66,20 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="8dp"
                     android:shadowColor="#ced0d2"
-                    android:text="Cancel"
+                    android:text="@string/cancel"
                     android:textAllCaps="false"
                     android:textColor="@color/subHead"
                     android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/okBtn"
+                    android:id="@+id/dialogPositiveBtn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/gilroy_bold"
-                    android:text="Primary Option" />
+                    android:fontFamily="@font/gilroy_bold"/>
             </LinearLayout>
         </LinearLayout>
 

@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.onlineapi.models.Course
+import java.io.Serializable
 import java.sql.Date
 
 @Entity
@@ -90,7 +91,7 @@ data class NotesModel(
     var createdAt: String = "",
     var deletedAt: String? = "",
     val contentTitle: String = ""
-) : BaseModel()
+) : BaseModel(), Serializable
 
 @Entity
 data class Notification(
@@ -117,12 +118,16 @@ data class HBRankModel(
 
 @Entity(
     indices = [Index("contentId")],
-    foreignKeys = [(ForeignKey(
-        entity = ContentModel::class,
-        parentColumns = ["ccid"],
-        childColumns = ["contentId"],
-        onDelete = ForeignKey.CASCADE
-    ))]
+    foreignKeys = [
+        (
+            ForeignKey(
+                entity = ContentModel::class,
+                parentColumns = ["ccid"],
+                childColumns = ["contentId"],
+                onDelete = ForeignKey.CASCADE
+            )
+            )
+    ]
 )
 data class BookmarkModel(
     @PrimaryKey
@@ -132,7 +137,8 @@ data class BookmarkModel(
     var sectionId: String = "",
     var createdAt: String = "",
     var sectionName: String = "",
-    var contentName: String = ""
+    var contentName: String = "",
+    var contentable: String = ""
 ) : BaseModel()
 
 @Entity
@@ -159,6 +165,16 @@ class FormModel(
     val required: Boolean,
     val title: String,
     val type: String
+)
+
+data class CodeModel(
+    val codeUid: String,
+    val codeContestId: Int
+)
+
+data class PdfModel(
+    val documentPdfLink: String,
+    val documentName: String
 )
 
 @Entity

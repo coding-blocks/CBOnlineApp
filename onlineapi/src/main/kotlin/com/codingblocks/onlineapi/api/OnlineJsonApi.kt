@@ -26,6 +26,7 @@ import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.Spins
 import com.codingblocks.onlineapi.models.User
+import com.codingblocks.onlineapi.models.Wishlist
 import com.github.jasminb.jsonapi.JSONAPIDocument
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -140,9 +141,19 @@ interface OnlineJsonApi {
         @Query("include") include: String = "instructors,runs"
     ): Response<List<Course>>
 
-    @GET("run_attempts/{runid}")
+    @GET("run_attempts/{id}")
     suspend fun enrolledCourseById(
-        @Path("runid") id: String
+        @Path("id") id: String
+    ): Response<RunAttempts>
+
+    @PATCH("run_attempts/{id}/pause")
+    suspend fun pauseCourse(
+        @Path("id") id: String
+    ): Response<RunAttempts>
+
+    @PATCH("run_attempts/{id}/unpause")
+    suspend fun unPauseCourse(
+        @Path("id") id: String
     ): Response<RunAttempts>
 
     @GET("sections/{sectionId}/relationships/contents")
@@ -154,6 +165,18 @@ interface OnlineJsonApi {
     suspend fun getNotesByAttemptId(
         @Path("runAttemptId") id: String
     ): Response<List<Note>>
+
+    @GET("notes")
+    suspend fun getNotesForContent(
+        @Query("filter[runAttemptId]") attemptId: String,
+        @Query("filter[contentId]") contentId: String
+    ): Response<List<Note>>
+
+    @GET("doubts")
+    suspend fun getDoubtsForContent(
+        @Query("filter[runAttemptId]") attemptId: String,
+        @Query("filter[contentId]") contentId: String
+    ): Response<List<Doubts>>
 
     @GET("bookmarks")
     suspend fun getBookmarksByAttemptId(
@@ -352,4 +375,25 @@ interface OnlineJsonApi {
         @Query("exclude") exclude: String = "spin_prize.*",
         @Query("include") include: String = "user,spin_prize"
     ): Response<JSONAPIDocument<List<Spins>>>
+
+    @GET("user_course_wishlists")
+    suspend fun getWishlist(
+        @Query("page[offset]") offset: String? = "0",
+        @Query("exclude") exclude: String = "course.*",
+        @Query("include") include: String = "course",
+        @Query("page[limit]") page: String = "3"
+    ): Response<JSONAPIDocument<List<Wishlist>>>
+
+    @POST("user_course_wishlists")
+    suspend fun addWishlist(@Body params: Wishlist): Response<Wishlist>
+
+    @GET("courses/{id}/relationships/user_course_wishlist")
+    suspend fun checkIfWishlisted(
+        @Path("id") id: String
+    ): Response<Wishlist>
+
+    @DELETE("user_course_wishlists/{id}")
+    suspend fun removeWishlist(
+        @Path("id") id: String
+    ): Response<Wishlist>
 }

@@ -11,7 +11,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_9xl"
         android:orientation="vertical"
         android:paddingTop="@dimen/margin_large"
         android:paddingBottom="@dimen/margin_large">
@@ -217,9 +216,11 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/wishlistHolder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
+                android:paddingTop="@dimen/margin_large"
+                android:paddingBottom="@dimen/margin_small"
                 android:visibility="gone">
 
                 <ImageView
@@ -255,8 +256,8 @@
                     android:textColor="@color/subHead"
                     android:textSize="13sp" />
 
-
                 <TextView
+                    android:id="@+id/viewAllTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/wishImg"
@@ -275,12 +276,11 @@
                     android:textColor="@color/orangish" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/wishRv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/wishSubTv"
-                    android:layout_marginStart="18dp"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:layout_marginBottom="@dimen/margin_9xl"
                     android:orientation="horizontal"
                     android:overScrollMode="never"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -289,10 +289,12 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/noWishListLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_xl"
-                android:layout_marginBottom="@dimen/margin_large"
+                android:paddingTop="@dimen/margin_xl"
+                android:paddingBottom="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_large"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:visibility="visible">

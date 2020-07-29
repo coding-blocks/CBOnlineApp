@@ -19,16 +19,17 @@ import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.OnCleanDialogListener
 import com.codingblocks.cbonlineapp.util.QNA
 import com.codingblocks.cbonlineapp.util.VIDEO
-import java.io.File
 import kotlinx.android.synthetic.main.item_content.view.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.textColor
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.yesButton
+import java.io.File
 
 class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.item_content, parent, false)) {
+    LayoutInflater.from(parent.context).inflate(R.layout.item_content, parent, false)
+) {
 
     var starterListener: DownloadStarter? = null
     private lateinit var contentModel: ContentModel
@@ -91,11 +92,14 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
     private fun checkDownloadStatus(it: ImageView) {
         if (FileUtils.checkIfCannotDownload(itemView.context)) {
-            FileUtils.showIfCleanDialog(itemView.context, object : OnCleanDialogListener {
-                override fun onComplete() {
-                    downloadFile()
+            FileUtils.showIfCleanDialog(
+                itemView.context,
+                object : OnCleanDialogListener {
+                    override fun onComplete() {
+                        downloadFile()
+                    }
                 }
-            })
+            )
         } else {
             downloadFile()
         }

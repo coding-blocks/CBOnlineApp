@@ -107,6 +107,7 @@
             android:text="@string/available_storage" />
 
         <ProgressBar
+            android:id="@+id/storageProgress"
             style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

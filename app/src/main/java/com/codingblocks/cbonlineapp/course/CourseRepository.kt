@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.course
 
 import com.codingblocks.onlineapi.CBOnlineLib
+import com.codingblocks.onlineapi.models.Wishlist
 import com.codingblocks.onlineapi.safeApiCall
 import org.jetbrains.anko.AnkoLogger
 
@@ -27,4 +28,10 @@ class CourseRepository() : AnkoLogger {
     suspend fun getTracks() = safeApiCall { CBOnlineLib.onlineV2JsonApi.getTracks() }
 
     suspend fun findCourses(query: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.findCourses(query = "%$query%") }
+
+    suspend fun checkIfWishlisted(id: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.checkIfWishlisted(id) }
+
+    suspend fun removeWishlist(id: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.removeWishlist(id) }
+
+    suspend fun addWishlist(wishList: Wishlist) = safeApiCall { CBOnlineLib.onlineV2JsonApi.addWishlist(wishList) }
 }

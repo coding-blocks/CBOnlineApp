@@ -10,8 +10,10 @@ import com.codingblocks.onlineapi.models.DoubtLeaderBoard
 
 class AdminLeaderBoardListAdapter : ListAdapter<DoubtLeaderBoard, AdminLeaderBoardViewHolder>(diffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdminLeaderBoardViewHolder {
-        return AdminLeaderBoardViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_admin_leaderboard, parent, false))
+        return AdminLeaderBoardViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_admin_leaderboard, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: AdminLeaderBoardViewHolder, position: Int) {

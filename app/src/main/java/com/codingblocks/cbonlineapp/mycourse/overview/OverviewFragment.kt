@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
@@ -20,11 +21,12 @@ import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.dashboard.home.loadData
 import com.codingblocks.cbonlineapp.dashboard.home.setGradientColor
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
-import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
 import com.codingblocks.cbonlineapp.util.CustomDialog
-import com.codingblocks.cbonlineapp.util.livedata.observer
+import com.codingblocks.cbonlineapp.util.DIALOG_TYPE
 import com.codingblocks.cbonlineapp.util.extensions.setRv
-import java.io.File
+import com.codingblocks.cbonlineapp.util.livedata.observeOnce
+import com.codingblocks.cbonlineapp.util.livedata.observer
+import com.codingblocks.cbonlineapp.util.showConfirmDialog
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_certificate.*
 import kotlinx.android.synthetic.main.item_hb_performance.*
@@ -32,17 +34,16 @@ import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.ocpsoft.prettytime.PrettyTime
+import java.io.File
+import java.util.*
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
     private val leaderBoardListAdapter = LeaderBoardListAdapter()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    var confirmDialog: AlertDialog? = null
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_overview, container, false)
     }
 
@@ -50,6 +51,9 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         super.onViewCreated(view, savedInstanceState)
         courseLeaderboardRv.setRv(requireContext(), leaderBoardListAdapter)
         viewModel.run?.distinctUntilChanged()?.observer(thisLifecycleOwner) { courseAndRun ->
+            if (courseAndRun.runAttempt.paused) {
+                showPauseDialog(courseAndRun.runAttempt.pauseTimeLeft)
+            }
             viewModel.premiumRun = courseAndRun.runAttempt.premium
             viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
             viewModel.runId = (courseAndRun.run.crUid)
@@ -104,9 +108,11 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
                 val currUserLeaderboard = leaderboard.find { it.id == viewModel.prefs.SP_USER_ID }
                 currUserLeaderboard?.let {
-                    courseLeaderboardll.isVisible = true
                     it.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
-                    leaderBoardListAdapter.submitList(mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5))
+                    if (leaderboard.size > 5) {
+                        courseLeaderboardll.isVisible = true
+                        leaderBoardListAdapter.submitList(mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5))
+                    }
                 }
             }
         }
@@ -117,23 +123,26 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             chart1.loadData(it.averageProgress, it.userProgress)
         }
 
-        viewModel.getHackerBlocksPerformance().distinctUntilChanged().observe(thisLifecycleOwner, Observer {
-            if (it != null) {
-                hbRankContainer.isVisible = true
-                currentOverallRank.text = it.currentOverallRank.toString()
-                currentMonthScore.text = requireContext().getString(R.string.points, it.currentMonthScore)
-                val rankDelta = it.currentOverallRank - it.previousOverallRank
-                val pointsDelta = it.currentMonthScore - it.previousMonthScore
-                previousRank.apply {
-                    isActivated = rankDelta >= 0
-                    text = context.getString(R.string.ranks, kotlin.math.abs(rankDelta))
-                }
-                previousMonthlyScore.apply {
-                    isActivated = pointsDelta >= 0
-                    text = context.getString(R.string.points, pointsDelta)
+        viewModel.getHackerBlocksPerformance().distinctUntilChanged().observe(
+            thisLifecycleOwner,
+            Observer {
+                if (it != null) {
+                    hbRankContainer.isVisible = true
+                    currentOverallRank.text = it.currentOverallRank.toString()
+                    currentMonthScore.text = requireContext().getString(R.string.points, it.currentMonthScore)
+                    val rankDelta = it.currentOverallRank - it.previousOverallRank
+                    val pointsDelta = it.currentMonthScore - it.previousMonthScore
+                    previousRank.apply {
+                        isActivated = rankDelta >= 0
+                        text = context.getString(R.string.ranks, kotlin.math.abs(rankDelta))
+                    }
+                    previousMonthlyScore.apply {
+                        isActivated = pointsDelta >= 0
+                        text = context.getString(R.string.points, pointsDelta)
+                    }
                 }
             }
-        })
+        )
 
         confirmReset.setOnClickListener {
             CustomDialog.showConfirmation(requireContext(), "reset") {
@@ -144,6 +153,22 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
             }
         }
+    }
+
+    private fun showPauseDialog(pauseTimeLeft: String?) {
+        if (confirmDialog == null)
+            confirmDialog = showConfirmDialog(DIALOG_TYPE.PAUSED) {
+                cancelable = false
+                val time = PrettyTime().format(Date(System.currentTimeMillis() + pauseTimeLeft!!.toLong()))
+                desc.text = getString(R.string.pause_time_left, time)
+                positiveBtnClickListener {
+                    viewModel.unPauseCourse().observeOnce {
+                        dialog?.dismiss()
+                    }
+                }
+                negativeBtnClickListener { requireActivity().finish() }
+            }
+        confirmDialog?.show()
     }
 
     private fun downloadCertificate(context: Context, certificateUrl: String, name: String) {

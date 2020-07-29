@@ -20,14 +20,16 @@
     <FrameLayout
         android:id="@+id/pagerAdmin"
         android:layout_width="match_parent"
+
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-    <com.codingblocks.fabnavigation.FabNavigation
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavAdmin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:menu="@menu/bottom_nav_admin"
         android:layout_gravity="bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

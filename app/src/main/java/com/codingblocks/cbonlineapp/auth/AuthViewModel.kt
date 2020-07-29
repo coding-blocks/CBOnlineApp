@@ -7,8 +7,8 @@ import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper
 import okhttp3.ResponseBody
+import org.json.JSONException
 import org.json.JSONObject
-import java.util.*
 
 const val PHONE_NUMBER = "phoneNumber"
 const val ID = "id"
@@ -166,9 +166,13 @@ class AuthViewModel(
     }
 
     private fun parseErrorBody(errorBody: ResponseBody) {
-        val jObjError = JSONObject(errorBody.string())
-        val message = jObjError.getJSONArray("errors").getJSONObject(0).getString("description")
-        errorLiveData.postValue(message)
+        try {
+            val jObjError = JSONObject(errorBody.string())
+            val message = jObjError.getJSONArray("errors").getJSONObject(0).getString("description")
+            errorLiveData.postValue(message)
+        } catch (je: JSONException) {
+            errorLiveData.postValue("Try Again!!!")
+        }
     }
 
     private fun parseError(errorBody: ResponseBody, key: String = "message") {

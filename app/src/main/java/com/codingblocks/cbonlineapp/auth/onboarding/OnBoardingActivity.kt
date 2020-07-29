@@ -7,7 +7,6 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
-import com.codingblocks.cbonlineapp.util.livedata.pageChangeCallback
 import kotlinx.android.synthetic.main.activity_on_boarding.*
 import org.jetbrains.anko.intentFor
 
@@ -41,14 +40,14 @@ class OnBoardingActivity : BaseCBActivity() {
             adapter = mAdapter
             currentItem = 0
             offscreenPageLimit = 1
-            addOnPageChangeListener(
-                    pageChangeCallback { pos, _, _ ->
-                        for (i in 0 until dotsCount) {
-                            dots[i].isSelected = false
-                        }
-                        dots[pos].isSelected = true
-                    }
-            )
+//            addOnPageChangeListener(
+//                    pageChangeCallback { pos, _, _ ->
+//                        for (i in 0 until dotsCount) {
+//                            dots[i].isSelected = false
+//                        }
+//                        dots[pos].isSelected = true
+//                    }
+//            )
             setScrollDuration(200)
         }
         dotsCount = mAdapter.count

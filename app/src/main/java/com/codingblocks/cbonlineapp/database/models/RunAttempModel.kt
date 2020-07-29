@@ -22,7 +22,10 @@ data class RunAttemptModel(
     val lastAccessedAt: String,
     val runId: String,
     val certificateUrl: String = "",
-    val runTier: String = ""
+    val runTier: String = "",
+    val paused: Boolean = false,
+    val pauseTimeLeft: String? = null,
+    val lastPausedLeft: String? = null
 ) {
     constructor() : this("", end = "", doubtSupport = " ", completedContents = 0, lastAccessedAt = "", runId = "")
 }

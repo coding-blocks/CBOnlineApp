@@ -28,6 +28,14 @@ data class Project(
     val image: String = ""
 ) : BaseModel()
 
+@Type("user_course_wishlists")
+data class Wishlist(
+    @Relationship("course")
+    val course: Course? = null,
+    @Relationship("user")
+    val user: User? = null
+) : BaseModel()
+
 @Type("courses", "course")
 data class Course(
     val title: String = "",
@@ -55,6 +63,13 @@ data class Course(
     val tags: ArrayList<Tags>?
 ) : BaseModel() {
 
+    constructor(id: String) :
+        this(
+            "", "", "", "", 0, "", 0, "", 0f, "",
+            "", "", null, null, null, null, null, null
+        ) {
+            super.id = id
+        }
     /** Logic to get [Runs] for enrolling into Trial */
     fun getTrialRun(tier: String): Runs? {
         return with(activeRuns ?: runs!!) {
@@ -157,7 +172,10 @@ data class RunAttempts(
     val run: Runs? = null,
     @Relationship("certificate")
     val certifcate: Certificate? = null,
-    val runTier: String? = null
+    val runTier: String? = null,
+    val paused: Boolean = false,
+    val pauseTimeLeft: String? = null,
+    val lastPausedLeft: String? = null
 ) : BaseModel() {
     constructor(id: String) : this() {
         super.id = id
@@ -265,8 +283,8 @@ data class LectureContent(
 ) : BaseModel() {
     constructor(id: String) :
         this("", 0L, "", null, null, null, null, null, null, null, null, null) {
-        super.id = id
-    }
+            super.id = id
+        }
 }
 
 @Type("instructors")
@@ -332,8 +350,8 @@ data class QuizAttempt(
 
     constructor(id: String, qnaId: ContentQna) :
         this(qna = qnaId) {
-        super.id = id
-    }
+            super.id = id
+        }
 }
 
 @Type("notes")
@@ -349,8 +367,8 @@ data class Note(
 ) : BaseModel(), Serializable {
     constructor(id: String, duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent) :
         this(duration, null, null, text, runAttemptId, contentId) {
-        super.id = id
-    }
+            super.id = id
+        }
 
     constructor(duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent) :
         this(duration, null, null, text, runAttemptId, contentId)
@@ -359,20 +377,25 @@ data class Note(
 @Type("users", "user")
 data class User(
     val email: String?,
-    val firstname: String? ="",
+    val firstname: String? = "",
     val lastReadNotification: String?,
-    val lastname: String? ="",
+    val lastname: String? = "",
     val oneauthId: String?,
     val photo: String?,
     val verifiedemail: String?,
     val verifiedmobile: String?,
-    val username: String = "",
+    val username: String?,
     val roleId: Int = 0,
     val graduationyear: String? = "",
     val college: String? = "",
     val mobile: String? = "",
     val branch: String? = ""
-) : BaseModel()
+) : BaseModel() {
+    constructor(id: String) :
+        this("", "", "", "", "", "", "", "", "") {
+            super.id = id
+        }
+}
 
 class SectionContent(
     val order: Int,
@@ -404,8 +427,8 @@ class ContentQna(
 ) : BaseModel() {
     constructor(id: String) :
         this() {
-        super.id = id
-    }
+            super.id = id
+        }
 }
 
 @Type("csv")
@@ -725,4 +748,3 @@ data class PrizeContent(
     val couponCreated: String?,
     val validEnd: String?
 )
-

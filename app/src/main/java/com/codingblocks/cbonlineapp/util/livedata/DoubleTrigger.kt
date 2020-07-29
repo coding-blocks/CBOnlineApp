@@ -3,7 +3,6 @@ package com.codingblocks.cbonlineapp.util.livedata
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 
-
 /**
  * Custom [MediatorLiveData] which takes an [Pair] instead of a single variable
  */

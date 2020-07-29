@@ -11,21 +11,24 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
+import com.codingblocks.cbonlineapp.database.models.CourseRunPair
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
-import com.codingblocks.cbonlineapp.mycourse.player.notes.NotesWorker
+import com.codingblocks.cbonlineapp.mycourse.content.player.notes.NotesWorker
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.TYPE
 import com.codingblocks.cbonlineapp.util.extensions.runIO
-import com.codingblocks.cbonlineapp.util.extensions.serializeToJson
 import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
+import com.codingblocks.cbonlineapp.util.extensions.serializeToJson
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
+import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
-import java.util.concurrent.TimeUnit
+import com.codingblocks.onlineapi.models.RunAttempts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 
 class LibraryViewModel(
     private val handle: SavedStateHandle,
@@ -36,6 +39,9 @@ class LibraryViewModel(
     var type: String? by savedStateValue(handle, TYPE)
     var name: String? by savedStateValue(handle, COURSE_NAME)
 
+    val run: LiveData<CourseRunPair>? by lazy {
+        attemptId?.let { repo.getRunById(it) }
+    }
     fun fetchNotes(): LiveData<List<NotesModel>> {
         val notes = repo.getNotes(attemptId!!)
         runIO {
@@ -95,12 +101,11 @@ class LibraryViewModel(
 
     private fun startWorkerRequest(noteId: String = "", noteModel: Note? = null) {
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val progressData: Data
-        if (noteId.isEmpty()) {
-            progressData = workDataOf("NOTE" to noteModel?.serializeToJson())
+        val progressData: Data = if (noteId.isEmpty()) {
+            workDataOf("NOTE" to noteModel?.serializeToJson())
 //            offlineSnackbar.postValue("Note will be updated once you connect to Network")
         } else {
-            progressData = workDataOf("NOTE_ID" to noteId)
+            workDataOf("NOTE_ID" to noteId)
 //            offlineSnackbar.postValue("Note will be Deleted once you connect to Network")
         }
         val request: OneTimeWorkRequest =
@@ -125,6 +130,28 @@ class LibraryViewModel(
                 is ResultWrapper.Success -> {
                     if (response.value.code() == 204) {
                         repo.deleteBookmark(id)
+                    } else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun updateNote(note: NotesModel) {
+        val newNote = Note(note.nttUid, note.duration, note.text, RunAttempts(note.runAttemptId), LectureContent(note.contentId))
+        runIO {
+            when (val response = repo.updateNote(newNote)) {
+                is ResultWrapper.GenericError -> {
+                    if (response.code in 100..103)
+                        startWorkerRequest(noteModel = newNote)
+                    else {
+                        setError(response.error)
+                    }
+                }
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                        repo.updateNoteInDb(newNote)
                     } else {
                         setError(fetchError(response.value.code()))
                     }

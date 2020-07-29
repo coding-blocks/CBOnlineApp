@@ -11,9 +11,9 @@ import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import java.util.regex.Pattern
 import kotlinx.android.synthetic.main.bottom_sheet_login.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.util.regex.Pattern
 
 class LoginEmailBottomSheet : BottomSheetDialogFragment() {
 
@@ -50,7 +50,7 @@ class LoginEmailBottomSheet : BottomSheetDialogFragment() {
                     dialog?.dismiss()
                 }
                 else -> {
-                    //Todo - handle this
+                    // Todo - handle this
                 }
             }
         }

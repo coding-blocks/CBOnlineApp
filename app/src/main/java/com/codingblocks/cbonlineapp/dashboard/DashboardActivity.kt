@@ -35,12 +35,12 @@ import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
-import com.codingblocks.cbonlineapp.util.glide.loadImage
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.extensions.slideDown
 import com.codingblocks.cbonlineapp.util.extensions.slideUp
+import com.codingblocks.cbonlineapp.util.glide.loadImage
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
@@ -64,7 +64,8 @@ import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 const val LOGGED_IN = "loggedIn"
 
-class DashboardActivity : BaseCBActivity(),
+class DashboardActivity :
+    BaseCBActivity(),
     NavigationView.OnNavigationItemSelectedListener,
     BottomNavigationView.OnNavigationItemSelectedListener {
     private val vm: DashboardViewModel by stateViewModel()
@@ -105,20 +106,23 @@ class DashboardActivity : BaseCBActivity(),
     }
 
     private fun setUser() {
-        vm.fetchUser().observe(this, Observer {
-            referralContainer.isVisible = true
-            if (JWTUtils.isExpired(vm.prefs.SP_JWT_TOKEN_KEY))
-                vm.refreshToken()
-            val navMenu = dashboardNavigation.menu
-            navMenu.findItem(R.id.nav_inbox).isVisible = true
-            navMenu.findItem(R.id.nav_purchases).isVisible = true
-            navMenu.findItem(R.id.nav_admin).isVisible = vm.prefs.SP_ADMIN
+        vm.fetchUser().observe(
+            this,
+            Observer {
+                referralContainer.isVisible = true
+                if (JWTUtils.isExpired(vm.prefs.SP_JWT_TOKEN_KEY))
+                    vm.refreshToken()
+                val navMenu = dashboardNavigation.menu
+                navMenu.findItem(R.id.nav_inbox).isVisible = true
+                navMenu.findItem(R.id.nav_purchases).isVisible = true
+                navMenu.findItem(R.id.nav_admin).isVisible = vm.prefs.SP_ADMIN
 
-            dashboardNavigation.getHeaderView(0).apply {
-                findViewById<CircleImageView>(R.id.navHeaderImageView).loadImage(vm.prefs.SP_USER_IMAGE, true)
-                findViewById<TextView>(R.id.navUsernameTv).text = ("Hello ${vm.prefs.SP_USER_NAME}")
+                dashboardNavigation.getHeaderView(0).apply {
+                    findViewById<CircleImageView>(R.id.navHeaderImageView).loadImage(vm.prefs.SP_USER_IMAGE, true)
+                    findViewById<TextView>(R.id.navUsernameTv).text = ("Hello ${vm.prefs.SP_USER_NAME}")
+                }
             }
-        })
+        )
     }
 
     private fun initializeUI(loggedIn: Boolean) {
@@ -290,7 +294,6 @@ class DashboardActivity : BaseCBActivity(),
         }
     }
 
-
     fun openProfile(view: View) {
         if (vm.isLoggedIn == false) {
             startActivity<LoginActivity>()
@@ -343,12 +346,12 @@ class DashboardActivity : BaseCBActivity(),
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
             } else {
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, ContextCompat.getColor(this,R.color.white))
+                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, ContextCompat.getColor(this, R.color.white))
             }
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.head))
         } else {
-            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, ContextCompat.getColor(this,R.color.head))
+            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, ContextCompat.getColor(this, R.color.head))
         }
 
         dashboardToolbarSecondary.post {

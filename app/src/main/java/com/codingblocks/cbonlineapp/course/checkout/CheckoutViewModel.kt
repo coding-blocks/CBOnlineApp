@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.course.checkout
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.CBOnlineLib
@@ -8,6 +9,7 @@ import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.safeApiCall
 import com.google.gson.JsonObject
+import kotlinx.coroutines.Dispatchers
 import org.json.JSONObject
 
 /**
@@ -22,7 +24,6 @@ class CheckoutViewModel : BaseCBViewModel() {
     var paymentMap = hashMapOf<String, String>()
     var creditsApplied = false
     var couponApplied: String = ""
-    var isFree: Boolean = false
 
     fun getCart() {
         runIO {
@@ -68,10 +69,10 @@ class CheckoutViewModel : BaseCBViewModel() {
                         errorBody()?.string()?.let {
                             val error = JSONObject(it)
                             val msg: String
-                            if (error.getJSONObject("err").has("err")) {
-                                msg = error.getJSONObject("err").getString("err")
+                            msg = if (error.getJSONObject("err").has("err")) {
+                                error.getJSONObject("err").getString("err")
                             } else
-                                msg = error.getJSONObject("err").getString("error")
+                                error.getJSONObject("err").getString("error")
                             setError(msg)
                         }
                     } ?: setError(fetchError(code()))
@@ -92,6 +93,19 @@ class CheckoutViewModel : BaseCBViewModel() {
                         setError(fetchError(code()))
                         function(false)
                     }
+                }
+            }
+        }
+    }
+
+    fun addOrder() = liveData(Dispatchers.IO) {
+        when (val response = safeApiCall { CBOnlineLib.api.addOrder() }) {
+            is ResultWrapper.GenericError -> setError(response.error)
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful) {
+                    emit(body())
+                } else {
+                    setError(fetchError(code()))
                 }
             }
         }

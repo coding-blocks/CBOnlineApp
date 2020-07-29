@@ -18,6 +18,7 @@ import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsViewModel
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
+import com.codingblocks.cbonlineapp.dashboard.home.WishlistViewModel
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.jobs.JobsViewModel
@@ -27,12 +28,12 @@ import com.codingblocks.cbonlineapp.library.LibraryRepository
 import com.codingblocks.cbonlineapp.library.LibraryViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
-import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeRepository
-import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeViewModel
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerRepository
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerViewModel
-import com.codingblocks.cbonlineapp.mycourse.quiz.QuizRepository
-import com.codingblocks.cbonlineapp.mycourse.quiz.QuizViewModel
+import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeRepository
+import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeViewModel
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerRepository
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerViewModel
+import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizRepository
+import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizViewModel
 import com.codingblocks.cbonlineapp.notifications.NotificationViewModel
 import com.codingblocks.cbonlineapp.profile.ProfileRepository
 import com.codingblocks.cbonlineapp.profile.ProfileViewModel
@@ -56,13 +57,14 @@ val viewModelModule = module {
     viewModel { AdminDoubtsViewModel(get()) }
     viewModel { AdminOverviewViewModel(get(), get()) }
     viewModel { DashboardDoubtsViewModel(get()) }
-    viewModel { CourseViewModel(get()) }
+    viewModel { CourseViewModel(get(), get()) }
     viewModel { (handle: SavedStateHandle) -> LibraryViewModel(handle, get(), get()) }
     viewModel { (handle: SavedStateHandle) -> DashboardViewModel(handle, get(), get(), get(), get(), get()) }
     viewModel { QuizViewModel(get()) }
     viewModel { CheckoutViewModel() }
     viewModel { TrackViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
+    viewModel { WishlistViewModel() }
     viewModel { (handle: SavedStateHandle) -> AuthViewModel(handle, get()) }
     viewModel { (handle: SavedStateHandle) -> CodeChallengeViewModel(handle, get()) }
     viewModel { (handle: SavedStateHandle) -> CampaignViewModel(handle, get()) }
@@ -72,9 +74,9 @@ val viewModelModule = module {
     single { CourseRepository() }
     single { DashboardDoubtsRepository(get(), get(), get(), get()) }
     single { DashboardMyCoursesRepository(get(), get(), get(), get(), get()) }
-    single { LibraryRepository(get(), get(), get(), get()) }
+    single { LibraryRepository(get(), get(), get(), get(), get()) }
     single { DashboardHomeRepository(get(), get(), get(), get()) }
-    single { VideoPlayerRepository(get(), get(), get(), get(), get()) }
+    single { VideoPlayerRepository(get(), get(), get(), get(), get(), get()) }
     single { QuizRepository(get()) }
     single { JobRepository(get()) }
     single { MyCourseRepository(get(), get(), get(), get(), get(), get(), get(), get()) }
@@ -98,9 +100,9 @@ val databaseModule = module {
 
     single {
         Room.databaseBuilder(
-                androidApplication(),
-                AppDatabase::class.java, "online-app-database"
-            )
+            androidApplication(),
+            AppDatabase::class.java, "online-app-database"
+        )
             .fallbackToDestructiveMigration()
             .build()
     }

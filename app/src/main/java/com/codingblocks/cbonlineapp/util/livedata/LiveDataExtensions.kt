@@ -4,15 +4,18 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 
 fun <T> LiveData<T>.observer(owner: LifecycleOwner, onEmission: (T) -> Unit) {
-    return observe(owner, Observer<T> {
-        if (it != null) {
-            onEmission(it)
+    return observe(
+        owner,
+        Observer<T> {
+            if (it != null) {
+                onEmission(it)
+            }
         }
-    })
+    )
 }
 
 fun <T> LiveData<T>.observeOnce(onEmission: (T) -> Unit) {
@@ -27,32 +30,35 @@ fun <T> LiveData<T>.observeOnce(onEmission: (T) -> Unit) {
 
 fun <T> LiveData<T>.getDistinct(): LiveData<T> {
     val distinctLiveData = MediatorLiveData<T>()
-    distinctLiveData.addSource(this, object : Observer<T> {
-        private var initialized = false
-        private var lastObj: T? = null
-        override fun onChanged(obj: T?) {
-            if (!initialized) {
-                initialized = true
-                lastObj = obj
-                distinctLiveData.postValue(lastObj)
-            } else if ((obj == null && lastObj != null) ||
-                obj != lastObj
-            ) {
-                /** [ContentModel] do not required an update from live data when progress is updated */
-                if (lastObj is ContentModel && obj is ContentModel) {
-                    val oldObj = (lastObj as ContentModel)
-                    val newObj = (obj as ContentModel)
-                    if (oldObj.ccid != newObj.ccid) {
+    distinctLiveData.addSource(
+        this,
+        object : Observer<T> {
+            private var initialized = false
+            private var lastObj: T? = null
+            override fun onChanged(obj: T?) {
+                if (!initialized) {
+                    initialized = true
+                    lastObj = obj
+                    distinctLiveData.postValue(lastObj)
+                } else if ((obj == null && lastObj != null) ||
+                    obj != lastObj
+                ) {
+                    /** [ContentModel] do not required an update from live data when progress is updated */
+                    if (lastObj is ContentModel && obj is ContentModel) {
+                        val oldObj = (lastObj as ContentModel)
+                        val newObj = (obj as ContentModel)
+                        if (oldObj.ccid != newObj.ccid) {
+                            lastObj = obj
+                            distinctLiveData.postValue(lastObj)
+                        }
+                    } else {
                         lastObj = obj
                         distinctLiveData.postValue(lastObj)
                     }
-                } else {
-                    lastObj = obj
-                    distinctLiveData.postValue(lastObj)
                 }
             }
         }
-    })
+    )
     return distinctLiveData
 }
 
@@ -60,8 +66,8 @@ fun pageChangeCallback(
     fnState: (Int) -> Unit = { },
     fnSelected: (Int) -> Unit = { },
     fnScrolled: (Int, Float, Int) -> Unit
-): ViewPager.OnPageChangeListener {
-    return object : ViewPager.OnPageChangeListener {
+): ViewPager2.OnPageChangeCallback {
+    return object : ViewPager2.OnPageChangeCallback() {
         override fun onPageScrollStateChanged(state: Int) = fnState(state)
         override fun onPageSelected(position: Int) = fnSelected(position)
         override fun onPageScrolled(
@@ -82,9 +88,12 @@ fun <T> LiveData<T>.nonNull(): NonNullMediatorLiveData<T> {
 }
 
 fun <T> NonNullMediatorLiveData<T>.observe(owner: LifecycleOwner, observer: (t: T) -> Unit) {
-    this.observe(owner, Observer {
-        it?.let(observer)
-    })
+    this.observe(
+        owner,
+        Observer {
+            it?.let(observer)
+        }
+    )
 }
 
 /**
@@ -100,5 +109,3 @@ inline fun <T> LiveData<List<T>>.filterList(crossinline predicate: (T?) -> Boole
     }
     return mutableLiveData
 }
-
-

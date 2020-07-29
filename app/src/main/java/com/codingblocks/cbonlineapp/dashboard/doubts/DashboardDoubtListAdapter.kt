@@ -60,9 +60,11 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
                         setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, context.getDrawable(R.drawable.ic_reopen_small), null)
                         text = context.getString(R.string.reopen_doubt)
                         setOnClickListener {
-                            resolveClickListener?.onClick(item.apply {
-                                status = PENDING
-                            })
+                            resolveClickListener?.onClick(
+                                item.apply {
+                                    status = PENDING
+                                }
+                            )
                         }
                     }
                 }
@@ -70,9 +72,11 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
                     markResolvedTv.apply {
                         isVisible = true
                         setOnClickListener {
-                            resolveClickListener?.onClick(item.apply {
-                                status = RESOLVED
-                            })
+                            resolveClickListener?.onClick(
+                                item.apply {
+                                    status = RESOLVED
+                                }
+                            )
                         }
                     }
                     chatTv.apply {

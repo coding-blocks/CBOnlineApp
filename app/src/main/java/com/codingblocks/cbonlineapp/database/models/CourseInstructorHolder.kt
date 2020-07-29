@@ -8,11 +8,13 @@ import androidx.room.Index
 import androidx.room.Junction
 import androidx.room.Relation
 
-@Entity(primaryKeys = ["course_id", "instructor_id"],
+@Entity(
+    primaryKeys = ["course_id", "instructor_id"],
     indices = [
         Index(value = ["course_id"]),
         Index(value = ["instructor_id"])
-    ])
+    ]
+)
 class CourseWithInstructor(
     @ColumnInfo(name = "course_id") val courseId: String,
     @ColumnInfo(name = "instructor_id") val instructorId: String

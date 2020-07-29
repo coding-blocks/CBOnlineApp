@@ -66,7 +66,8 @@ class CourseSearchFragment : BottomSheetDialogFragment() {
                 val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     requireActivity(),
                     logo,
-                    ViewCompat.getTransitionName(logo)!!)
+                    ViewCompat.getTransitionName(logo)!!
+                )
                 startActivity(intent, options.toBundle())
             }
         }
@@ -75,10 +76,12 @@ class CourseSearchFragment : BottomSheetDialogFragment() {
     @NonNull
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog: Dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setOnShowListener(OnShowListener { dialogInterface ->
-            val bottomSheetDialog = dialogInterface as BottomSheetDialog
-            setupFullHeight(bottomSheetDialog)
-        })
+        dialog.setOnShowListener(
+            OnShowListener { dialogInterface ->
+                val bottomSheetDialog = dialogInterface as BottomSheetDialog
+                setupFullHeight(bottomSheetDialog)
+            }
+        )
         return dialog
     }
 

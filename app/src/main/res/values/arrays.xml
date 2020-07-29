@@ -18,9 +18,24 @@
         <item>@string/active</item>
     </string-array>
 
+    <string-array name="tab_titles">
+        <item>@string/dashboard</item>
+        <item>@string/curriculum</item>
+        <item>@string/library</item>
+        <item>@string/misc</item>
+    </string-array>
+
+    <string-array name="campaign_tab_titles">
+        <item>@string/spin_wheel</item>
+        <item>@string/winnings</item>
+        <item>@string/leaderboard</item>
+        <item>@string/rules</item>
+    </string-array>
+
     <integer-array name="tourslide">
         <item>@drawable/intro1</item>
         <item>@drawable/intro2</item>
         <item>@drawable/intro3</item>
     </integer-array>
+    <string name="misc">More</string>
 </resources>

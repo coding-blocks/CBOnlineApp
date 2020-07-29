@@ -95,8 +95,10 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
             if (ll.visibility == View.GONE) {
                 title.setTextColor(ContextCompat.getColor(ll.context, R.color.orangish))
                 ll.visibility = View.VISIBLE
-                arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                    0.5f)
+                arrowAnimation = RotateAnimation(
+                    0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                    0.5f
+                )
                 arrowAnimation.fillAfter = true
                 arrowAnimation.duration = 350
 
@@ -104,8 +106,10 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
             } else {
                 title.setTextColor(ContextCompat.getColor(ll.context, R.color.orangish))
                 ll.visibility = View.GONE
-                arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                    0.5f)
+                arrowAnimation = RotateAnimation(
+                    180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                    0.5f
+                )
                 arrowAnimation.fillAfter = true
                 arrowAnimation.duration = 350
                 itemView.arrow.startAnimation(arrowAnimation)

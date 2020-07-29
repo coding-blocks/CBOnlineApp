@@ -27,9 +27,8 @@ class RulesFragment : BaseCBFragment() {
         super.onViewCreated(view, savedInstanceState)
         val markWon = Markwon.create(requireContext())
         vm.fetchRules().observer(thisLifecycleOwner) {
-            val text = it.getString("Rules")!!.replace("_b", "\n",true)
+            val text = it.getString("Rules")!!.replace("_b", "\n", true)
             markWon.setMarkdown(rulesTv, text)
         }
     }
 }
-
