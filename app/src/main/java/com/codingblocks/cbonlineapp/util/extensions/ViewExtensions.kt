@@ -105,7 +105,11 @@ fun Fragment.showShimmer(internetView: LinearLayout, emptyView: LinearLayout, sh
     shimmerView.showAndStart()
 }
 
-fun Fragment.showEmptyView(internetView: LinearLayout? = null, emptyView: LinearLayout, shimmerView: ShimmerFrameLayout) {
+fun Fragment.showEmptyView(
+    internetView: LinearLayout? = null,
+    emptyView: LinearLayout,
+    shimmerView: ShimmerFrameLayout
+) {
     if (internetView == null) {
         emptyView.isVisible = true
     } else {
@@ -140,7 +144,9 @@ fun AppCompatActivity.replaceFragmentSafely(
         .beginTransaction()
         .setCustomAnimations(enterAnimation, exitAnimation, popEnterAnimation, popExitAnimation)
         .replace(containerViewId, fragment, tag)
-    if (addToStack) { ft.addToBackStack(tag) }
+    if (addToStack) {
+        ft.addToBackStack(tag)
+    }
     if (!supportFragmentManager.isStateSaved) {
         ft.commit()
     } else if (allowStateLoss) {

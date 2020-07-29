@@ -47,7 +47,10 @@ class ViewPagerCustomDuration : ViewPager {
         mScroller!!.setScrollDuration(duration)
     }
 
-    private inner class FixedSpeedScroller(context: Context, interpolator: Interpolator) : Scroller(context, interpolator) {
+    private inner class FixedSpeedScroller(
+        context: Context,
+        interpolator: Interpolator
+    ) : Scroller(context, interpolator) {
 
         private var mDuration = 800
 

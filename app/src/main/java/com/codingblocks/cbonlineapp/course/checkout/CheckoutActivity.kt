@@ -84,7 +84,8 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener, AnkoLo
 
             json.getAsJsonObject("razorpayPayment").let {
                 options.put("order_id", it["order_id"].asString) // razorpay_order_id from API
-                options.put("amount", it["amount"].asString) // Amount in paise from carts API after applying coupon and everything
+                // Amount in paise from carts API after applying coupon and everything
+                options.put("amount", it["amount"].asString)
             }
             json.getAsJsonObject("transaction").let {
                 vm.paymentMap["txnId"] = it["id"].asString

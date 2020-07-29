@@ -13,9 +13,15 @@ class QuizRepository(private var contentDao: ContentDao) {
 
     suspend fun getQuizAttempts(qnaId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getQuizAttempt(qnaId) }
 
-    suspend fun createQuizAttempt(quizAttempt: QuizAttempt) = safeApiCall { CBOnlineLib.onlineV2JsonApi.createQuizAttempt(quizAttempt) }
+    suspend fun createQuizAttempt(quizAttempt: QuizAttempt) = safeApiCall {
+        CBOnlineLib.onlineV2JsonApi.createQuizAttempt(quizAttempt)
+    }
 
-    suspend fun fetchQuizAttempt(quizAttemptId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getQuizAttemptById(quizAttemptId) }
+    suspend fun fetchQuizAttempt(quizAttemptId: String) = safeApiCall {
+        CBOnlineLib.onlineV2JsonApi.getQuizAttemptById(quizAttemptId)
+    }
 
-    suspend fun submitQuiz(quizAttemptId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.submitQuizById(quizAttemptId) }
+    suspend fun submitQuiz(quizAttemptId: String) = safeApiCall {
+        CBOnlineLib.onlineV2JsonApi.submitQuizById(quizAttemptId)
+    }
 }

@@ -79,7 +79,10 @@ object FileUtils {
     }
 
     fun checkDownloadFileExists(context: Context, lectureId: String): Boolean {
-        return File(getCommonPath(context), "/$lectureId").exists() && File(getCommonPath(context), "/$lectureId").totalSpace > 100000
+        return File(getCommonPath(context), "/$lectureId").exists() && File(
+            getCommonPath(context),
+            "/$lectureId"
+        ).totalSpace > 100000
     }
 
     fun loadJsonObjectFromAsset(context: Context, assetName: String, jsonType: String = "array"): Any? {

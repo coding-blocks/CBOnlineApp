@@ -190,7 +190,9 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                     if (content.progress == "DONE") {
                         sectionComplete++
                     }
-                    if (content.contentable == "lecture" && content.contentLecture.lectureUid.isNotEmpty() && !content.contentLecture.isDownloaded) {
+                    if (content.contentable == "lecture" && content.contentLecture.lectureUid.isNotEmpty() &&
+                        !content.contentLecture.isDownloaded
+                    ) {
                         isDownloadEnabled = true
                     }
 

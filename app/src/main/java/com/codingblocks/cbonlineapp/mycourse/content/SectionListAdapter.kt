@@ -9,7 +9,8 @@ import com.codingblocks.cbonlineapp.commons.SectionListClickListener
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import kotlinx.android.synthetic.main.item_section_list.view.*
 
-class SectionListAdapter(private val sectionList: ArrayList<SectionModel>) : RecyclerView.Adapter<SectionListAdapter.SectionListViewHolder>() {
+class SectionListAdapter(private val sectionList: ArrayList<SectionModel>) :
+    RecyclerView.Adapter<SectionListAdapter.SectionListViewHolder>() {
 
     var onSectionListClick: SectionListClickListener? = null
 

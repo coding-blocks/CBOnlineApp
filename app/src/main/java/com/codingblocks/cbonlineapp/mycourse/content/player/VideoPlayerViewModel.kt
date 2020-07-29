@@ -215,7 +215,11 @@ class VideoPlayerViewModel(
     }
 
     fun updateNote(note: NotesModel) {
-        val newNote = Note(note.nttUid, note.duration, note.text, RunAttempts(note.runAttemptId), LectureContent(note.contentId))
+        val newNote = Note(
+            note.nttUid, note.duration,
+            note.text, RunAttempts(note.runAttemptId),
+            LectureContent(note.contentId)
+        )
         runIO {
             when (val response = repo.updateNote(newNote)) {
                 is ResultWrapper.GenericError ->

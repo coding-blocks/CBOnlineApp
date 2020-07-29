@@ -85,22 +85,32 @@ class HomeFragment : BaseCBFragment(), AnkoLogger {
         val fbMsg: String
         val waMSg: String
         val twMsg: String
-        val msg = "Signup using this link to get 500 credits in your wallet and stand a chance of winning amazing prizes this Summer using my referral code: https://cb.lk/join/${vm.referral}"
+        val msg =
+            "Signup using this link to get 500 credits in your wallet and stand a chance of winning amazing prizes" +
+                " this Summer using my referral code: https://cb.lk/join/${vm.referral}"
         val json: String
         if (size > 0) {
             title = "CONGRATULATIONS!"
             subTitle = "You won\n${prize.toUpperCase()}"
             description = descriptionMsg
             share = "Use hashtag #TurnYourLuck and show off your winnings on social media."
-            fbMsg = "I am ecstatic to share that I have won $prize in Coding Blocks’s new Summer Learning Spree Campaign. Don’t wait any further. You can also win amazing prizes. Click on https://cb.lk/snwfb to participate in the Campaign and get an extra spin. #TurnYourLuck #CodingBlocks"
-            waMSg = "I am so happy to share that I have won $prize in Coding Blocks ’ s new Summer Learning Spree Campaign.You can also win exciting prizes . Click on https://cb.lk/snwtw to participate in the Campaign and get an extra spin.# TurnYourLuck # CodingBlocks"
-            twMsg = "I am ecstatic to share that I have won $prize in Coding Blocks ’ s new Summer Learning Spree Campaign.You can also win exciting prizes . Click on https://cb.lk/snwwa  to participate in the Campaign and get an extra spin.# TurnYourLuck # CodingBlocks @codingblocksin"
+            fbMsg = "I am ecstatic to share that I have won $prize in Coding Blocks’s new" +
+                " Summer Learning Spree Campaign. Don’t wait any further. You can also win amazing prizes." +
+                " Click on https://cb.lk/snwfb to participate in the Campaign and get an extra spin." +
+                " #TurnYourLuck #CodingBlocks"
+            waMSg = "I am so happy to share that I have won $prize in Coding Blocks ’ s " +
+                "new Summer Learning Spree Campaign.You can also win exciting prizes . Click on https://cb.lk/snwtw" +
+                " to participate in the Campaign and get an extra spin.# TurnYourLuck # CodingBlocks"
+            twMsg = "I am ecstatic to share that I have won $prize in Coding Blocks ’ s new Summer Learning Spree" +
+                " Campaign.You can also win exciting prizes . Click on https://cb.lk/snwwa  to participate in the " +
+                "Campaign and get an extra spin.# TurnYourLuck # CodingBlocks @codingblocksin"
             json = "gift.json"
         } else {
             title = "OOPS!"
             subTitle = "Sorry \n Better Luck Next Time}"
             description = ""
-            share = "For every friend who signup with your code you get an extra spin! https://cb.lk/join/${vm.referral}"
+            share =
+                "For every friend who signup with your code you get an extra spin! https://cb.lk/join/${vm.referral}"
             fbMsg = msg
             waMSg = msg
             twMsg = msg

@@ -61,7 +61,11 @@ class DoubtCommentActivity : BaseCBActivity() {
             markResolvedTv.apply {
                 text = when (it.status) {
                     RESOLVED -> {
-                        setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, context.getDrawable(R.drawable.ic_reopen_small), null)
+                        setCompoundDrawablesRelativeWithIntrinsicBounds(
+                            null,
+                            null,
+                            context.getDrawable(R.drawable.ic_reopen_small), null
+                        )
                         setTextColor(ContextCompat.getColor(context, R.color.neon_red))
                         setOnClickListener { _ ->
                             viewModel.resolveDoubt(
@@ -77,7 +81,12 @@ class DoubtCommentActivity : BaseCBActivity() {
                         context.getString(R.string.reopen_doubt)
                     }
                     else -> {
-                        setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, context.getDrawable(R.drawable.ic_tick), null)
+                        setCompoundDrawablesRelativeWithIntrinsicBounds(
+                            null,
+                            null,
+                            context.getDrawable(R.drawable.ic_tick),
+                            null
+                        )
                         setTextColor(ContextCompat.getColor(context, R.color.freshGreen))
                         setOnClickListener { _ ->
                             viewModel.resolveDoubt(

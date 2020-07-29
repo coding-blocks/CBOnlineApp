@@ -18,15 +18,16 @@ import com.codingblocks.onlineapi.models.Spins
 import kotlinx.android.synthetic.main.item_winnings.view.*
 import org.jetbrains.anko.toast
 
-class WinningsListAdapter : ListAdapter<Spins, WinningsListAdapter.CampaignViewHolder>(object : DiffUtil.ItemCallback<Spins>() {
-    override fun areItemsTheSame(oldItem: Spins, newItem: Spins): Boolean {
-        return oldItem.id == newItem.id
-    }
+class WinningsListAdapter : ListAdapter<Spins, WinningsListAdapter.CampaignViewHolder>(
+    object : DiffUtil.ItemCallback<Spins>() {
+        override fun areItemsTheSame(oldItem: Spins, newItem: Spins): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-    override fun areContentsTheSame(oldItem: Spins, newItem: Spins): Boolean {
-        return oldItem.sameAndEqual(newItem)
+        override fun areContentsTheSame(oldItem: Spins, newItem: Spins): Boolean {
+            return oldItem.sameAndEqual(newItem)
+        }
     }
-}
 ) {
     private lateinit var myClipboard: ClipboardManager
 

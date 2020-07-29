@@ -23,7 +23,12 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.google.gson.JsonObject
 import com.vdocipher.aegis.media.ErrorDescription
-import com.vdocipher.aegis.offline.*
+import com.vdocipher.aegis.offline.DownloadOptions
+import com.vdocipher.aegis.offline.DownloadRequest
+import com.vdocipher.aegis.offline.DownloadSelections
+import com.vdocipher.aegis.offline.DownloadStatus
+import com.vdocipher.aegis.offline.OptionsDownloader
+import com.vdocipher.aegis.offline.VdoDownloadManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -177,7 +182,10 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener {
         notification.apply {
             setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded( Current ${p1?.downloadPercent}% )")
+                    .bigText(
+                        "${downloadList.filterValues { it.isDownloaded }.size} out of" +
+                            " ${downloadList.size} downloaded( Current ${p1?.downloadPercent}% )"
+                    )
             )
         }
         notificationManager.notify(1, notification.build())
@@ -213,7 +221,10 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener {
             setProgress(downloadList.size, downloadList.filterValues { it.isDownloaded }.size, false)
             setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded")
+                    .bigText(
+                        "${downloadList.filterValues { it.isDownloaded }.size} out of" +
+                            " ${downloadList.size} downloaded"
+                    )
             )
         }
         notificationManager.notify(1, notification.build())
@@ -224,14 +235,20 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener {
 
     /** Creates a new notification after completion of the task*/
     private fun createCompletionNotification() {
-        notification = NotificationCompat.Builder(applicationContext, DOWNLOAD_CHANNEL_ID).apply {
+        notification = NotificationCompat.Builder(
+            applicationContext,
+            DOWNLOAD_CHANNEL_ID
+        ).apply {
             setSmallIcon(R.drawable.ic_file_download)
             setContentTitle("Downloaded $sectionName")
             setOnlyAlertOnce(true)
             setLargeIcon(BitmapFactory.decodeResource(applicationContext.resources, R.mipmap.ic_launcher))
             setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded")
+                    .bigText(
+                        "${downloadList.filterValues { it.isDownloaded }.size}" +
+                            " out of ${downloadList.size} downloaded"
+                    )
             )
         }
         notificationManager.notify(2, notification.build())

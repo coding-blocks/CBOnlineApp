@@ -221,7 +221,10 @@ class JobDetailActivity : BaseCBActivity() {
                 setView(formView)
                 setCancelable(true)
                 show()
-                window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+                window?.clearFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
+                )
             }
         }
     }

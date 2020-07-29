@@ -10,7 +10,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.adapter.WishlistListener
-import com.codingblocks.cbonlineapp.util.extensions.*
+import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
+import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.onlineapi.models.Wishlist
 import de.hdodenhof.circleimageview.CircleImageView

@@ -112,13 +112,19 @@ class CBOnlineApp : Application() {
             Router.initActivityRouter(
                 applicationContext,
                 IActivityRouteTableInitializer { router ->
-                    router["activity://courseRun/https://online.codingblocks.com/app/classroom/course/:s{$COURSE_ID}/run/:s{$RUN_ID}"] =
+                    router[
+                        "activity://courseRun/https://online.codingblocks.com/" +
+                            "app/classroom/course/:s{$COURSE_ID}/run/:s{$RUN_ID}"
+                    ] =
                         MyCourseActivity::class.java
                     router["activity://courseRun/https://online.codingblocks.com/courses/:s{courseId}"] =
                         CourseActivity::class.java
                     router["activity://courseRun/https://online.codingblocks.com/courses"] =
                         SearchCourseActivity::class.java
-                    router["activity://courseRun/https://online.codingblocks.com/app/player/:s{$RUN_ATTEMPT_ID}/content/:s{$SECTION_ID}/:s{$CONTENT_ID}"] =
+                    router[
+                        "activity://courseRun/https://online.codingblocks.com/" +
+                            "app/player/:s{$RUN_ATTEMPT_ID}/content/:s{$SECTION_ID}/:s{$CONTENT_ID}"
+                    ] =
                         VideoPlayerActivity::class.java
                     router["activity://courseRun/https://online.codingblocks.com/app/tracks/:s{courseId}"] =
                         TrackActivity::class.java

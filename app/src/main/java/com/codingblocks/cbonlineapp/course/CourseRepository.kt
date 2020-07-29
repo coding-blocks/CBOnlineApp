@@ -11,9 +11,13 @@ class CourseRepository() : AnkoLogger {
 
     suspend fun getCourse(id: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getCourse(id) }
 
-    suspend fun getSuggestedCourses(offset: Int = 0, page: Int = 12) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getRecommendedCourses(offset = offset, page = page) }
+    suspend fun getSuggestedCourses(offset: Int = 0, page: Int = 12) = safeApiCall {
+        CBOnlineLib.onlineV2JsonApi.getRecommendedCourses(offset = offset, page = page)
+    }
 
-    suspend fun getAllCourses(offset: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getAllCourses(offset = offset) }
+    suspend fun getAllCourses(offset: String) = safeApiCall {
+        CBOnlineLib.onlineV2JsonApi.getAllCourses(offset = offset)
+    }
 
     suspend fun getProjects(id: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getProject(id) }
 

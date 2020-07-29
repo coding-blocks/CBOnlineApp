@@ -209,7 +209,10 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
         val data = findDataWithId(videoId)
         if (data != null) {
             notificationManager.cancel(data.notificationId)
-            val folderFile = File(applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath), "/$videoId")
+            val folderFile = File(
+                applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath),
+                "/$videoId"
+            )
             FileUtils.deleteRecursive(folderFile)
         }
     }

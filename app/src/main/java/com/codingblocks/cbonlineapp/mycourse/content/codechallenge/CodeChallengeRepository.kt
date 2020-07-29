@@ -16,7 +16,9 @@ import com.codingblocks.onlineapi.safeApiCall
 class CodeChallengeRepository(
     private val codeDao: CodeChallengeDao
 ) {
-    suspend fun fetchCodeChallenge(codeId: Int, contestId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getCodeChallenge(codeId, contestId) }
+    suspend fun fetchCodeChallenge(codeId: Int, contestId: String) = safeApiCall {
+        CBOnlineLib.onlineV2JsonApi.getCodeChallenge(codeId, contestId)
+    }
 
     suspend fun getOfflineContent(codeId: String): CodeChallenge? {
         val model: CodeChallengeModel? = codeDao.getCodeChallengeById(codeId)

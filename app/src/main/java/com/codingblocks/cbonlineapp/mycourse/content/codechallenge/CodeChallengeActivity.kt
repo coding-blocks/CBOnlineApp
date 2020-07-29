@@ -6,7 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
-import com.codingblocks.cbonlineapp.util.*
+import com.codingblocks.cbonlineapp.util.CODE_ID
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.CONTEST_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.livedata.observer
@@ -57,7 +60,10 @@ class CodeChallengeActivity : AppCompatActivity() {
                     }
                 }
                 else -> {
-                    codeLayout.showSnackbar("There was some Error fetching this challenge", Snackbar.LENGTH_SHORT, action = false)
+                    codeLayout.showSnackbar(
+                        "There was some Error fetching this challenge",
+                        Snackbar.LENGTH_SHORT, action = false
+                    )
                     AppCrashlyticsWrapper.log(it)
                 }
             }

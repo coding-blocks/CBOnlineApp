@@ -14,7 +14,10 @@ import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.glide.loadImage
 import kotlinx.android.synthetic.main.item_courses.view.*
 
-class MyCourseListAdapter(val type: String = "DEFAULT") : ListAdapter<CourseInstructorPair, RecyclerView.ViewHolder>(DiffCallback()) {
+class MyCourseListAdapter(val type: String = "DEFAULT") : ListAdapter<CourseInstructorPair,
+    RecyclerView.ViewHolder>(
+    DiffCallback()
+) {
 
     var onItemClick: ItemClickListener? = null
 

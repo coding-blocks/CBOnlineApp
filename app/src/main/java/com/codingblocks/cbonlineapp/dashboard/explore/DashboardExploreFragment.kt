@@ -114,9 +114,20 @@ class DashboardExploreFragment : BaseCBFragment() {
 //        campaignView.setOnClickListener {
 //            startActivity(CampaignActivity.createCampaignActivityIntent(requireContext()))
 //        }
-        dashboardPopularRv.setRv(requireContext(), coursePopularListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
-        courseSuggestedRv.setRv(requireContext(), courseCardListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
-        dashboardTracksRv.setRv(requireContext(), tracksListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
+        dashboardPopularRv.setRv(
+            requireContext(), coursePopularListAdapter,
+            orientation = RecyclerView.HORIZONTAL, space = 28f
+        )
+        courseSuggestedRv.setRv(
+            requireContext(),
+            courseCardListAdapter,
+            orientation = RecyclerView.HORIZONTAL,
+            space = 28f
+        )
+        dashboardTracksRv.setRv(
+            requireContext(), tracksListAdapter,
+            orientation = RecyclerView.HORIZONTAL, space = 28f
+        )
 
         vm.suggestedCourses.observe(thisLifecycleOwner) { courses ->
             if (courses.isNotEmpty()) {

@@ -22,7 +22,9 @@ import kotlinx.android.synthetic.main.item_track_card.view.trackChips
 import kotlinx.android.synthetic.main.item_track_card.view.trackCover
 import org.jetbrains.anko.share
 
-class TracksListAdapter(val type: String = "") : ListAdapter<CareerTracks, TracksListAdapter.ItemViewHolder>(DiffCallback()) {
+class TracksListAdapter(val type: String = "") : ListAdapter<CareerTracks, TracksListAdapter.ItemViewHolder>(
+    DiffCallback()
+) {
 
     var onItemClick: ItemClickListener? = null
 

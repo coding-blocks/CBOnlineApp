@@ -80,7 +80,12 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
 
         notificationManager.notify(downloadData.notificationId, downloadData.notificationBuilder.build())
         val response: Response<JsonObject>
-        response = withContext(Dispatchers.IO) { CBOnlineLib.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true) }
+        response = withContext(Dispatchers.IO) {
+            CBOnlineLib.api.getOtp(
+                downloadData.videoId, downloadData.sectionId,
+                downloadData.attemptId, true
+            )
+        }
         if (response.isSuccessful) {
             response.body()?.let {
                 downloadList[videoId] = (downloadData)
@@ -182,7 +187,14 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
 
     private fun retryDownload(downloadData: DownloadData) {
         GlobalScope.launch {
-            val response: Response<JsonObject> = withContext(Dispatchers.IO) { CBOnlineLib.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true) }
+            val response: Response<JsonObject> = withContext(Dispatchers.IO) {
+                CBOnlineLib.api.getOtp(
+                    downloadData.videoId,
+                    downloadData.sectionId,
+                    downloadData.attemptId,
+                    true
+                )
+            }
             if (response.isSuccessful) {
                 response.body()?.let {
                     val mOtp = it.get("otp").asString

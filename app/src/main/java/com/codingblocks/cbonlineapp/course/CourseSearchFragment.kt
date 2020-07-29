@@ -51,7 +51,10 @@ class CourseSearchFragment : BottomSheetDialogFragment() {
 
         courseCardListAdapter.onItemClick = itemClickListener
 
-        view.courseSearchRv.setRv(requireContext(), courseCardListAdapter, orientation = RecyclerView.VERTICAL, setDivider = true)
+        view.courseSearchRv.setRv(
+            requireContext(), courseCardListAdapter,
+            orientation = RecyclerView.VERTICAL, setDivider = true
+        )
         return view
     }
 

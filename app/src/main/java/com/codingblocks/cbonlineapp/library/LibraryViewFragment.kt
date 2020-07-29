@@ -23,8 +23,14 @@ import com.codingblocks.cbonlineapp.mycourse.content.PdfActivity
 import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeActivity
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizActivity
-import com.codingblocks.cbonlineapp.util.*
+import com.codingblocks.cbonlineapp.util.CODE
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.FileUtils
+import com.codingblocks.cbonlineapp.util.LECTURE
+import com.codingblocks.cbonlineapp.util.QNA
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
@@ -41,7 +47,7 @@ import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.io.File
-import java.util.*
+import java.util.Objects
 
 class LibraryViewFragment : BaseCBFragment() {
 

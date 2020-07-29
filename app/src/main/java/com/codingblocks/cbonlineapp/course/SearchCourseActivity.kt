@@ -50,8 +50,18 @@ class SearchCourseActivity : BaseCBActivity() {
         setContentView(R.layout.activity_search_course)
         setToolbar(searchToolbar, title = "All Courses")
         courseSearchRv.apply {
-            layoutManager = LinearLayoutManager(this@SearchCourseActivity, RecyclerView.VERTICAL, false)
-            addItemDecoration(DividerItemDecorator(ContextCompat.getDrawable(this@SearchCourseActivity, R.drawable.divider)!!))
+            layoutManager = LinearLayoutManager(
+                this@SearchCourseActivity,
+                RecyclerView.VERTICAL,
+                false
+            )
+            addItemDecoration(
+                DividerItemDecorator(
+                    ContextCompat.getDrawable(
+                        this@SearchCourseActivity, R.drawable.divider
+                    )!!
+                )
+            )
             adapter = courseCardListAdapter
         }
 

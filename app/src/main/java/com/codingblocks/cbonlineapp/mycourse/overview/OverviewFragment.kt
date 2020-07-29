@@ -36,7 +36,7 @@ import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.ocpsoft.prettytime.PrettyTime
 import java.io.File
-import java.util.*
+import java.util.Date
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
@@ -60,7 +60,9 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             val progressValue = courseAndRun.getProgress()
             homeProgressTv.text = getString(R.string.progress, progressValue.toInt())
             homeProgressView.setGradientColor(progressValue)
-            certificate_descTv.apply { text = getString(R.string.certificate_desc, courseAndRun.run.completionThreshold) }
+            certificate_descTv.apply {
+                text = getString(R.string.certificate_desc, courseAndRun.run.completionThreshold)
+            }
             progressTv.apply {
                 text = getString(R.string.thresholdcompletion, courseAndRun.run.completionThreshold)
                 isActivated = courseAndRun.run.completionThreshold < progressValue
@@ -70,14 +72,20 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 val status = if (courseAndRun.runAttempt.approvalRequested) "Requested" else "Pending"
                 text = getString(R.string.mentorapproval, status)
             }
-            if (progressTv.isActivated && mentorApprovalTv.isActivated && courseAndRun.runAttempt.certificateApproved) {
+            if (progressTv.isActivated &&
+                mentorApprovalTv.isActivated && courseAndRun.runAttempt.certificateApproved
+            ) {
                 requestCertificateBtn.apply {
                     isEnabled = true
                     text = getString(R.string.download_share)
                     setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                     setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_share, 0)
                     setOnClickListener {
-                        downloadCertificate(requireContext(), courseAndRun.runAttempt.certificateUrl, "${viewModel.name}.pdf")
+                        downloadCertificate(
+                            requireContext(),
+                            courseAndRun.runAttempt.certificateUrl,
+                            "${viewModel.name}.pdf"
+                        )
                     }
                 }
             } else if (progressTv.isActivated && !mentorApprovalTv.isActivated) {
@@ -101,7 +109,9 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             }
 
             if (courseAndRun.run.crStart > "1574985600") {
-                if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium && RUNTIERS.LITE.name != courseAndRun.runAttempt.runTier)
+                if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium &&
+                    RUNTIERS.LITE.name != courseAndRun.runAttempt.runTier
+                )
                     setGoodiesCard(courseAndRun.run.goodiesThreshold, progressValue)
             }
             viewModel.getLeaderboard().observer(thisLifecycleOwner) { leaderboard ->
@@ -111,7 +121,12 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     it.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
                     if (leaderboard.size > 5) {
                         courseLeaderboardll.isVisible = true
-                        leaderBoardListAdapter.submitList(mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5))
+                        leaderBoardListAdapter.submitList(
+                            mutableListOf(currUserLeaderboard) + leaderboard.subList(
+                                0,
+                                5
+                            )
+                        )
                     }
                 }
             }

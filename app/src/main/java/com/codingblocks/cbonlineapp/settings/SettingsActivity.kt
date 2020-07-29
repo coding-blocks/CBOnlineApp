@@ -9,7 +9,11 @@ import androidx.lifecycle.lifecycleScope
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.FileUtils
-import com.codingblocks.cbonlineapp.util.extensions.*
+import com.codingblocks.cbonlineapp.util.extensions.folderSize
+import com.codingblocks.cbonlineapp.util.extensions.getPrefs
+import com.codingblocks.cbonlineapp.util.extensions.readableFileSize
+import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -144,7 +144,12 @@ class VideoPlayerActivity :
 
         contentRv.setRv(this, sectionItemsAdapter)
         vm.contentList.observer(this) {
-            sectionItemsAdapter.submitList(it.contents.filter { it.contentable == VIDEO || it.contentable == LECTURE }.sortedBy { it.order }, vm.currentContentId!!)
+            sectionItemsAdapter.submitList(
+                it.contents.filter {
+                    it.contentable == VIDEO || it.contentable == LECTURE
+                }.sortedBy { it.order },
+                vm.currentContentId!!
+            )
         }
         sectionItemsAdapter.onItemClick = {
             startActivity(
@@ -184,7 +189,12 @@ class VideoPlayerActivity :
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
                     } else {
-                        fabMenu.setBackgroundColor(ContextCompat.getColor(this@VideoPlayerActivity, R.color.white_transparent))
+                        fabMenu.setBackgroundColor(
+                            ContextCompat.getColor(
+                                this@VideoPlayerActivity,
+                                R.color.white_transparent
+                            )
+                        )
                     }
                 } else {
                     doubtFab.startAnimation(animationUtils.open)
@@ -193,7 +203,11 @@ class VideoPlayerActivity :
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         fabMenu.setBackgroundColor(getColor(R.color.black_95))
                     } else {
-                        fabMenu.setBackgroundColor(ContextCompat.getColor(this@VideoPlayerActivity, R.color.black_95))
+                        fabMenu.setBackgroundColor(
+                            ContextCompat.getColor(
+                                this@VideoPlayerActivity, R.color.black_95
+                            )
+                        )
                     }
                 }
             }
@@ -687,7 +701,8 @@ class VideoPlayerActivity :
     }
 
     private fun navToLauncherTask(appContext: Context) {
-        val activityManager: ActivityManager = (appContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
+        val activityManager: ActivityManager =
+            (appContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
         val appTasks: List<ActivityManager.AppTask> = activityManager.appTasks
         for (task in appTasks) {
             val baseIntent: Intent = task.taskInfo.baseIntent
@@ -825,23 +840,24 @@ class VideoPlayerActivity :
         }
     }
 
-    private val vdoParamsGenerator: VdoPlayerControls.VdoParamsGenerator = object : VdoPlayerControls.VdoParamsGenerator {
+    private val vdoParamsGenerator: VdoPlayerControls.VdoParamsGenerator =
+        object : VdoPlayerControls.VdoParamsGenerator {
 
-        override fun getNewVdoInitParams(): VdoPlayer.VdoInitParams? {
-            return try {
-                getVdoParams()
-            } catch (e: IOException) {
-                e.printStackTrace()
-                log("Error generating new otp and playbackInfo")
-                null
-            } catch (e: JSONException) {
-                e.printStackTrace()
-                log("Error generating new otp and playbackInfo")
+            override fun getNewVdoInitParams(): VdoPlayer.VdoInitParams? {
+                return try {
+                    getVdoParams()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    log("Error generating new otp and playbackInfo")
+                    null
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                    log("Error generating new otp and playbackInfo")
 
-                null
+                    null
+                }
             }
         }
-    }
 
     fun hideVideoFab() {
         noteFabTv.isVisible = false
@@ -858,7 +874,12 @@ class VideoPlayerActivity :
 
     companion object {
 
-        fun createVideoPlayerActivityIntent(context: Context, contentId: String, sectionId: String, position: Long = 0): Intent {
+        fun createVideoPlayerActivityIntent(
+            context: Context,
+            contentId: String,
+            sectionId: String,
+            position: Long = 0
+        ): Intent {
             return context.intentFor<VideoPlayerActivity>(
                 CONTENT_ID to contentId,
                 VIDEO_POSITION to position,

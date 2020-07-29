@@ -57,7 +57,12 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
                     markResolvedTv.isVisible = false
                     chatTv.apply {
                         isVisible = true
-                        setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, context.getDrawable(R.drawable.ic_reopen_small), null)
+                        setCompoundDrawablesRelativeWithIntrinsicBounds(
+                            null,
+                            null,
+                            context.getDrawable(R.drawable.ic_reopen_small),
+                            null
+                        )
                         text = context.getString(R.string.reopen_doubt)
                         setOnClickListener {
                             resolveClickListener?.onClick(
@@ -80,7 +85,12 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
                         }
                     }
                     chatTv.apply {
-                        setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, context.getDrawable(R.drawable.ic_chat), null)
+                        setCompoundDrawablesRelativeWithIntrinsicBounds(
+                            null,
+                            null,
+                            context.getDrawable(R.drawable.ic_chat),
+                            null
+                        )
                         text = context.getString(R.string.chat_with_ta)
                         setOnClickListener {
                             chatClickListener?.onClick(item.conversationId ?: "", item.dbtUid)

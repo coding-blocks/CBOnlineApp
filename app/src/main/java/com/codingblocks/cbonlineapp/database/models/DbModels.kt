@@ -19,7 +19,8 @@ data class ContentLecture(
     var lectureId: String = "",
     var lectureSectionId: String = "",
     var lectureUpdatedAt: String = "",
-    var isDownloaded: Boolean = if (lectureId.isEmpty()) false else FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, lectureId),
+    var isDownloaded: Boolean = if (lectureId.isEmpty()) false
+    else FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, lectureId),
     var date: Date = Date(0L),
     var lectureContentId: String = ""
 ) : BaseModel()

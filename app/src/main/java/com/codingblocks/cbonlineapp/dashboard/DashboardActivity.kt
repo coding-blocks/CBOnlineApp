@@ -78,8 +78,17 @@ class DashboardActivity :
         setContentView(R.layout.activity_dashboard)
         vm.isLoggedIn = intent?.getBooleanExtra(LOGGED_IN, vm.prefs.SP_ACCESS_TOKEN_KEY.isNotEmpty())
 
-        setToolbar(dashboardToolbar, hasUpEnabled = false, homeButtonEnabled = false, title = getString(R.string.dashboard))
-        val toggle = ActionBarDrawerToggle(this, dashboardDrawer, dashboardToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        setToolbar(
+            dashboardToolbar, hasUpEnabled = false,
+            homeButtonEnabled = false,
+            title = getString(R.string.dashboard)
+        )
+        val toggle = ActionBarDrawerToggle(
+            this,
+            dashboardDrawer, dashboardToolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
 
         dashboardDrawer.addDrawerListener(toggle)
         toggle.syncState()
@@ -343,14 +352,26 @@ class DashboardActivity :
         supportActionBar?.title = title
         if (pos == 0 || pos == 2)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
+                dashboardToolbar.colouriseToolbar(
+                    this@DashboardActivity,
+                    R.drawable.toolbar_bg_dark,
+                    getColor(R.color.white)
+                )
             } else {
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, ContextCompat.getColor(this, R.color.white))
+                dashboardToolbar.colouriseToolbar(
+                    this@DashboardActivity,
+                    R.drawable.toolbar_bg_dark,
+                    ContextCompat.getColor(this, R.color.white)
+                )
             }
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
         } else {
-            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, ContextCompat.getColor(this, R.color.black))
+            dashboardToolbar.colouriseToolbar(
+                this@DashboardActivity,
+                R.drawable.toolbar_bg,
+                ContextCompat.getColor(this, R.color.black)
+            )
         }
 
         dashboardToolbarSecondary.post {

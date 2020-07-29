@@ -42,6 +42,7 @@ class LibraryViewModel(
     val run: LiveData<CourseRunPair>? by lazy {
         attemptId?.let { repo.getRunById(it) }
     }
+
     fun fetchNotes(): LiveData<List<NotesModel>> {
         val notes = repo.getNotes(attemptId!!)
         runIO {
@@ -139,7 +140,11 @@ class LibraryViewModel(
     }
 
     fun updateNote(note: NotesModel) {
-        val newNote = Note(note.nttUid, note.duration, note.text, RunAttempts(note.runAttemptId), LectureContent(note.contentId))
+        val newNote = Note(
+            note.nttUid, note.duration,
+            note.text,
+            RunAttempts(note.runAttemptId), LectureContent(note.contentId)
+        )
         runIO {
             when (val response = repo.updateNote(newNote)) {
                 is ResultWrapper.GenericError -> {

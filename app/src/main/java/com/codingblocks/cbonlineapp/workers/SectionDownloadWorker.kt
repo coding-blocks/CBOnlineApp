@@ -18,7 +18,12 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.google.gson.JsonObject
 import com.vdocipher.aegis.media.ErrorDescription
-import com.vdocipher.aegis.offline.*
+import com.vdocipher.aegis.offline.DownloadOptions
+import com.vdocipher.aegis.offline.DownloadRequest
+import com.vdocipher.aegis.offline.DownloadSelections
+import com.vdocipher.aegis.offline.DownloadStatus
+import com.vdocipher.aegis.offline.OptionsDownloader
+import com.vdocipher.aegis.offline.VdoDownloadManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

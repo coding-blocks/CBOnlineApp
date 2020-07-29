@@ -37,10 +37,11 @@ class ViewPagerAdapter(
         container.removeView(obj as ScrollView)
     }
 
-    override fun instantiateItem(container: ViewGroup, position: Int): Any = LayoutInflater.from(mContext).inflate(R.layout.quizlayout, container, false).apply {
-        fetchQuestion(viewModel, position, this)
-        container.addView(this)
-    }
+    override fun instantiateItem(container: ViewGroup, position: Int): Any =
+        LayoutInflater.from(mContext).inflate(R.layout.quizlayout, container, false).apply {
+            fetchQuestion(viewModel, position, this)
+            container.addView(this)
+        }
 
     private fun fetchQuestion(viewModel: QuizViewModel, pos: Int, view: View) {
         if (pos == questionList.size() - 1 && result == null) {

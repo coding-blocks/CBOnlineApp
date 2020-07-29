@@ -68,10 +68,14 @@ class VideoBottomSheet : RoundedBottomSheetDialogFragment(), View.OnClickListene
                     text = getString(R.string.update)
                     setOnClickListener(this@VideoBottomSheet)
                 }
-                bottomSheetInfoTv.text = getString(R.string.notes_info, notes!!.contentTitle, notes!!.duration.secToTime())
+                bottomSheetInfoTv.text = getString(
+                    R.string.notes_info, notes!!.contentTitle,
+                    notes!!.duration.secToTime()
+                )
             }
             VideoSheetType.NOTE_CREATE -> {
-                bottomSheetInfoTv.text = getString(R.string.notes_info, notes!!.contentTitle, notes!!.duration.secToTime())
+                bottomSheetInfoTv.text =
+                    getString(R.string.notes_info, notes!!.contentTitle, notes!!.duration.secToTime())
 
                 bottomSheetSaveBtn.apply {
                     text = getString(R.string.save)

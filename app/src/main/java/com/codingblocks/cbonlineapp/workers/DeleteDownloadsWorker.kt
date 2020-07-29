@@ -10,7 +10,8 @@ import com.codingblocks.cbonlineapp.util.FileUtils
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.io.File
-import java.util.*
+import java.util.Calendar
+import java.util.Date
 
 /**
  * Worker class to Auto-Delete downloaded files after 15 days.
@@ -24,7 +25,12 @@ class DeleteDownloadsWorker(context: Context, workerParameters: WorkerParameters
         val list: List<ContentModel> = contentDao.getDownloads(true)
 
         list.forEach { item ->
-            val folderFile = File(applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath), "/${item.contentLecture.lectureId}")
+            val folderFile = File(
+                applicationContext.getExternalFilesDir(
+                    Environment.getDataDirectory().absolutePath
+                ),
+                "/${item.contentLecture.lectureId}"
+            )
             val fileDate = Date(folderFile.lastModified())
             val calendar = Calendar.getInstance()
             calendar.time = Date(fileDate.time)

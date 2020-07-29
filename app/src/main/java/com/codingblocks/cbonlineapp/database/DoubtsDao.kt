@@ -20,10 +20,16 @@ abstract class DoubtsDao : BaseDao<DoubtsModel> {
     @Query("SElECT * FROM DoubtsModel where runAttemptId = :runAttemptId AND contentId = :contentId")
     abstract fun getDoubtsForContent(runAttemptId: String, contentId: String): LiveData<List<DoubtsModel>>
 
-    @Query("SElECT * FROM DoubtsModel where status != 'RESOLVED' AND runAttemptId = :runAttemptId AND contentId = :contentId")
+    @Query(
+        "SElECT * FROM DoubtsModel " +
+            "where status != 'RESOLVED' AND runAttemptId = :runAttemptId AND contentId = :contentId"
+    )
     abstract fun getLiveDoubtsForContent(runAttemptId: String, contentId: String): LiveData<List<DoubtsModel>>
 
-    @Query("SElECT * FROM DoubtsModel where status = 'RESOLVED' AND runAttemptId = :runAttemptId AND contentId = :contentId")
+    @Query(
+        "SElECT * FROM DoubtsModel where status = 'RESOLVED'" +
+            " AND runAttemptId = :runAttemptId AND contentId = :contentId"
+    )
     abstract fun getResolveDoubtsForContent(runAttemptId: String, contentId: String): LiveData<List<DoubtsModel>>
 
     @Query("UPDATE DoubtsModel SET status = :status where dbtUid = :uid")

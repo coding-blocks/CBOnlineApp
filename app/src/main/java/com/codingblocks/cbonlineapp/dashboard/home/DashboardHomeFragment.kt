@@ -51,7 +51,14 @@ class DashboardHomeFragment : BaseCBFragment() {
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
             override fun onClick(sectionId: String, contentId: String, postition: Long) {
-                startActivity(VideoPlayerActivity.createVideoPlayerActivityIntent(requireContext(), contentId, sectionId, postition))
+                startActivity(
+                    VideoPlayerActivity.createVideoPlayerActivityIntent(
+                        requireContext(),
+                        contentId,
+                        sectionId,
+                        postition
+                    )
+                )
             }
         }
     }
@@ -97,7 +104,12 @@ class DashboardHomeFragment : BaseCBFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recentPlayedRv.setRv(requireContext(), recentlyPlayedAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
+        recentPlayedRv.setRv(
+            requireContext(),
+            recentlyPlayedAdapter,
+            orientation = RecyclerView.HORIZONTAL,
+            space = 28f
+        )
         wishRv.setRv(requireContext(), wishlistAdapter, orientation = RecyclerView.HORIZONTAL, space = 20f)
         recentlyPlayedAdapter.onItemClick = itemClickListener
         wishlistAdapter.onItemClick = wishListItemClickListener

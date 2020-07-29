@@ -48,14 +48,15 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
     private val pagerAdapter: ViewPager2Adapter by lazy { ViewPager2Adapter(this) }
     private var confirmDialog: AlertDialog? = null
 
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            confirmDialog?.dismiss()
-            toast(getString(R.string.logged_in))
-            viewModel.fetchSections()
-            viewModel.getStats()
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                confirmDialog?.dismiss()
+                toast(getString(R.string.logged_in))
+                viewModel.fetchSections()
+                viewModel.getStats()
+            }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +79,13 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
                 courseResumeBtn.setOnClickListener {
                     if (content != null)
                         when (content.contentable) {
-                            LECTURE, VIDEO -> startActivity(createVideoPlayerActivityIntent(this, content.contentId, content.sectionId))
+                            LECTURE, VIDEO -> startActivity(
+                                createVideoPlayerActivityIntent(
+                                    this,
+                                    content.contentId,
+                                    content.sectionId
+                                )
+                            )
                         } else {
                         toast("Please Wait while the content is being updated!")
                     }
@@ -169,8 +176,18 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
 
     companion object {
 
-        fun createMyCourseActivityIntent(context: Context, attemptId: String, name: String = "", pos: Int = 0): Intent {
-            return context.intentFor<MyCourseActivity>(COURSE_NAME to name, RUN_ATTEMPT_ID to attemptId, TAB_POS to pos).singleTop()
+        fun createMyCourseActivityIntent(
+            context: Context,
+            attemptId: String,
+            name: String = "",
+            pos: Int = 0
+        ): Intent {
+            return context.intentFor<MyCourseActivity>(
+                COURSE_NAME to name,
+                RUN_ATTEMPT_ID to attemptId,
+                TAB_POS to pos
+            )
+                .singleTop()
         }
     }
 }

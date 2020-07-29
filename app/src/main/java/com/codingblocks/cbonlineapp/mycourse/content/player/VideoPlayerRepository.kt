@@ -28,9 +28,11 @@ class VideoPlayerRepository(
     private val playerDao: PlayerDao,
     private val doubtsDao: DoubtsDao
 ) {
-    suspend fun fetchCourseContentNotes(attemptId: String, contentId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getNotesForContent(attemptId, contentId) }
+    suspend fun fetchCourseContentNotes(attemptId: String, contentId: String) =
+        safeApiCall { CBOnlineLib.onlineV2JsonApi.getNotesForContent(attemptId, contentId) }
 
-    suspend fun fetchCourseContentDoubts(attemptId: String, contentId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getDoubtsForContent(attemptId, contentId) }
+    suspend fun fetchCourseContentDoubts(attemptId: String, contentId: String) =
+        safeApiCall { CBOnlineLib.onlineV2JsonApi.getDoubtsForContent(attemptId, contentId) }
 
     fun getDoubtsByCourseRun(type: String?, pair: Pair<String?, String?>): LiveData<List<DoubtsModel>> {
         return when (type) {
@@ -108,9 +110,11 @@ class VideoPlayerRepository(
         )
     }
 
-    fun getContents(attemptId: String, sectionId: String) = sectionDao.getNextContent(attemptId, sectionId).distinctUntilChanged()
+    fun getContents(attemptId: String, sectionId: String) =
+        sectionDao.getNextContent(attemptId, sectionId).distinctUntilChanged()
 
-    suspend fun removeBookmark(bookmarkUid: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.deleteBookmark(bookmarkUid) }
+    suspend fun removeBookmark(bookmarkUid: String) =
+        safeApiCall { CBOnlineLib.onlineV2JsonApi.deleteBookmark(bookmarkUid) }
 
     fun deleteBookmark(id: String) = bookmarkDao.deleteBookmark(id)
 
@@ -118,7 +122,8 @@ class VideoPlayerRepository(
 
     fun getBookmark(contentId: String) = bookmarkDao.getBookmarkById(contentId)
 
-    suspend fun updateDownload(status: Int, lectureId: String) = contentDao.updateContentWithVideoId(lectureId, status)
+    suspend fun updateDownload(status: Int, lectureId: String) =
+        contentDao.updateContentWithVideoId(lectureId, status)
 
     suspend fun savePlayerState(attemptId: String, sectionId: String, contentId: String, time: Long) {
         playerDao.insert(PlayerState(attemptId, sectionId, contentId, time))

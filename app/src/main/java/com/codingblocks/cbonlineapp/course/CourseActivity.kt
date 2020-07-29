@@ -86,11 +86,12 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     private var youtubePlayer: YouTubePlayer? = null
 
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            toast(getString(R.string.logged_in))
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                toast(getString(R.string.logged_in))
+            }
         }
-    }
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {

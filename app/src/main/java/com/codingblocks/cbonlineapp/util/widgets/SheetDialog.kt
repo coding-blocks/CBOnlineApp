@@ -27,7 +27,13 @@ class SheetDialog(context: Context, @StyleRes theme: Int) : BottomSheetDialog(co
             var themeId = themeId
             if (themeId == 0) {
                 val outValue = TypedValue()
-                themeId = if (context.theme.resolveAttribute(com.google.android.material.R.attr.bottomSheetDialogTheme, outValue, true)) {
+                themeId = if (
+                    context.theme.resolveAttribute(
+                        com.google.android.material.R.attr.bottomSheetDialogTheme,
+                        outValue,
+                        true
+                    )
+                ) {
                     outValue.resourceId
                 } else {
                     com.google.android.material.R.style.Theme_Design_Light_BottomSheetDialog

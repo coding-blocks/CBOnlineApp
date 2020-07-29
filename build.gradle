@@ -16,6 +16,7 @@ buildscript {
         classpath 'com.google.gms:google-services:4.3.3'
         classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:0.12.5'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.2.0'
+        classpath "org.jlleitschuh.gradle:ktlint-gradle:9.3.0"
     }
 }
 
