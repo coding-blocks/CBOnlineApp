@@ -11,10 +11,10 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.models.DownloadData
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
@@ -30,14 +30,14 @@ import com.vdocipher.aegis.offline.DownloadSelections
 import com.vdocipher.aegis.offline.DownloadStatus
 import com.vdocipher.aegis.offline.OptionsDownloader
 import com.vdocipher.aegis.offline.VdoDownloadManager
-import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.core.inject
 import org.koin.core.KoinComponent
+import org.koin.core.inject
 import retrofit2.Response
+import java.io.File
 
 class DownloadWorker(context: Context, private val workerParameters: WorkerParameters) :
     CoroutineWorker(context, workerParameters),

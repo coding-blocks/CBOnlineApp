@@ -8,27 +8,27 @@ import androidx.work.Data
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.workDataOf
 import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.database.models.CourseRunPair
 import com.codingblocks.cbonlineapp.database.models.NotesModel
-import com.codingblocks.cbonlineapp.mycourse.content.player.notes.NotesWorker
 import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
+import com.codingblocks.cbonlineapp.mycourse.content.player.notes.NotesWorker
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.TYPE
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
 import com.codingblocks.cbonlineapp.util.extensions.serializeToJson
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.TYPE
+import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
-import com.codingblocks.onlineapi.ResultWrapper
-import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 
 class LibraryViewModel(
     private val handle: SavedStateHandle,

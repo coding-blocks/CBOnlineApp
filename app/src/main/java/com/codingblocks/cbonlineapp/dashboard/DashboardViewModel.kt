@@ -1,11 +1,11 @@
 package com.codingblocks.cbonlineapp.dashboard
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.switchMap
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.liveData
+import androidx.lifecycle.switchMap
 import androidx.work.BackoffPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
@@ -21,25 +21,25 @@ import com.codingblocks.cbonlineapp.database.models.CourseRunPair
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.DELETE_DOWNLOADED_VIDEO
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
 import com.codingblocks.cbonlineapp.util.livedata.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.livedata.getDistinct
-import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.workers.DeleteDownloadsWorker
+import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.getMeta
 import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Player
 import com.codingblocks.onlineapi.models.Wishlist
-import com.codingblocks.onlineapi.ResultWrapper
 import com.google.common.util.concurrent.ListenableFuture
 import com.onesignal.OneSignal
-import java.util.concurrent.TimeUnit
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 
 class DashboardViewModel(
     handle: SavedStateHandle,

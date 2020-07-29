@@ -61,7 +61,7 @@ class ChatActivity : BaseCBActivity() {
                             var inbox = talkSession.createInbox();
                             inbox.mount(document.getElementById("talkjs-container"));
                         });
-                            """.trimIndent()
+                        """.trimIndent()
                 } else {
                     script =
                         """
@@ -81,7 +81,7 @@ class ChatActivity : BaseCBActivity() {
                             var inbox = talkSession.createChatbox(conversation);
                             inbox.mount(document.getElementById("talkjs-container"));
                         });
-                            """.trimIndent()
+                        """.trimIndent()
                 }
 
                 webView.webViewClient = object : WebViewClient() {

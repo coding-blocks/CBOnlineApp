@@ -10,10 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.lifecycle.distinctUntilChanged
-import com.codingblocks.cbonlineapp.course.CourseViewModel
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.extensions.getDateForRun
+import com.codingblocks.cbonlineapp.course.CourseViewModel
 import com.codingblocks.cbonlineapp.util.FileUtils
+import com.codingblocks.cbonlineapp.util.extensions.getDateForRun
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.onlineapi.models.Comparision
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -23,12 +23,12 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.lang.reflect.Type
 import kotlinx.android.synthetic.main.bottom_sheet_comparsion.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_runs.*
 import kotlinx.android.synthetic.main.bottom_sheet_runs.view.*
 import org.json.JSONArray
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.lang.reflect.Type
 
 class CourseTierFragment : BottomSheetDialogFragment() {
 

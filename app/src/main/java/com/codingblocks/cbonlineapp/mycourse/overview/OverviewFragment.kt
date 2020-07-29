@@ -13,22 +13,20 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.Observer
+import androidx.lifecycle.distinctUntilChanged
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.dashboard.home.loadData
 import com.codingblocks.cbonlineapp.dashboard.home.setGradientColor
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
-import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.DIALOG_TYPE
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.livedata.observeOnce
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.showConfirmDialog
-import java.io.File
-import java.util.Date
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_certificate.*
 import kotlinx.android.synthetic.main.item_hb_performance.*
@@ -37,6 +35,8 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.ocpsoft.prettytime.PrettyTime
+import java.io.File
+import java.util.Date
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 

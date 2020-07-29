@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
-import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.DIALOG_TYPE
 import com.codingblocks.cbonlineapp.util.livedata.observeOnce
 import com.codingblocks.cbonlineapp.util.livedata.observer
@@ -19,11 +19,11 @@ import com.codingblocks.cbonlineapp.util.showConfirmDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import java.util.Date
 import kotlinx.android.synthetic.main.course_pause_fragment.*
 import org.jetbrains.anko.startActivity
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.ocpsoft.prettytime.PrettyTime
+import java.util.Date
 
 class PauseSheetFragment : BottomSheetDialogFragment() {
 
