@@ -748,3 +748,29 @@ data class PrizeContent(
     val couponCreated: String?,
     val validEnd: String?
 )
+
+data class Feedback(
+    val rating: Float,
+    val count: Int,
+    val stats: List<Int>,
+    val userScore: UserScore
+)
+
+data class UserScore(
+    val id: Int,
+    val value: Int,
+    val courseId: Int,
+    val userId: Int,
+    val review: String,
+    val heading: String,
+    val isListed: Boolean,
+    val createdAt: String,
+    val updatedAt: String
+)
+
+data class SendFeedback(
+    val experience: String,
+    val review: String,
+    val value: Float
+)
+

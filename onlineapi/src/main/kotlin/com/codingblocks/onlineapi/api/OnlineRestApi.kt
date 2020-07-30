@@ -8,6 +8,8 @@ import com.codingblocks.onlineapi.models.RankResponse
 import com.codingblocks.onlineapi.models.RatingModel
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 import com.codingblocks.onlineapi.models.SpinResponse
+import com.codingblocks.onlineapi.models.Feedback
+import com.codingblocks.onlineapi.models.SendFeedback
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
@@ -149,4 +151,15 @@ interface OnlineRestApi {
 
     @POST("v2/runs/addOrder")
     suspend fun addOrder(): Response<JsonObject>
+
+    @POST("v2/courses/{id}/rating")
+    suspend fun sendFeedback(
+        @Path("id") id: String,
+        @Body json: SendFeedback
+    ): Response<Feedback>
+
+    @GET("v2/courses/{id}/rating")
+    suspend fun getFeedback(
+        @Path("id") id: String
+    ): Response<Feedback>
 }

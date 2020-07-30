@@ -57,6 +57,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             viewModel.premiumRun = courseAndRun.runAttempt.premium
             viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
             viewModel.runId = (courseAndRun.run.crUid)
+            viewModel.courseId = courseAndRun.course.cid
             val progressValue = courseAndRun.getProgress()
             homeProgressTv.text = getString(R.string.progress, progressValue.toInt())
             homeProgressView.setGradientColor(progressValue)
