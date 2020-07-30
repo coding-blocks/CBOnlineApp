@@ -25,6 +25,7 @@ import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.models.LectureContent
+import com.codingblocks.onlineapi.models.SendFeedback
 import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.RankResponse
 import com.codingblocks.onlineapi.models.ResetRunAttempt
@@ -349,6 +350,10 @@ class MyCourseRepository(
         checkNotNull(id) { "RunAttempt Id cannot be null" }
         CBOnlineLib.onlineV2JsonApi.unPauseCourse(id)
     }
+
+    suspend fun sendFeedback(id: String, feedback: SendFeedback) = safeApiCall { CBOnlineLib.api.sendFeedback(id, feedback) }
+
+    suspend fun getFeedback(id: String) = safeApiCall { CBOnlineLib.api.getFeedback(id) }
 
     suspend fun updateRunAttempt(runAttempt: RunAttempts) {
         attemptDao.updatePause(runAttempt.id, runAttempt.paused, runAttempt.pauseTimeLeft, runAttempt.lastPausedLeft)
