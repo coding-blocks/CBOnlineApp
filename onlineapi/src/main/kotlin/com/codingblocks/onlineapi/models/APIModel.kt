@@ -773,4 +773,3 @@ data class SendFeedback(
     val review: String,
     val value: Float
 )
-

@@ -2,28 +2,28 @@ package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.DoubtStats
 import com.codingblocks.onlineapi.models.Extension
+import com.codingblocks.onlineapi.models.Feedback
 import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.RankResponse
 import com.codingblocks.onlineapi.models.RatingModel
 import com.codingblocks.onlineapi.models.ResetRunAttempt
-import com.codingblocks.onlineapi.models.SpinResponse
-import com.codingblocks.onlineapi.models.Feedback
 import com.codingblocks.onlineapi.models.SendFeedback
+import com.codingblocks.onlineapi.models.SpinResponse
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.PATCH
-import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.POST
 import retrofit2.http.Query
+import retrofit2.Response
 
 interface OnlineRestApi {
     @Deprecated("Progress is part of run")

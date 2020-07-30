@@ -4,10 +4,6 @@ import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.HBRankDao
-import com.codingblocks.cbonlineapp.database.RunAttemptDao
-import com.codingblocks.cbonlineapp.database.RunPerformanceDao
-import com.codingblocks.cbonlineapp.database.SectionDao
-import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.cbonlineapp.database.models.ContentCodeChallenge
 import com.codingblocks.cbonlineapp.database.models.ContentCsvModel
@@ -21,15 +17,19 @@ import com.codingblocks.cbonlineapp.database.models.RunAttemptModel
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
+import com.codingblocks.cbonlineapp.database.RunAttemptDao
+import com.codingblocks.cbonlineapp.database.RunPerformanceDao
+import com.codingblocks.cbonlineapp.database.SectionDao
+import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.CBOnlineLib
-import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.models.LectureContent
-import com.codingblocks.onlineapi.models.SendFeedback
 import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.RankResponse
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 import com.codingblocks.onlineapi.models.RunAttempts
+import com.codingblocks.onlineapi.models.SendFeedback
+import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -236,11 +236,9 @@ class MyCourseRepository(
             val status: String
             if (content.progress != null) {
                 status =
-                    content.progress?.status
-                    ?: ""
+                    content.progress?.status ?: ""
                 progressId =
-                    content.progress?.id
-                    ?: ""
+                    content.progress?.id ?: ""
             } else {
                 status =
                     "UNDONE"
@@ -356,7 +354,9 @@ class MyCourseRepository(
         CBOnlineLib.onlineV2JsonApi.unPauseCourse(id)
     }
 
-    suspend fun sendFeedback(id: String, feedback: SendFeedback) = safeApiCall { CBOnlineLib.api.sendFeedback(id, feedback) }
+    suspend fun sendFeedback(id: String, feedback: SendFeedback) = safeApiCall {
+        CBOnlineLib.api.sendFeedback(id, feedback)
+    }
 
     suspend fun getFeedback(id: String) = safeApiCall { CBOnlineLib.api.getFeedback(id) }
 
