@@ -2,6 +2,7 @@ package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.CBOnlineCommunicator
 import com.codingblocks.onlineapi.CBOnlineLib
+import com.codingblocks.onlineapi.models.SendFeedback
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -100,10 +101,24 @@ class OnlineJsonApiAuthenticatedTest {
 //        assertTrue(wishlistCheck?.id != null)
 //    }
 
+//    @Test
+//    fun `GET removeWishlist`() {
+//        val id = runBlocking { CBOnlineLib.onlineV2JsonApi.checkIfWishlisted("89").body()?.id }
+//        val wishlistRemove = runBlocking { CBOnlineLib.onlineV2JsonApi.removeWishlist(id ?: "").code() }
+//        assertTrue(wishlistRemove == 204)
+//    }
+
     @Test
-    fun `GET removeWishlist`() {
-        val id = runBlocking { CBOnlineLib.onlineV2JsonApi.checkIfWishlisted("89").body()?.id }
-        val wishlistRemove = runBlocking { CBOnlineLib.onlineV2JsonApi.removeWishlist(id ?: "").code() }
-        assertTrue(wishlistRemove == 204)
+    fun `POST sendFeedback`(){
+        val sendFeedback = runBlocking { CBOnlineLib.api.sendFeedback("45", SendFeedback("Amazing", "Amazing course",4.9F)) }
+        assertTrue(sendFeedback.code()==200)
     }
+
+    @Test
+    fun `GET getFeedback`(){
+        val getFeedback = runBlocking { CBOnlineLib.api.getFeedback("45") }
+        assertNotNull(getFeedback.body())
+        assertTrue(getFeedback.body()?.count != null)
+    }
+
 }

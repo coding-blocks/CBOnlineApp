@@ -334,4 +334,9 @@
     <string name="update">Update</string>
     <string name="notes_info">%s | %s</string>
     <string name="post">Post</string>
+    <string name="leave_a_rating">Leave a rating</string>
+    <string name="rate_course_dialog_text">How would you rate this course overall?</string>
+    <string name="overall_experience">How was the overall experience?</string>
+    <string name="write_a_public_review">Write a public review.</string>
+    <string name="submit_feedback">Submit Feedback</string>
 </resources>

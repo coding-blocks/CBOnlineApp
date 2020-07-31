@@ -31,22 +31,14 @@ jobs:
         run: ./ktlint --android onlineapi/src/**/*.kt app/src/**/*.kt && echo "Lint completed successfully"
   test:
     name: Run Unit Tests
-    runs-on:  ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-18.04]
+    runs-on: ubuntu-18.04
+
     steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-jars-{{ checksum "build.gradle" }}
-
-      - name: Set up JDK 1.9
+      - uses: actions/checkout@v1
+      - name: set up JDK 1.8
         uses: actions/setup-java@v1
         with:
-          java-version: 1.9
+          java-version: 1.8
 
       - name: Grant Permission to Execute
         run: chmod +x gradlew
@@ -56,22 +48,14 @@ jobs:
 
   apk:
     name: Generate APK
-    runs-on:  ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-18.04]
+    runs-on: ubuntu-18.04
+
     steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-jars-{{ checksum "build.gradle" }}
-
-      - name: Set up JDK 1.9
+      - uses: actions/checkout@v1
+      - name: set up JDK 1.8
         uses: actions/setup-java@v1
         with:
-          java-version: 1.9
+          java-version: 1.8
 
       - name: Grant Permission to Execute
         run: chmod +x gradlew
