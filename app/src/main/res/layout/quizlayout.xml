@@ -40,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/margin_medium_small"
+            android:layout_marginBottom="@dimen/margin_large"
             tools:itemCount="4"
             tools:listitem="@layout/quiz_single_option" />
 
