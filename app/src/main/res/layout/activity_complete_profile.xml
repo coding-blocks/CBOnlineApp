@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@android:color/holo_green_light"
     tools:context="com.codingblocks.cbonlineapp.auth.onboarding.CompleteProfileActivity">
 
     <ScrollView
@@ -77,12 +78,11 @@
                     style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:backgroundTint="@color/white"
+                    android:background="@drawable/boxes"
                     android:fontFamily="@font/gilroy_medium"
                     android:hint="@string/college"
                     android:completionThreshold="1"
-                    android:paddingStart="0dp"
-                    android:paddingEnd="0dp"
+                    android:paddingStart="15dp"
                     android:textColorHighlight="@color/orangish"
                     android:textColorHint="@color/black"
                     android:textSize="16sp" />
@@ -106,8 +106,8 @@
                     android:fontFamily="@font/gilroy_medium"
                     android:hint="@string/branch"
                     android:completionThreshold="1"
-                    android:paddingStart="0dp"
-                    android:paddingEnd="0dp"
+                    android:background="@drawable/boxes"
+                    android:paddingStart="15dp"
                     android:textColorHighlight="@color/orangish"
                     android:textColorHint="@color/black"
                     android:textSize="16sp" />
@@ -126,13 +126,12 @@
                     android:id="@+id/graduation"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:backgroundTint="@color/white"
+                    android:background="@drawable/boxes"
                     android:fontFamily="@font/gilroy_medium"
                     android:hint="@string/graduation_year"
-                    android:paddingStart="0dp"
+                    android:paddingStart="15dp"
                     android:inputType="number"
                     android:maxLength="4"
-                    android:paddingEnd="0dp"
                     android:textColorHighlight="@color/orangish"
                     android:textColorHint="@color/black"
                     android:textSize="16sp" />

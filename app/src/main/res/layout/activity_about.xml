@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@drawable/splash_background"
+    android:layout_marginBottom="15dp"
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
@@ -10,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp"
+        android:background="@color/black"
         style="@style/ToolBarStyleDark"
         android:gravity="center_vertical"
         app:title="Contact Us" />
@@ -18,14 +21,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:background="#fff"
+        android:background="@drawable/splash_background"
         android:fillViewport="true"
+        android:layout_marginBottom="15dp"
         android:overScrollMode="never"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".settings.AboutActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+            android:background="@drawable/splash_background"
+            android:layout_marginBottom="15dp"
             android:layout_height="match_parent">
 
             <TextView
@@ -39,7 +45,7 @@
                 android:letterSpacing="0.25"
                 android:text="@string/our_centres"
                 android:textAlignment="center"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="22sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -53,10 +59,10 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:textColor="@color/white"
                 android:letterSpacing="0.25"
                 android:text="@string/tollfree_number"
                 android:textAlignment="center"
-                android:textColor="@color/black"
                 android:textSize="26sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +79,7 @@
                 android:text="@string/email_cb"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="@color/salmon"
+                android:textColor="@color/white"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +92,7 @@
                 android:layout_marginStart="@dimen/centre_container_margin"
                 android:layout_marginTop="@dimen/centre_container_margin"
                 android:layout_marginEnd="@dimen/centre_container_margin"
-                android:background="#fc4f4f"
+                android:background="@drawable/about_background"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mailTv">
@@ -209,7 +215,8 @@
                 android:layout_marginStart="@dimen/centre_container_margin"
                 android:layout_marginTop="@dimen/centre_container_margin"
                 android:layout_marginEnd="@dimen/centre_container_margin"
-                android:background="@color/white"
+                android:background="@drawable/about_background"
+                android:backgroundTint="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_1">
@@ -322,7 +329,8 @@
                 android:layout_marginStart="@dimen/centre_container_margin"
                 android:layout_marginTop="@dimen/centre_container_margin"
                 android:layout_marginEnd="@dimen/centre_container_margin"
-                android:background="@color/white"
+                android:background="@drawable/about_background"
+                android:backgroundTint="@color/yellow"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_2">
