@@ -18,7 +18,6 @@
         <item name="background">@color/light_grey</item>
         <item name="divider">@color/divider</item>
         <item name="radioButtonStyle">@style/MyRadioButtonStyle</item>
-        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowEnterTransition">@transition/explode</item>
         <item name="android:windowExitTransition">@transition/explode</item>
