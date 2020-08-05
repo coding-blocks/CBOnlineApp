@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
@@ -25,6 +26,7 @@ import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
+import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.cbonlineapp.util.livedata.observer
@@ -47,6 +49,7 @@ class DashboardHomeFragment : BaseCBFragment() {
 
     private val recentlyPlayedAdapter = RecentlyPlayedAdapter()
     private val wishlistAdapter = CourseListAdapter("WISHLIST")
+    private lateinit var bannerUrl: String
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -111,6 +114,12 @@ class DashboardHomeFragment : BaseCBFragment() {
         viewAllTv.setOnClickListener {
             startActivity(Intent(requireContext(), WishlistActivity::class.java))
         }
+        bannerCross.setOnClickListener {
+            bannerHolder.isVisible = false
+        }
+        banner.setOnClickListener {
+            requireContext().openChrome(bannerUrl)
+        }
     }
 
     override fun onDestroyView() {
@@ -125,6 +134,7 @@ class DashboardHomeFragment : BaseCBFragment() {
                 thisLifecycleOwner,
                 Observer { coursePair ->
                     dashboardProgressContainer.isVisible = coursePair != null
+                    bannerHolder.isVisible = coursePair != null
                     dashboardEmptyProgress.isVisible = coursePair == null
                     dashboardHomeShimmer.hideAndStop()
                     dashboardHome.isVisible = true
@@ -170,6 +180,12 @@ class DashboardHomeFragment : BaseCBFragment() {
                 noWishListLayout.isVisible = wishlist.isEmpty()
                 wishlistHolder.isVisible = wishlist.isNotEmpty()
                 wishlistAdapter.submitList(wishlist)
+            }
+
+            vm.fetchBanner().observer(viewLifecycleOwner){
+                val bannerItem = it?.get(0)
+                bannerUrl = bannerItem?.link?:""
+                Glide.with(requireContext()).load(bannerItem?.mobileImageUrl).into(banner)
             }
         } else {
             dashboardHomeShimmer.hideAndStop()

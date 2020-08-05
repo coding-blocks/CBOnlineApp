@@ -11,6 +11,8 @@ object CBOnlineLib {
 
     val api get() = getClient().api
 
+    val hackapi get() = getClient().hackapi
+
     val onlineV2JsonApi get() = getClient().onlineV2JsonApi
 
     var httpLogging

@@ -59,4 +59,5 @@ class DashboardHomeRepository(
     suspend fun removeWishlist(id: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.removeWishlist(id) }
     suspend fun checkWishlisted(s: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.checkIfWishlisted(s) }
     suspend fun fetchWishlist() = safeApiCall { CBOnlineLib.onlineV2JsonApi.getWishlist(page = "3") }
+    suspend fun fetchBanner() = safeApiCall { CBOnlineLib.hackapi.getBanner() }
 }
