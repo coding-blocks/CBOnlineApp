@@ -4,6 +4,7 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
 import cn.campusapp.router.Router
 import cn.campusapp.router.router.IActivityRouteTableInitializer
 import com.codingblocks.cbonlineapp.campaign.CampaignActivity
@@ -64,6 +65,10 @@ class CBOnlineApp : Application() {
                 get() = BuildConfig.BASE_URL
                 set(value) {}
         })
+        if (prefs.SP_DARK_MODE)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        else
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
 
         if (BuildConfig.DEBUG) {
             AppSignatureHelper(this).appSignatures.forEach {
