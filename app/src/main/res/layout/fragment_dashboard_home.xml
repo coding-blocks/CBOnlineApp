@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingTop="@dimen/margin_large"
         android:paddingBottom="@dimen/margin_large">
 
         <LinearLayout
@@ -19,8 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="@dimen/margin_large"
             android:visibility="gone">
+
             <RelativeLayout
                 android:id="@+id/dashboardProgressContainer"
                 android:layout_width="match_parent"
