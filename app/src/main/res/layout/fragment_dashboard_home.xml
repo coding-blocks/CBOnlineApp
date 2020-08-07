@@ -20,28 +20,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone">
-
-            <RelativeLayout
-                android:id="@+id/bannerHolder"
-                android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/banner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <ImageView
-                    android:id="@+id/bannerCross"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_cross_white"/>
-
-            </RelativeLayout>
-
             <RelativeLayout
                 android:id="@+id/dashboardProgressContainer"
                 android:layout_width="match_parent"

@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
@@ -29,11 +30,14 @@ import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.LOGIN
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
+import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.activity_course.courseSuggestedRv
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard_explore.*
+import kotlinx.android.synthetic.main.fragment_dashboard_home.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -49,6 +53,7 @@ class DashboardExploreFragment : BaseCBFragment() {
     private val courseCardListAdapter = CourseListAdapter()
     private val coursePopularListAdapter = CourseListAdapter("POPULAR")
     private val tracksListAdapter = TracksListAdapter()
+    private lateinit var bannerUrl: String
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -141,6 +146,22 @@ class DashboardExploreFragment : BaseCBFragment() {
         }
         vm.snackbar.observe(thisLifecycleOwner) {
             swipeToRefresh.showSnackbar(it, anchorView = activity?.dashboardBottomNav, action = false)
+        }
+
+        vm.fetchBanner().observer(viewLifecycleOwner){
+            bannerHolder.isVisible = it?.size?:0 > 0
+            if (it?.size?:0 > 0){
+                val bannerItem = it?.get(0)
+                bannerUrl = bannerItem?.link?:""
+                Glide.with(requireContext()).load(bannerItem?.mobileImageUrl).into(banner)
+            }
+        }
+
+        bannerCross.setOnClickListener {
+            bannerHolder.isVisible = false
+        }
+        bannerHolder.setOnClickListener {
+            requireContext().openChrome(bannerUrl)
         }
 
         courseCardListAdapter.onItemClick = itemClickListener
