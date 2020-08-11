@@ -20,41 +20,6 @@
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/bannerHolder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginTop="@dimen/margin_large"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:visibility="gone"
-                app:cardCornerRadius="@dimen/corner_radius">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/banner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <ImageView
-                        android:id="@+id/bannerCross"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:padding="10dp"
-                        android:src="@drawable/ic_cross_white"/>
-
-                </RelativeLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-
-            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/allCourseCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -277,6 +242,40 @@
                 android:layout_height="3dp"
                 android:layout_marginTop="@dimen/margin_large"
                 android:background="@drawable/dividerthick" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/bannerHolder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                app:cardCornerRadius="@dimen/corner_radius">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/banner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:id="@+id/bannerCross"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_cross_white"/>
+
+                </RelativeLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
                 android:layout_width="match_parent"

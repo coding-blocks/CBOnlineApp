@@ -33,6 +33,7 @@ import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.activity_course.courseSuggestedRv
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
@@ -153,7 +154,7 @@ class DashboardExploreFragment : BaseCBFragment() {
             if (it?.size?:0 > 0){
                 val bannerItem = it?.get(0)
                 bannerUrl = bannerItem?.link?:""
-                Glide.with(requireContext()).load(bannerItem?.mobileImageUrl).into(banner)
+                banner.loadImage(bannerItem?.mobileImageUrl?:"")
             }
         }
 
