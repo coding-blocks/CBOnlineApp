@@ -10,6 +10,7 @@ import com.codingblocks.onlineapi.models.ResetRunAttempt
 import com.codingblocks.onlineapi.models.SpinResponse
 import com.codingblocks.onlineapi.models.Feedback
 import com.codingblocks.onlineapi.models.SendFeedback
+import com.codingblocks.onlineapi.models.Banner
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
@@ -162,4 +163,7 @@ interface OnlineRestApi {
     suspend fun getFeedback(
         @Path("id") id: String
     ): Response<Feedback>
+
+    @GET("dashboard-banners")
+    suspend fun getBanner() : Response<List<Banner>>
 }
