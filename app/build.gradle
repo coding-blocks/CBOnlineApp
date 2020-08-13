@@ -184,7 +184,7 @@ dependencies {
     }
     //Firebase
     implementation 'com.google.firebase:firebase-common-ktx:19.3.0'
-    implementation 'com.google.firebase:firebase-core:17.4.3'
+    implementation 'com.google.firebase:firebase-core:17.5.0'
     implementation 'com.google.firebase:firebase-messaging:20.2.1'
     implementation 'com.google.firebase:firebase-crashlytics:17.1.0'
     implementation 'com.google.firebase:firebase-firestore-ktx:21.4.3'
