@@ -16,10 +16,7 @@ import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
-import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
-import com.codingblocks.cbonlineapp.util.FileUtils
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.*
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.google.gson.JsonObject
 import com.vdocipher.aegis.media.ErrorDescription
@@ -145,7 +142,14 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener {
                     // we have received the available download options
                     val selectionIndices = intArrayOf(0, 1)
                     val downloadSelections = DownloadSelections(options, selectionIndices)
-                    val file = applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
+                    var file = applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
+                    val directories =
+                        applicationContext.getExternalFilesDirs(Environment.getDataDirectory().absolutePath)
+                    if (PreferenceHelper.getPrefs(applicationContext).SP_SD_CARD && directories.size > 1) {
+                        file = directories[1]
+                    }else {
+                        PreferenceHelper.getPrefs(applicationContext).SP_SD_CARD = false
+                    }
                     val folderFile = File(file, "/$videoId")
                     if (!folderFile.exists()) {
                         folderFile.mkdir()

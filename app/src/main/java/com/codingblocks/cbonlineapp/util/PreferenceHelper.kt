@@ -103,6 +103,12 @@ class PreferenceHelper private constructor() {
             prefs?.save("COURSE_FILTER_TYPE", value)
         }
 
+    var SP_SD_CARD: Boolean
+        get() = prefs?.getBoolean("SD_CARD", false) ?: false
+        set(value) {
+            prefs?.save("SD_CARD", value)
+        }
+
     fun clearPrefs() {
         prefs?.edit()?.clear()?.apply()
     }

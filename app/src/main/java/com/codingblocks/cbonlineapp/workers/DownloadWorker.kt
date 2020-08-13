@@ -21,6 +21,7 @@ import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
+import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.google.gson.JsonObject
 import com.vdocipher.aegis.media.ErrorDescription
@@ -112,8 +113,14 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
                     // we have received the available download options
                     val selectionIndices = intArrayOf(0, 1)
                     val downloadSelections = DownloadSelections(options, selectionIndices)
-                    val file =
-                        applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
+                    var file = applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
+                    val directories =
+                        applicationContext.getExternalFilesDirs(Environment.getDataDirectory().absolutePath)
+                    if (getPrefs(applicationContext).SP_SD_CARD && directories.size > 1) {
+                        file = directories[1]
+                    }else {
+                        getPrefs(applicationContext).SP_SD_CARD = false
+                    }
                     val folderFile = File(file, "/$videoId")
                     if (!folderFile.exists()) {
                         folderFile.mkdir()
