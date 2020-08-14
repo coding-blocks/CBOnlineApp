@@ -190,7 +190,7 @@
     </style>
 
 
-    <style name="AutoPlaySwitchStyle">
+    <style name="ColorSwitchStyle">
         <item name="colorControlActivated">@color/colorPrimary</item>
         <item name="colorSwitchThumbNormal">@color/white</item>
         <item name="android:colorForeground">@color/battleship_gray</item>
