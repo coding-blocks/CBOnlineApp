@@ -78,7 +78,8 @@ class Clients internal constructor(
         CodeChallenge::class.java,
         SpinPrize::class.java,
         Spins::class.java,
-        Wishlist::class.java
+        Wishlist::class.java,
+        Banner::class.java
     )
 
     // type resolver
@@ -142,5 +143,15 @@ class Clients internal constructor(
         .baseUrl("http://${communicator.baseUrl}/api/")
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
+
+    private val hackRetrofit = Retrofit.Builder()
+        .client(clientInterceptor)
+        .baseUrl("https://hack-api.codingblocks.com/api/v2/")
+        .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
+        .addConverterFactory(JacksonConverterFactory.create(om))
+        .build()
+
     val api: OnlineRestApi = retrofit.create(OnlineRestApi::class.java)
+
+    val hackapi: OnlineRestApi = hackRetrofit.create(OnlineRestApi::class.java)
 }

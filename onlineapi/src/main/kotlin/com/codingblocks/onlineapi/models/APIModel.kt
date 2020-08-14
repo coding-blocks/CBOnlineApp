@@ -241,6 +241,16 @@ data class Comment(
     val doubt: Doubts? = null
 ) : BaseModel()
 
+@Type("dashboard_banners")
+data class Banner(
+    @JsonProperty("mobile-image-url") val mobileImageUrl: String,
+    @JsonProperty("image-url") val imageUrl: String,
+    @JsonProperty("alt-text") val altText: String?,
+    val link: String,
+    val order: Int,
+    val hosts: String
+) : BaseModel()
+
 @Type("sections")
 data class Sections(
     var name: String? = null,
