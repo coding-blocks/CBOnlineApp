@@ -196,6 +196,12 @@
         <item name="android:colorForeground">@color/battleship_gray</item>
     </style>
 
+    <style name="AutoPlaySwitchStyle">
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorSwitchThumbNormal">@color/white</item>
+        <item name="android:colorForeground">@color/battleship_gray</item>
+    </style>
+
     <style name="VdoMediaButton">
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:layout_width">54dp</item>

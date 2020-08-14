@@ -7,6 +7,11 @@ import com.codingblocks.cbonlineapp.util.extensions.save
 
 class PreferenceHelper private constructor() {
 
+    var SP_AUTO_PLAY: Boolean
+        get() = prefs?.getBoolean(AUTO_PLAY, false)?:false
+        set(value){
+            prefs?.save(AUTO_PLAY, value)
+        }
     var SP_ACCESS_TOKEN_KEY: String
         get() = prefs?.getString(ACCESS_TOKEN, "") ?: ""
         set(value) {
@@ -110,6 +115,7 @@ class PreferenceHelper private constructor() {
     companion object {
         private const val PREFS_FILENAME = "com.codingblocks.cbonline.prefs"
         const val ACCESS_TOKEN = "access_token"
+        const val AUTO_PLAY = "auto_play"
         const val JWT_TOKEN = "jwt_token"
         const val REFRESH_TOKEN = "refresh_token"
         const val USER_IMAGE = "user_image"

@@ -172,7 +172,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
+
+                    <Switch
+                        android:id="@+id/autoPlaySwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/ripple"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:layout_gravity="end"
+                        android:switchPadding="15dp"
+                        android:textColor="@color/white"
+                        android:text="@string/autoplay"
+                        android:textSize="18sp"
+                        android:layout_marginEnd="@dimen/margin_large"
+                        android:layout_marginBottom="@dimen/margin_small"
+                        app:theme="@style/ColorSwitchStyle" />
 
                     <View
                         android:layout_width="match_parent"
