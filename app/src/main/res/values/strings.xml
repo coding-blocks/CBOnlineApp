@@ -339,4 +339,5 @@
     <string name="overall_experience">How was the overall experience?</string>
     <string name="write_a_public_review">Write a public review.</string>
     <string name="submit_feedback">Submit Feedback</string>
+    <string name="autoplay">AutoPlay</string>
 </resources>

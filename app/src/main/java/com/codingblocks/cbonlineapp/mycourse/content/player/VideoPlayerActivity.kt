@@ -235,9 +235,13 @@ class VideoPlayerActivity :
             else
                 startDownloadWorker()
         }
+        autoPlaySwitch.setOnCheckedChangeListener { compoundButton, b ->
+            getPrefs().SP_AUTO_PLAY = b
+        }
 
         vm.content.getDistinct().observe(this) {
             //            vm.contentLength = it.contentLecture.lectureDuration
+            autoPlaySwitch.isChecked = getPrefs().SP_AUTO_PLAY
             sectionItemsAdapter.updateSelectedItem(it.ccid)
             vm.attemptId.value = it.attempt_id
             sectionTitle.text = getString(R.string.section_name, it.sectionTitle)
@@ -501,6 +505,17 @@ class VideoPlayerActivity :
         }
         /**Remove [PlayerState] After 95%*/
 
+        if (progress >= duration && autoPlaySwitch.isChecked){
+            if (sectionItemsAdapter.selectedItem < sectionItemsAdapter.currentList.lastIndex){
+                val nextItem = sectionItemsAdapter.currentList[sectionItemsAdapter.selectedItem + 1]
+                startActivity(
+                    createVideoPlayerActivityIntent(
+                        this, nextItem.ccid,
+                        vm.sectionId ?: ""
+                    )
+                )
+            }
+        }
         val completion = duration * 0.95
         if (progress > completion) {
             vm.deletePlayerState()
