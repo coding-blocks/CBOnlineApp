@@ -10,6 +10,9 @@ import com.codingblocks.onlineapi.models.ContentQna
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.RunAttempts
+import com.codingblocks.onlineapi.models.Bookmark
+import com.codingblocks.onlineapi.models.LectureContent
+import com.codingblocks.onlineapi.models.Sections
 
 class QuizViewModel(private val repo: QuizRepository) : BaseCBViewModel() {
 
@@ -23,8 +26,13 @@ class QuizViewModel(private val repo: QuizRepository) : BaseCBViewModel() {
     val quizDetails = MutableLiveData<Quizzes>()
     val quizAttempts = MutableLiveData<List<QuizAttempt>>()
     val quizAttempt = MutableLiveData<QuizAttempt>()
+    val offlineSnackbar = MutableLiveData<String>()
+    val bookmarkLiveData = MutableLiveData<Boolean>()
     val content by lazy {
         repo.getContent(contentId)
+    }
+    val bookmark by lazy {
+        repo.getBookmark(contentId)
     }
 
     fun fetchQuiz() {
@@ -99,6 +107,44 @@ class QuizViewModel(private val repo: QuizRepository) : BaseCBViewModel() {
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
                         function()
+                    } else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun markBookmark() {
+        runIO {
+            val bookmark = Bookmark(RunAttempts(attemptId), LectureContent(contentId), Sections(sectionId))
+            when (val response = repo.addBookmark(bookmark)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let { bookmark ->
+                            offlineSnackbar.postValue(("Bookmark Added Successfully !"))
+                            repo.updateBookmark(bookmark)
+                            bookmarkLiveData.postValue(true)
+                        }
+                    else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun removeBookmark() {
+        runIO {
+            val uid = bookmark.value?.bookmarkUid
+            when (val response = uid?.let { repo.removeBookmark(it) }) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.code() == 204) {
+                        offlineSnackbar.postValue(("Removed Bookmark Successfully !"))
+                        repo.deleteBookmark(uid)
+                        bookmarkLiveData.postValue(false)
                     } else {
                         setError(fetchError(response.value.code()))
                     }

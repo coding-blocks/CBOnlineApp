@@ -169,12 +169,14 @@ class FormModel(
 
 data class CodeModel(
     val codeUid: String,
-    val codeContestId: Int
+    val codeContestId: Int,
+    val attempt_id: String
 )
 
 data class PdfModel(
     val documentPdfLink: String,
-    val documentName: String
+    val documentName: String,
+    val attempt_id: String
 )
 
 @Entity
