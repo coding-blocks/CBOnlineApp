@@ -15,7 +15,21 @@
             android:id="@+id/quizToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/toolbar_bg_dark_secondary" />
+            android:background="@drawable/toolbar_bg_dark_secondary">
+
+            <ImageView
+                android:id="@+id/quizBookmarkBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:padding="4dp"
+                android:src="@drawable/bookmark_state" />
+
+        </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout

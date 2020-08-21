@@ -12,7 +12,7 @@ import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import kotlinx.android.synthetic.main.item_playlist.view.*
 
 class PlaylistAdapter : ListAdapter<ContentModel, PlaylistAdapter.PlaylistViewHolder>(diffCallback) {
-    private var selectedItem: Int = -1
+    var selectedItem: Int = -1
     var onItemClick: ((ContentModel) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder =

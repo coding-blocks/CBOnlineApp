@@ -241,6 +241,16 @@ data class Comment(
     val doubt: Doubts? = null
 ) : BaseModel()
 
+@Type("dashboard_banners")
+data class Banner(
+    @JsonProperty("mobile-image-url") val mobileImageUrl: String,
+    @JsonProperty("image-url") val imageUrl: String,
+    @JsonProperty("alt-text") val altText: String?,
+    val link: String,
+    val order: Int,
+    val hosts: String
+) : BaseModel()
+
 @Type("sections")
 data class Sections(
     var name: String? = null,
@@ -748,3 +758,29 @@ data class PrizeContent(
     val couponCreated: String?,
     val validEnd: String?
 )
+
+data class Feedback(
+    val rating: Float,
+    val count: Int,
+    val stats: List<Int>,
+    val userScore: UserScore
+)
+
+data class UserScore(
+    val id: Int,
+    val value: Int,
+    val courseId: Int,
+    val userId: Int,
+    val review: String,
+    val heading: String,
+    val isListed: Boolean,
+    val createdAt: String,
+    val updatedAt: String
+)
+
+data class SendFeedback(
+    val experience: String,
+    val review: String,
+    val value: Float
+)
+

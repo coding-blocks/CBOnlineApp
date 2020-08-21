@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Environment
 import android.util.Log
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
+import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.folderSize
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import org.jetbrains.anko.intentFor
@@ -18,7 +19,11 @@ const val GB_TO_KB = 1024 * 1024
 object FileUtils {
 
     private fun getCommonPath(context: Context) =
-        context.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
+        if (getPrefs(context).SP_SD_CARD) {
+            context.getExternalFilesDirs(Environment.getDataDirectory().absolutePath)[1]
+        } else{
+            context.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
+        }
 
     fun deleteDatabaseFile(context: Context, databaseName: String) {
         val databases = File(context.applicationInfo.dataDir + "/databases")

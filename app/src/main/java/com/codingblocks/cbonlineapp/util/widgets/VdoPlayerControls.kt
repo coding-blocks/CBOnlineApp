@@ -14,6 +14,7 @@ import android.widget.ListAdapter
 import android.widget.ProgressBar
 import android.widget.SeekBar
 import android.widget.TextView
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.airbnb.lottie.LottieAnimationView
@@ -93,6 +94,7 @@ class VdoPlayerControls @JvmOverloads constructor(
     private val errorTextView: TextView
     private val controlPanel: View
     private val controllerBackground: View
+    private val lock: ImageView
 
     private val ffwdMs: Int
     private val rewindMs: Int
@@ -158,6 +160,8 @@ class VdoPlayerControls @JvmOverloads constructor(
         controlPanel = findViewById(R.id.vdo_control_panel)
         controllerBackground = findViewById(R.id.vdo_controller_bg)
         setOnClickListener(uiListener)
+        lock = findViewById(R.id.lock)
+        lock.setOnClickListener(uiListener)
     }
 
     fun setPlayer(newPlayer: VdoPlayer?) {
@@ -200,6 +204,20 @@ class VdoPlayerControls @JvmOverloads constructor(
     fun setFullscreenState(fullscreen: Boolean) {
         this.fullscreen = fullscreen
         updateFullscreenButtons()
+    }
+
+    fun setScreenLock(locked: Boolean){
+        val playing = player?.playWhenReady ?: false
+        lock.isSelected = locked
+        qualityButton.isVisible = !locked
+        speedControlButton.isVisible = !locked
+        enterFullscreenButton.isVisible = if (fullscreen) false else !locked
+        exitFullscreenButton.isVisible = if (fullscreen) !locked else false
+        playButton.isVisible = if (playing) false else !locked
+        pauseButton.isVisible = if (playing) !locked else false
+        fastForwardButton.isVisible = !locked
+        rewindButton.isVisible = !locked
+        seekBar.isEnabled = !locked
     }
 
     override fun onAttachedToWindow() {
@@ -247,8 +265,8 @@ class VdoPlayerControls @JvmOverloads constructor(
         val playing = (player?.playWhenReady ?: false) &&
             playbackState != VdoPlayer.STATE_IDLE &&
             playbackState != VdoPlayer.STATE_ENDED
-        playButton.visibility = if (playing) GONE else VISIBLE
-        pauseButton.visibility = if (playing) VISIBLE else GONE
+        playButton.visibility = if (playing || lock.isSelected) GONE else VISIBLE
+        pauseButton.visibility = if (playing && !lock.isSelected) VISIBLE else GONE
     }
 
     private fun rewind() {
@@ -277,8 +295,8 @@ class VdoPlayerControls @JvmOverloads constructor(
 
         player?.let {
             if (it.isSpeedControlSupported) {
-                speedControlButton.visibility = VISIBLE
-                qualityButton.visibility = VISIBLE
+                speedControlButton.isVisible = !lock.isSelected
+                qualityButton.isVisible = !lock.isSelected
 
                 val speed = it.playbackSpeed
                 chosenSpeedIndex = getClosestFloatIndex(allowedSpeedList, speed)
@@ -481,6 +499,8 @@ class VdoPlayerControls @JvmOverloads constructor(
                 toggleFullscreen()
             } else if (v === errorView || v === errorTextView) {
                 retryAfterError()
+            } else if(v == lock){
+                setScreenLock(!lock.isSelected)
             } else if (v === this@VdoPlayerControls) {
                 hideAfterTimeout = false
                 if (controllerVisible()) {

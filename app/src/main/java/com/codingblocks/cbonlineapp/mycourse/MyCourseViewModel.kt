@@ -25,6 +25,7 @@ import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.PREMIUM
+import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
@@ -36,6 +37,7 @@ import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.ResetRunAttempt
+import com.codingblocks.onlineapi.models.SendFeedback
 import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.TimeUnit
 
@@ -49,6 +51,7 @@ class MyCourseViewModel(
     var name by savedStateValue<String>(handle, COURSE_NAME)
     var runId by savedStateValue<String>(handle, RUN_ID)
     var premiumRun by savedStateValue<Boolean>(handle, PREMIUM)
+    var courseId by savedStateValue<String>(handle, COURSE_ID)
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -269,6 +272,36 @@ class MyCourseViewModel(
                 if (isSuccessful) {
                     body()?.let { repo.updateRunAttempt(it) }
                     emit(true)
+                } else {
+                    errorLiveData.postValue("There was some error")
+                }
+            }
+        }
+    }
+
+    fun sendFeedback(feedback: SendFeedback) = liveData {
+        when (val response = courseId?.let { repo.sendFeedback(it, feedback) }) {
+            is ResultWrapper.GenericError -> {
+                setError(response.error)
+            }
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful) {
+                    emit(true)
+                } else {
+                    errorLiveData.postValue("There was some error")
+                }
+            }
+        }
+    }
+
+    fun getFeedback() = liveData {
+        when (val response = courseId?.let { repo.getFeedback(it) }) {
+            is ResultWrapper.GenericError -> {
+                setError(response.error)
+            }
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful) {
+                    emit(body())
                 } else {
                     errorLiveData.postValue("There was some error")
                 }
