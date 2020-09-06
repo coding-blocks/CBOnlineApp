@@ -13,10 +13,10 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.SECTION_ID
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.receivers.DownloadBroadcastReceiver
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -42,33 +42,35 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pdf)
-        if (savedInstanceState == null){
+        setToolbar(toolbarPdfActivity)
+        if (savedInstanceState == null) {
             vm.contentId = intent.getStringExtra(CONTENT_ID)
             vm.sectionId = intent.getStringExtra(SECTION_ID)
         }
 
-        vm.getPdf().observer(this){pdfModel->
+        vm.getPdf().observer(this) { pdfModel ->
             url = pdfModel.documentPdfLink
             fileName = pdfModel.documentName
+            title = pdfModel.title
             checkFile()
         }
 
-        pdfBookmarkBtn.setOnClickListener{view->
+        pdfBookmarkBtn.setOnClickListener { view ->
             if (pdfBookmarkBtn.isActivated)
                 vm.removeBookmark()
             else {
                 vm.markBookmark()
             }
         }
-        vm.bookmark.observer(this){
+        vm.bookmark.observer(this) {
             pdfBookmarkBtn.isActivated = !it.bookmarkUid.isNullOrEmpty()
         }
 
-        vm.bookmarkLiveData.observer(this){
+        vm.bookmarkLiveData.observer(this) {
             pdfBookmarkBtn.isActivated = it
         }
 
-        vm.bookmarkSnackbar.observer(this){
+        vm.bookmarkSnackbar.observer(this) {
             pdfBookmarkBtn.showSnackbar(it, Snackbar.LENGTH_SHORT, action = false)
         }
 

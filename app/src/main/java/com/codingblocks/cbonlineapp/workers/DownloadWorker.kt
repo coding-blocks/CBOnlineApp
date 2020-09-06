@@ -17,11 +17,11 @@ import com.codingblocks.cbonlineapp.database.models.DownloadData
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
+import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
-import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.google.gson.JsonObject
 import com.vdocipher.aegis.media.ErrorDescription
@@ -118,7 +118,7 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
                         applicationContext.getExternalFilesDirs(Environment.getDataDirectory().absolutePath)
                     if (getPrefs(applicationContext).SP_SD_CARD && directories.size > 1) {
                         file = directories[1]
-                    }else {
+                    } else {
                         getPrefs(applicationContext).SP_SD_CARD = false
                     }
                     val folderFile = File(file, "/$videoId")

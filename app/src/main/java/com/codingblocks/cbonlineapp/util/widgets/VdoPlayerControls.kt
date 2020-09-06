@@ -7,15 +7,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.ListAdapter
-import android.widget.ProgressBar
-import android.widget.SeekBar
-import android.widget.TextView
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.view.isVisible
 import com.airbnb.lottie.LottieAnimationView
 import com.codingblocks.cbonlineapp.R
@@ -206,7 +198,7 @@ class VdoPlayerControls @JvmOverloads constructor(
         updateFullscreenButtons()
     }
 
-    fun setScreenLock(locked: Boolean){
+    fun setScreenLock(locked: Boolean) {
         val playing = player?.playWhenReady ?: false
         lock.isSelected = locked
         qualityButton.isVisible = !locked
@@ -412,9 +404,30 @@ class VdoPlayerControls @JvmOverloads constructor(
         controlPanel.visibility = View.GONE
         errorView.visibility = View.VISIBLE
         errorTextView.visibility = View.VISIBLE
-        val errMsg = "An error occurred : " + errorDescription.errorCode + "\nRetrying again"
+        val errMsg: String = getErrorMessage(errorDescription)
         errorTextView.text = errMsg
         show()
+    }
+
+    private fun getErrorMessage(errorDescription: ErrorDescription): String {
+        val messagePrefix = "Error: " + errorDescription.errorCode + ". "
+        return when (errorDescription.errorCode) {
+            5110, 5124, 5130 -> messagePrefix + "Please check your internet connection and try restarting " +
+                "the app."
+            5160, 5161 -> messagePrefix + "Downloaded media files have been accidentally deleted by " +
+                "some other app in your mobile. Kindly download the video again and do " +
+                "not use cleaner apps."
+            6101, 6120 -> messagePrefix + "Kindly try restarting the phone and app."
+            1220, 1250, 1253, 2021, 6155, 6156, 6157, 6166, 6178, 6186 -> messagePrefix + "Phone is not compatible for secure playback. " +
+                "Kindly update your OS, restart the phone and app. If still not " +
+                "corrected, factory reset can be tried if possible."
+            6187 -> messagePrefix + "Rental license for downloaded video has expired. Kindly " +
+                "download again."
+            else -> """
+                An error occurred: ${errorDescription.errorCode}
+                Retrying again
+                """.trimIndent()
+        }
     }
 
     fun retryAfterError() {
@@ -499,7 +512,7 @@ class VdoPlayerControls @JvmOverloads constructor(
                 toggleFullscreen()
             } else if (v === errorView || v === errorTextView) {
                 retryAfterError()
-            } else if(v == lock){
+            } else if (v == lock) {
                 setScreenLock(!lock.isSelected)
             } else if (v === this@VdoPlayerControls) {
                 hideAfterTimeout = false

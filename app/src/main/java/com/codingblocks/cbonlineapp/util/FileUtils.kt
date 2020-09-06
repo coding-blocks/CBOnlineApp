@@ -21,7 +21,7 @@ object FileUtils {
     private fun getCommonPath(context: Context) =
         if (getPrefs(context).SP_SD_CARD) {
             context.getExternalFilesDirs(Environment.getDataDirectory().absolutePath)[1]
-        } else{
+        } else {
             context.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
         }
 

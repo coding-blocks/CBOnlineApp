@@ -33,12 +33,10 @@ import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
-import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.activity_course.courseSuggestedRv
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard_explore.*
-import kotlinx.android.synthetic.main.fragment_dashboard_home.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -120,8 +118,18 @@ class DashboardExploreFragment : BaseCBFragment() {
 //        campaignView.setOnClickListener {
 //            startActivity(CampaignActivity.createCampaignActivityIntent(requireContext()))
 //        }
-        dashboardPopularRv.setRv(requireContext(), coursePopularListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
-        courseSuggestedRv.setRv(requireContext(), courseCardListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
+        dashboardPopularRv.setRv(
+            requireContext(),
+            coursePopularListAdapter,
+            orientation = RecyclerView.HORIZONTAL,
+            space = 28f
+        )
+        courseSuggestedRv.setRv(
+            requireContext(),
+            courseCardListAdapter,
+            orientation = RecyclerView.HORIZONTAL,
+            space = 28f
+        )
         dashboardTracksRv.setRv(requireContext(), tracksListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
 
         vm.suggestedCourses.observe(thisLifecycleOwner) { courses ->
@@ -149,12 +157,11 @@ class DashboardExploreFragment : BaseCBFragment() {
             swipeToRefresh.showSnackbar(it, anchorView = activity?.dashboardBottomNav, action = false)
         }
 
-        vm.fetchBanner().observer(viewLifecycleOwner){
-            bannerHolder.isVisible = it?.size?:0 > 0
-            if (it?.size?:0 > 0){
-                val bannerItem = it?.get(0)
-                bannerUrl = bannerItem?.link?:""
-                banner.loadImage(bannerItem?.mobileImageUrl?:"")
+        vm.fetchBanner().observer(viewLifecycleOwner) {
+            it?.let {
+                bannerUrl = it.link
+                bannerHolder.isVisible = true
+                Glide.with(requireContext()).load(it.mobileImageUrl).into(banner)
             }
         }
 

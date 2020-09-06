@@ -63,7 +63,7 @@ class CodeChallengeActivity : AppCompatActivity() {
             }
         }
 
-        codeBookmarkBtn.setOnClickListener{view->
+        codeBookmarkBtn.setOnClickListener { view ->
             if (codeBookmarkBtn.isActivated)
                 vm.removeBookmark()
             else {
@@ -71,15 +71,15 @@ class CodeChallengeActivity : AppCompatActivity() {
             }
         }
 
-        vm.getBookmark.observer(this){
+        vm.getBookmark.observer(this) {
             codeBookmarkBtn.isActivated = it.bookmarkUid.isNotEmpty()
         }
 
-        vm.offlineSnackbar.observer(this){
+        vm.offlineSnackbar.observer(this) {
             codeLayout.showSnackbar(it, Snackbar.LENGTH_SHORT, action = false)
         }
 
-        vm.bookmarkLiveData.observe(this){
+        vm.bookmarkLiveData.observe(this) {
             codeBookmarkBtn.isActivated = it
         }
 

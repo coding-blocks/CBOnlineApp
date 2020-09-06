@@ -176,7 +176,8 @@ data class CodeModel(
 data class PdfModel(
     val documentPdfLink: String,
     val documentName: String,
-    val attempt_id: String
+    val attempt_id: String,
+    val title:String
 )
 
 @Entity

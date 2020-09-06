@@ -25,6 +25,7 @@
         android:supportsRtl="true"
         android:theme="@style/NewAppTheme"
         android:usesCleartextTraffic="true"
+        tools:replace="android:fullBackupContent"
         tools:targetApi="q">
         <activity
             android:name=".campaign.CampaignActivity"

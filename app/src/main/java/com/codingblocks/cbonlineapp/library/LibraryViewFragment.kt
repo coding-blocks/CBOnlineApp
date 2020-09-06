@@ -19,8 +19,8 @@ import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.LibraryTypes
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
-import com.codingblocks.cbonlineapp.mycourse.content.document.PdfActivity
 import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeActivity
+import com.codingblocks.cbonlineapp.mycourse.content.document.PdfActivity
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.*
@@ -79,11 +79,11 @@ class LibraryViewFragment : BaseCBFragment() {
                                 )
                             CODE ->
                                 startActivity(
-                                intentFor<CodeChallengeActivity>(
-                                    CONTENT_ID to item.contentId,
-                                    SECTION_ID to item.sectionId
+                                    intentFor<CodeChallengeActivity>(
+                                        CONTENT_ID to item.contentId,
+                                        SECTION_ID to item.sectionId
+                                    )
                                 )
-                            )
                         }
                     }
                     is NotesModel -> updateNotes(item)

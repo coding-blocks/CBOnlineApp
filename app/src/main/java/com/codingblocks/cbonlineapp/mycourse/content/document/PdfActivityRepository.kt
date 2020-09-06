@@ -14,11 +14,15 @@ class PdfActivityRepository(private val bookmarkDao: BookmarkDao, private val li
     fun getBookmark(contentId: String) = bookmarkDao.getBookmarkById(contentId)
 
     suspend fun updateBookmark(bookmark: Bookmark) {
-        bookmarkDao.insert(BookmarkModel(bookmark.id ?: "",
-            bookmark.runAttempt?.id ?: "",
-            bookmark.content?.id ?: "",
-            bookmark.section?.id ?: "",
-            bookmark.createdAt ?: ""))
+        bookmarkDao.insert(
+            BookmarkModel(
+                bookmark.id ?: "",
+                bookmark.runAttempt?.id ?: "",
+                bookmark.content?.id ?: "",
+                bookmark.section?.id ?: "",
+                bookmark.createdAt ?: ""
+            )
+        )
     }
 
     suspend fun addBookmark(bookmark: Bookmark) = safeApiCall { CBOnlineLib.onlineV2JsonApi.addBookmark(bookmark) }
@@ -26,5 +30,4 @@ class PdfActivityRepository(private val bookmarkDao: BookmarkDao, private val li
     fun deleteBookmark(id: String) = bookmarkDao.deleteBookmark(id)
 
     suspend fun getPdfBookmark(contentId: String) = libraryDao.getPDF(contentId)
-
 }

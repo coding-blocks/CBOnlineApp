@@ -243,9 +243,9 @@ data class Comment(
 
 @Type("dashboard_banners")
 data class Banner(
-    @JsonProperty("mobile-image-url") val mobileImageUrl: String,
-    @JsonProperty("image-url") val imageUrl: String,
-    @JsonProperty("alt-text") val altText: String?,
+    val mobileImageUrl: String,
+    val imageUrl: String,
+    val altText: String?,
     val link: String,
     val order: Int,
     val hosts: String
@@ -783,4 +783,3 @@ data class SendFeedback(
     val review: String,
     val value: Float
 )
-

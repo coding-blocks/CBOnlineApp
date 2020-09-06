@@ -8,8 +8,8 @@ import com.codingblocks.cbonlineapp.util.extensions.save
 class PreferenceHelper private constructor() {
 
     var SP_AUTO_PLAY: Boolean
-        get() = prefs?.getBoolean(AUTO_PLAY, false)?:false
-        set(value){
+        get() = prefs?.getBoolean(AUTO_PLAY, false) ?: false
+        set(value) {
             prefs?.save(AUTO_PLAY, value)
         }
     var SP_ACCESS_TOKEN_KEY: String

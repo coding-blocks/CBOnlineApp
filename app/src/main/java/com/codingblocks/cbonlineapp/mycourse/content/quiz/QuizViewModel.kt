@@ -6,12 +6,12 @@ import com.codingblocks.cbonlineapp.database.models.ContentQnaModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
+import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.models.ContentQna
+import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.RunAttempts
-import com.codingblocks.onlineapi.models.Bookmark
-import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Sections
 
 class QuizViewModel(private val repo: QuizRepository) : BaseCBViewModel() {

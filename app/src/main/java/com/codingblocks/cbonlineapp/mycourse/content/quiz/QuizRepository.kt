@@ -8,8 +8,10 @@ import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.safeApiCall
 
-class QuizRepository(private var contentDao: ContentDao,
-                     private val bookmarkDao: BookmarkDao) {
+class QuizRepository(
+    private var contentDao: ContentDao,
+    private val bookmarkDao: BookmarkDao
+) {
 
     fun getContent(contentId: String) = contentDao.getContentLive(contentId)
 
@@ -28,11 +30,15 @@ class QuizRepository(private var contentDao: ContentDao,
     fun getBookmark(contentId: String) = bookmarkDao.getBookmarkById(contentId)
 
     suspend fun updateBookmark(bookmark: Bookmark) {
-        bookmarkDao.insert(BookmarkModel(bookmark.id ?: "",
-            bookmark.runAttempt?.id ?: "",
-            bookmark.content?.id ?: "",
-            bookmark.section?.id ?: "",
-            bookmark.createdAt ?: ""))
+        bookmarkDao.insert(
+            BookmarkModel(
+                bookmark.id ?: "",
+                bookmark.runAttempt?.id ?: "",
+                bookmark.content?.id ?: "",
+                bookmark.section?.id ?: "",
+                bookmark.createdAt ?: ""
+            )
+        )
     }
 
     suspend fun addBookmark(bookmark: Bookmark) = safeApiCall { CBOnlineLib.onlineV2JsonApi.addBookmark(bookmark) }

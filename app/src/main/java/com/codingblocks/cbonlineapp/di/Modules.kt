@@ -30,12 +30,12 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeRepository
 import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeViewModel
+import com.codingblocks.cbonlineapp.mycourse.content.document.PdfActivityRepository
+import com.codingblocks.cbonlineapp.mycourse.content.document.PdfViewModel
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerRepository
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerViewModel
 import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizRepository
 import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizViewModel
-import com.codingblocks.cbonlineapp.mycourse.content.document.PdfActivityRepository
-import com.codingblocks.cbonlineapp.mycourse.content.document.PdfViewModel
 import com.codingblocks.cbonlineapp.notifications.NotificationViewModel
 import com.codingblocks.cbonlineapp.profile.ProfileRepository
 import com.codingblocks.cbonlineapp.profile.ProfileViewModel

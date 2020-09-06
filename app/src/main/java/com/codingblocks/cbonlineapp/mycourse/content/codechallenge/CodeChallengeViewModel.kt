@@ -7,10 +7,10 @@ import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
-import com.codingblocks.onlineapi.models.CodeChallenge
 import com.codingblocks.onlineapi.models.Bookmark
-import com.codingblocks.onlineapi.models.RunAttempts
+import com.codingblocks.onlineapi.models.CodeChallenge
 import com.codingblocks.onlineapi.models.LectureContent
+import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.Sections
 import kotlinx.coroutines.Dispatchers
 
@@ -30,7 +30,7 @@ class CodeChallengeViewModel(
     val offlineSnackbar = MutableLiveData<String>()
     val bookmarkLiveData = MutableLiveData<Boolean>()
 
-    val getBookmark by lazy{
+    val getBookmark by lazy {
         repo.getBookmark(contentId!!)
     }
 

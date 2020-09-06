@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.mycourse.content.document
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.liveData
@@ -17,8 +16,10 @@ import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.Sections
 
-class PdfViewModel(handle: SavedStateHandle,
-                    private val repo: PdfActivityRepository) : BaseCBViewModel() {
+class PdfViewModel(
+    handle: SavedStateHandle,
+    private val repo: PdfActivityRepository
+) : BaseCBViewModel() {
 
     var sectionId by savedStateValue<String>(handle, SECTION_ID)
     var contentId by savedStateValue<String>(handle, CONTENT_ID)
@@ -51,14 +52,14 @@ class PdfViewModel(handle: SavedStateHandle,
     }
 
     fun getPdf() = liveData {
-        val pdfModel = repo.getPdfBookmark(contentId?:"")
+        val pdfModel = repo.getPdfBookmark(contentId ?: "")
         attempId = pdfModel.attempt_id
         emit(pdfModel)
     }
 
     fun removeBookmark() {
         runIO {
-            val uid =  bookmark.value?.bookmarkUid
+            val uid = bookmark.value?.bookmarkUid
             when (val response = uid?.let { repo.removeBookmark(it) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {

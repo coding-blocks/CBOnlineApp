@@ -30,11 +30,11 @@ class QuizActivity : BaseCBActivity() {
             quizBookmarkBtn.isActivated = if (it == null) false else it.bookmarkUid.isNotEmpty()
         }
 
-        viewModel.bookmarkLiveData.observer(this){
+        viewModel.bookmarkLiveData.observer(this) {
             quizBookmarkBtn.isActivated = it
         }
 
-        quizBookmarkBtn.setOnClickListener{view->
+        quizBookmarkBtn.setOnClickListener { view ->
             if (quizBookmarkBtn.isActivated)
                 viewModel.removeBookmark()
             else {

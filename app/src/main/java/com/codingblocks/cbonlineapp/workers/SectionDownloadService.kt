@@ -147,7 +147,7 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener {
                         applicationContext.getExternalFilesDirs(Environment.getDataDirectory().absolutePath)
                     if (PreferenceHelper.getPrefs(applicationContext).SP_SD_CARD && directories.size > 1) {
                         file = directories[1]
-                    }else {
+                    } else {
                         PreferenceHelper.getPrefs(applicationContext).SP_SD_CARD = false
                     }
                     val folderFile = File(file, "/$videoId")

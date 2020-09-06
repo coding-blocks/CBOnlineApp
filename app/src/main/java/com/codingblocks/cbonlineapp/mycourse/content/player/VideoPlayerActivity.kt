@@ -27,13 +27,7 @@ import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
-import androidx.work.BackoffPolicy
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.workDataOf
+import androidx.work.*
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
@@ -44,22 +38,10 @@ import com.codingblocks.cbonlineapp.library.EditNoteClickListener
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoBottomSheet.Companion.VideoSheetType
 import com.codingblocks.cbonlineapp.mycourse.content.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.mycourse.content.player.notes.VideoNotesFragment
-import com.codingblocks.cbonlineapp.util.Animations
-import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.FileUtils
-import com.codingblocks.cbonlineapp.util.LECTURE
+import com.codingblocks.cbonlineapp.util.*
 import com.codingblocks.cbonlineapp.util.MediaUtils.getYoutubeVideoId
 import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.SECTION_ID
-import com.codingblocks.cbonlineapp.util.TITLE
-import com.codingblocks.cbonlineapp.util.VIDEO
-import com.codingblocks.cbonlineapp.util.VIDEO_ID
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
-import com.codingblocks.cbonlineapp.util.extensions.openChrome
-import com.codingblocks.cbonlineapp.util.extensions.setRv
-import com.codingblocks.cbonlineapp.util.extensions.showDialog
-import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.codingblocks.cbonlineapp.util.extensions.*
 import com.codingblocks.cbonlineapp.util.livedata.getDistinct
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
@@ -79,11 +61,7 @@ import com.vdocipher.aegis.player.VdoPlayerSupportFragment
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.my_fab_menu.*
 import kotlinx.android.synthetic.main.vdo_control_view.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.excludeFromRecents
@@ -144,7 +122,8 @@ class VideoPlayerActivity :
 
         contentRv.setRv(this, sectionItemsAdapter)
         vm.contentList.observer(this) {
-            sectionItemsAdapter.submitList(it.contents.filter { it.contentable == VIDEO || it.contentable == LECTURE }.sortedBy { it.order }, vm.currentContentId!!)
+            sectionItemsAdapter.submitList(it.contents.filter { it.contentable == VIDEO || it.contentable == LECTURE }
+                .sortedBy { it.order }, vm.currentContentId!!)
         }
         sectionItemsAdapter.onItemClick = {
             startActivity(
@@ -184,7 +163,12 @@ class VideoPlayerActivity :
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
                     } else {
-                        fabMenu.setBackgroundColor(ContextCompat.getColor(this@VideoPlayerActivity, R.color.white_transparent))
+                        fabMenu.setBackgroundColor(
+                            ContextCompat.getColor(
+                                this@VideoPlayerActivity,
+                                R.color.white_transparent
+                            )
+                        )
                     }
                 } else {
                     doubtFab.startAnimation(animationUtils.open)
@@ -212,9 +196,9 @@ class VideoPlayerActivity :
         noteFab.setOnClickListener {
             val notePos: Double? =
                 if (youtubePlayerView.isVisible)
-                (tracker.currentSecond.div(1000)).toDouble()
+                    (tracker.currentSecond.div(1000)).toDouble()
                 else
-                (videoPlayer.currentTime.div(1000)).toDouble()
+                    (videoPlayer.currentTime.div(1000)).toDouble()
 
             val newNote = NotesModel(
                 duration = notePos ?: 0.0,
@@ -466,10 +450,7 @@ class VideoPlayerActivity :
         }
 
         override fun onLoadError(p0: VdoPlayer.VdoInitParams, p1: ErrorDescription) {
-            FirebaseCrashlytics.getInstance().log(
-                "Error Message: ${p1.errorMsg}, " +
-                    "Error Code: ${p1.errorCode} , ${p1.httpStatusCode}"
-            )
+            log("Error Message: ${p1.errorMsg}, Error Code: ${p1.errorCode} , ${p1.httpStatusCode}")
             when (p1.errorCode) {
                 5110 -> {
                     rootLayout.snackbar("Seems like your download was corrupted.Please Download Again")
@@ -505,8 +486,8 @@ class VideoPlayerActivity :
         }
         /**Remove [PlayerState] After 95%*/
 
-        if (progress >= duration && autoPlaySwitch.isChecked){
-            if (sectionItemsAdapter.selectedItem < sectionItemsAdapter.currentList.lastIndex){
+        if (progress >= duration && autoPlaySwitch.isChecked) {
+            if (sectionItemsAdapter.selectedItem < sectionItemsAdapter.currentList.lastIndex) {
                 val nextItem = sectionItemsAdapter.currentList[sectionItemsAdapter.selectedItem + 1]
                 startActivity(
                     createVideoPlayerActivityIntent(
@@ -702,7 +683,8 @@ class VideoPlayerActivity :
     }
 
     private fun navToLauncherTask(appContext: Context) {
-        val activityManager: ActivityManager = (appContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
+        val activityManager: ActivityManager =
+            (appContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
         val appTasks: List<ActivityManager.AppTask> = activityManager.appTasks
         for (task in appTasks) {
             val baseIntent: Intent = task.taskInfo.baseIntent
@@ -840,23 +822,24 @@ class VideoPlayerActivity :
         }
     }
 
-    private val vdoParamsGenerator: VdoPlayerControls.VdoParamsGenerator = object : VdoPlayerControls.VdoParamsGenerator {
+    private val vdoParamsGenerator: VdoPlayerControls.VdoParamsGenerator =
+        object : VdoPlayerControls.VdoParamsGenerator {
 
-        override fun getNewVdoInitParams(): VdoPlayer.VdoInitParams? {
-            return try {
-                getVdoParams()
-            } catch (e: IOException) {
-                e.printStackTrace()
-                log("Error generating new otp and playbackInfo")
-                null
-            } catch (e: JSONException) {
-                e.printStackTrace()
-                log("Error generating new otp and playbackInfo")
+            override fun getNewVdoInitParams(): VdoPlayer.VdoInitParams? {
+                return try {
+                    getVdoParams()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    log("Error generating new otp and playbackInfo")
+                    null
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                    log("Error generating new otp and playbackInfo")
 
-                null
+                    null
+                }
             }
         }
-    }
 
     fun hideVideoFab() {
         noteFabTv.isVisible = false
@@ -873,7 +856,12 @@ class VideoPlayerActivity :
 
     companion object {
 
-        fun createVideoPlayerActivityIntent(context: Context, contentId: String, sectionId: String, position: Long = 0): Intent {
+        fun createVideoPlayerActivityIntent(
+            context: Context,
+            contentId: String,
+            sectionId: String,
+            position: Long = 0
+        ): Intent {
             return context.intentFor<VideoPlayerActivity>(
                 CONTENT_ID to contentId,
                 VIDEO_POSITION to position,
