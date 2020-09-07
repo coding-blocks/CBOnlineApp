@@ -138,7 +138,7 @@ dependencies {
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.5.Final'
     implementation "com.github.skydoves:progressview:1.0.5"
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-    implementation 'com.razorpay:checkout:1.5.15'
+    implementation 'com.razorpay:checkout:1.6.3'
     implementation "io.noties.markwon:core:$markwon_version"
     implementation "io.noties.markwon:ext-tables:$markwon_version"
     implementation "io.noties.markwon:editor:$markwon_version"
