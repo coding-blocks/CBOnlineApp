@@ -10,11 +10,7 @@ import com.github.jasminb.jsonapi.annotations.Type
 import com.google.gson.JsonObject
 import java.io.Serializable
 
-open class BaseModel {
-    @Id
-    var id: String = ""
-    var updatedAt: String = ""
-}
+
 
 data class CourseFeatures(
     val icon: String,
@@ -26,7 +22,7 @@ data class Project(
     val title: String = "",
     val description: String = "",
     val image: String = ""
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("user_course_wishlists")
 data class Wishlist(
@@ -34,7 +30,7 @@ data class Wishlist(
     val course: Course? = null,
     @Relationship("user")
     val user: User? = null
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("courses", "course")
 data class Course(
@@ -61,7 +57,7 @@ data class Course(
     var projects: ArrayList<Project>?,
     @Relationship("tags")
     val tags: ArrayList<Tags>?
-) : BaseModel() {
+) : BaseNetworkModel() {
 
     constructor(id: String) :
         this(
@@ -112,7 +108,7 @@ data class Runs(
     val goodiesThreshold: Int?,
     val totalContents: Int,
     val tier: String?
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("hbcontents")
 data class CodeChallenge(
@@ -120,7 +116,7 @@ data class CodeChallenge(
     @Relationship("problem")
     val content: Problem? = null
 
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("timelimits")
 data class TimeLimits(
@@ -131,7 +127,7 @@ data class TimeLimits(
     val js: String,
     val csharp: String,
     val java: String
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("details")
 data class CodeDetails(
@@ -146,7 +142,7 @@ data class CodeDetails(
     @JsonProperty("sample_output")
     val sampleOutput: String? = "None",
     val description: String? = "None"
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("problems")
 data class Problem(
@@ -156,7 +152,7 @@ data class Problem(
     val status: String? = "",
     val details: CodeDetails? = null,
     val timelimits: TimeLimits? = null
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("run-attempts", "run_attempts")
 data class RunAttempts(
@@ -176,14 +172,14 @@ data class RunAttempts(
     val paused: Boolean = false,
     val pauseTimeLeft: String? = null,
     val lastPausedLeft: String? = null
-) : BaseModel() {
+) : BaseNetworkModel() {
     constructor(id: String) : this() {
         super.id = id
     }
 }
 
 @Type("certificates")
-data class Certificate(val url: String?) : BaseModel()
+data class Certificate(val url: String?) : BaseNetworkModel()
 
 @Type("doubts", "doubt")
 data class Doubts(
@@ -204,7 +200,7 @@ data class Doubts(
     val firebaseRef: String? = null,
     @Relationship("resolved_by", "resolved-by")
     val resolvedBy: User? = null
-) : BaseModel() {
+) : BaseNetworkModel() {
     constructor(
         id: String,
         title: String,
@@ -239,7 +235,7 @@ data class Comment(
     val discourseTopicId: String = "",
     @Relationship("doubt")
     val doubt: Doubts? = null
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("dashboard_banners")
 data class Banner(
@@ -249,7 +245,7 @@ data class Banner(
     val link: String,
     val order: Int,
     val hosts: String
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("sections")
 data class Sections(
@@ -262,7 +258,7 @@ data class Sections(
     val runId: String? = "",
     @RelationshipLinks("contents")
     val courseContentLinks: Links? = null
-) : BaseModel() {
+) : BaseNetworkModel() {
     constructor(id: String) : this() {
         super.id = id
     }
@@ -290,7 +286,7 @@ data class LectureContent(
     val csv: ContentCsv?,
     @Relationship("bookmark")
     val bookmark: Bookmark?
-) : BaseModel() {
+) : BaseNetworkModel() {
     constructor(id: String) :
         this("", 0L, "", null, null, null, null, null, null, null, null, null) {
             super.id = id
@@ -304,7 +300,7 @@ data class Instructor(
     val photo: String?,
     val email: String?,
     val sub: String?
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("progresses", "progress")
 data class ContentProgress(
@@ -354,7 +350,7 @@ data class QuizAttempt(
     @Relationship("run-attempt")
     var runAttempt: RunAttempts? = null,
     var submission: ArrayList<QuizSubmission>? = null
-) : BaseModel() {
+) : BaseNetworkModel() {
     constructor(qnaId: ContentQna, runAttemptId: RunAttempts) :
         this(qna = qnaId, runAttempt = runAttemptId)
 
@@ -374,7 +370,7 @@ data class Note(
     val runAttempt: RunAttempts? = null,
     @Relationship("content")
     val content: LectureContent? = null
-) : BaseModel(), Serializable {
+) : BaseNetworkModel(), Serializable {
     constructor(id: String, duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent) :
         this(duration, null, null, text, runAttemptId, contentId) {
             super.id = id
@@ -400,7 +396,7 @@ data class User(
     val college: String? = "",
     val mobile: String? = "",
     val branch: String? = ""
-) : BaseModel() {
+) : BaseNetworkModel() {
     constructor(id: String) :
         this("", "", "", "", "", "", "", "", "") {
             super.id = id
@@ -410,12 +406,12 @@ data class User(
 class SectionContent(
     val order: Int,
     val sectionId: String?
-) : BaseModel()
+) : BaseNetworkModel()
 
 // =======Section Content Models =========
 
 @Type("code-challenges", "code_challenges")
-class ContentCodeChallenge() : BaseModel() {
+class ContentCodeChallenge() : BaseNetworkModel() {
     @JvmField
     var contentId: String? = null
 
@@ -434,7 +430,7 @@ class ContentQna(
     var contentId: String? = null,
     var qId: Int? = null,
     var name: String? = null
-) : BaseModel() {
+) : BaseNetworkModel() {
     constructor(id: String) :
         this() {
             super.id = id
@@ -442,7 +438,7 @@ class ContentQna(
 }
 
 @Type("csv")
-class ContentCsv : BaseModel() {
+class ContentCsv : BaseNetworkModel() {
     @JvmField
     var contentId: String? = null
 
@@ -466,7 +462,7 @@ class ContentCsv : BaseModel() {
 }
 
 @Type("documents", "document")
-class ContentDocumentType : BaseModel() {
+class ContentDocumentType : BaseNetworkModel() {
     @JvmField
     var contentId: String? = null
 
@@ -484,7 +480,7 @@ class ContentDocumentType : BaseModel() {
 }
 
 @Type("lectures", "lecture")
-class ContentLectureType : BaseModel() {
+class ContentLectureType : BaseNetworkModel() {
     @JvmField
     var createdAt: String? = null
 
@@ -505,7 +501,7 @@ class ContentLectureType : BaseModel() {
 }
 
 @Type("videos", "video")
-class ContentVideoType : BaseModel() {
+class ContentVideoType : BaseNetworkModel() {
     @JvmField
     var description: String? = null
 
@@ -523,7 +519,7 @@ class ContentVideoType : BaseModel() {
 }
 
 @Type("announcement")
-class Announcement : BaseModel() {
+class Announcement : BaseNetworkModel() {
     @JvmField
     var userId: String? = null
 
@@ -548,10 +544,10 @@ class Quizzes(
     var description: String? = null,
     @Relationship("questions")
     var questions: ArrayList<Question>? = null
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("questions")
-class Question : BaseModel() {
+class Question : BaseNetworkModel() {
     @JvmField
     var title: String? = null
 
@@ -564,7 +560,7 @@ class Question : BaseModel() {
 }
 
 @Type("choices")
-class Choice : BaseModel() {
+class Choice : BaseNetworkModel() {
     @JvmField
     var title: String? = null
 
@@ -578,12 +574,12 @@ class Choice : BaseModel() {
     var correct: Boolean? = null
 }
 
-class QuizSubmission : BaseModel() {
+class QuizSubmission : BaseNetworkModel() {
     @JvmField
     var markedChoices: Array<String>? = null
 }
 
-class QuizResult : BaseModel() {
+class QuizResult : BaseNetworkModel() {
     @JvmField
     var type: String? = null
 
@@ -594,7 +590,7 @@ class QuizResult : BaseModel() {
     var questions: ArrayList<QuizQuestion>? = null
 }
 
-class QuizQuestion : BaseModel() {
+class QuizQuestion : BaseNetworkModel() {
     @JvmField
     var score: Int? = null
 
@@ -615,13 +611,13 @@ class DoubtLeaderBoard(
     val ratingWeek: Double,
     @Relationship("user")
     var user: User?
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("rating")
-class Rating : BaseModel()
+class Rating : BaseNetworkModel()
 
 @Type("tags")
-class Tags : BaseModel() {
+class Tags : BaseNetworkModel() {
     @JvmField
     var name: String? = null
 }
@@ -633,7 +629,7 @@ class CarouselCards(
     var img: String,
     var buttonText: String,
     var buttonLink: String
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("career_tracks")
 data class CareerTracks(
@@ -651,12 +647,12 @@ data class CareerTracks(
     var professions: List<Professions>?,
     @RelationshipLinks("courses")
     val coursesLinks: Links? = null
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("professions")
 class Professions(
     val title: String = ""
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("players")
 data class Player(
@@ -687,7 +683,7 @@ class Jobs(
     val courses: ArrayList<Course>?,
     @Relationship("my_application", "my-application")
     val application: ApplicationId?
-) : BaseModel()
+) : BaseNetworkModel()
 
 class Form(
     val name: String,
@@ -706,7 +702,7 @@ class Company(
     val website: String = "",
     val inactive: Boolean = false,
     val contacts: ArrayList<Contact>?
-) : BaseModel()
+) : BaseNetworkModel()
 
 data class Contact(
     val email: String = "",
@@ -720,7 +716,7 @@ data class Applications(
     val resumeLink: String = "",
     @Relationship("job")
     val job: JobId
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("jobs")
 class JobId(
@@ -745,14 +741,14 @@ data class Spins(
     val spinPrize: SpinPrize?,
     @Relationship("user")
     val user: User?
-) : BaseModel()
+) : BaseNetworkModel()
 
 @Type("spin_prizes")
 data class SpinPrize(
     val title: String,
     val description: String,
     val img: String
-) : BaseModel()
+) : BaseNetworkModel()
 
 data class PrizeContent(
     val couponCreated: String?,

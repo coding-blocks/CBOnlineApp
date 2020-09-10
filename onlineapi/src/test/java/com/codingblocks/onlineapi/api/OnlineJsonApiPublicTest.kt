@@ -2,8 +2,9 @@ package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.CBOnlineCommunicator
 import com.codingblocks.onlineapi.CBOnlineLib
+import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 
@@ -34,43 +35,49 @@ class OnlineJsonApiPublicTest {
 
     @Test
     fun `GET courses|{id}`() = runBlocking {
-        val course = api.getCourse("26").body()
-        Assert.assertNotNull(course)
+        val course = api.getCourse("26").body()!!
+        assertThat(course.title).isEqualTo("Algo++  Data Structures & Algorithms")
+    }
+
+    @Test
+    fun `GET courses|{slug}`() = runBlocking {
+        val course = api.getCourse("c-plus-plus-online-course-for-beginners").body()!!
+        assertThat(course.subtitle).contains("become a C++ Master")
     }
 
     @Test
     fun `GET instructor`() = runBlocking {
         val instructor = api.getInstructor("6").body()
-        Assert.assertNotNull(instructor)
+        assertNotNull(instructor)
     }
 
     @Test
     fun `GET recommended`() = runBlocking {
         val courses = api.getRecommendedCourses().body()
-        Assert.assertNotNull(courses)
+        assertNotNull(courses)
     }
 
     @Test
     fun `GET instructors`() = runBlocking {
         val instructors = api.getAllInstructors().body()
-        Assert.assertNotNull(instructors)
+        assertNotNull(instructors)
     }
 
     @Test
     fun `GET allcourses`() = runBlocking {
         val courses = api.getAllCourses("0").body()
-        Assert.assertNotNull(courses)
+        assertNotNull(courses)
     }
 
     @Test
     fun `GET carouselCards`() = runBlocking {
         val carouselCards = api.getCarouselCards().body()
-        Assert.assertNotNull(carouselCards)
+        assertNotNull(carouselCards)
     }
 
     @Test
     fun `GET fetchBanners`() = runBlocking {
         val banners = hackApi.getBanner().body()
-        Assert.assertNotNull(banners)
+        assertNotNull(banners)
     }
 }

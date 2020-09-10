@@ -31,7 +31,7 @@ data class RatingModel(
 data class Leaderboard(
     @JvmField
     var userName: String
-) : BaseModel() {
+) : BaseNetworkModel() {
     @JvmField
     var collegeName: String? = null
     @JvmField

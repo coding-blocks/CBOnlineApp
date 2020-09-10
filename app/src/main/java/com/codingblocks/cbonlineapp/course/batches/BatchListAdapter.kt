@@ -8,14 +8,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
-import com.codingblocks.onlineapi.models.BaseModel
+import com.codingblocks.onlineapi.models.BaseNetworkModel
 import com.codingblocks.onlineapi.models.Professions
 import com.codingblocks.onlineapi.models.Runs
 import kotlinx.android.synthetic.main.item_batch.view.*
 
-class BatchListAdapter : ListAdapter<BaseModel, BatchListAdapter.ItemViewHolder>(DiffCallback()) {
+class BatchListAdapter : ListAdapter<BaseNetworkModel, BatchListAdapter.ItemViewHolder>(DiffCallback()) {
 
-    var onItemClick: ((BaseModel) -> Unit)? = null
+    var onItemClick: ((BaseNetworkModel) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
@@ -29,7 +29,7 @@ class BatchListAdapter : ListAdapter<BaseModel, BatchListAdapter.ItemViewHolder>
     }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: BaseModel) = with(itemView) {
+        fun bind(item: BaseNetworkModel) = with(itemView) {
             if (item is Runs) {
                 batchTileTv.text = item.description
             } else if (item is Professions) {
@@ -41,12 +41,12 @@ class BatchListAdapter : ListAdapter<BaseModel, BatchListAdapter.ItemViewHolder>
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<BaseModel>() {
-        override fun areItemsTheSame(oldItem: BaseModel, newItem: BaseModel): Boolean {
+    class DiffCallback : DiffUtil.ItemCallback<BaseNetworkModel>() {
+        override fun areItemsTheSame(oldItem: BaseNetworkModel, newItem: BaseNetworkModel): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: BaseModel, newItem: BaseModel): Boolean {
+        override fun areContentsTheSame(oldItem: BaseNetworkModel, newItem: BaseNetworkModel): Boolean {
             return oldItem.sameAndEqual(newItem)
         }
     }
