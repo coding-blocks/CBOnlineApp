@@ -35,15 +35,15 @@ class OnBoardingActivity : BaseCBActivity() {
         setUpViewPagerWithDots(getIntroList())
     }
 
-    private fun setUpViewPagerWithDots(introList: List<Intro>) {
-        val dotsCount = introList.size
+    private fun setUpViewPagerWithDots(introArray: Array<Intro>) {
+        val dotsCount = introArray.size
         val dots = Array(dotsCount) {
             ImageView(this)
         }
 
         initDots(dots)
         viewPager2.apply {
-            adapter = IntroPagerAdapter(introList)
+            adapter = IntroPagerAdapter(introArray)
             currentItem = 0
             offscreenPageLimit = 1
             registerOnPageChangeCallback(
@@ -68,23 +68,21 @@ class OnBoardingActivity : BaseCBActivity() {
         dots[0].isSelected = true
     }
 
-    private fun getIntroList(): List<Intro> {
-        return listOf(
+    private fun getIntroList(): Array<Intro> {
+        val introImages = resources.obtainTypedArray(R.array.intro_images)
+        val introTitles = resources.obtainTypedArray(R.array.intro_titles)
+        val introDescription = resources.obtainTypedArray(R.array.intro_descriptions)
+        val introArray = Array(3) {
             Intro(
-                getString(R.string.intro_slide_title_1),
-                getString(R.string.intro_slide_message_1),
-                R.drawable.intro1
-            ),
-            Intro(
-                getString(R.string.intro_slide_title_2),
-                getString(R.string.intro_slide_message_1),
-                R.drawable.intro2
-            ),
-            Intro(
-                getString(R.string.intro_slide_title_3),
-                getString(R.string.intro_slide_message_1),
-                R.drawable.intro3
+                introTitles.getResourceId(it, -1),
+                introDescription.getResourceId(it, -1),
+                introImages.getResourceId(it, -1)
             )
-        )
+        }
+        introImages.recycle()
+        introTitles.recycle()
+        introDescription.recycle()
+
+        return introArray
     }
 }

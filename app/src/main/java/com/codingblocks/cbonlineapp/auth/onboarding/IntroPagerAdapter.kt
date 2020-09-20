@@ -9,7 +9,7 @@ import com.codingblocks.cbonlineapp.R
 import kotlinx.android.synthetic.main.tour_layout.view.*
 
 class IntroPagerAdapter(
-    private val introData: List<Intro>
+    private val introData: Array<Intro>
 ) : RecyclerView.Adapter<IntroPagerAdapter.IntroViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IntroViewHolder {
@@ -27,8 +27,8 @@ class IntroPagerAdapter(
 
         fun bind(item: Intro) {
             with(itemView) {
-                titleTv.text = item.title
-                descriptionTV.text = item.message
+                titleTv.text = context.getString(item.title)
+                descriptionTV.text = context.getString(item.description)
                 val bm = BitmapFactory.decodeResource(context.resources, item.image)
                 imageView.setImageBitmap(bm)
             }

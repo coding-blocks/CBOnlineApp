@@ -25,6 +25,24 @@
         <item>@string/misc</item>
     </string-array>
 
+    <string-array name="intro_titles">
+        <item>@string/intro_slide_title_1</item>
+        <item>@string/intro_slide_title_2</item>
+        <item>@string/intro_slide_title_3</item>
+    </string-array>
+
+    <string-array name="intro_descriptions">
+        <item>@string/intro_slide_message_1</item>
+        <item>@string/intro_slide_message_2</item>
+        <item>@string/intro_slide_message_3</item>
+    </string-array>
+
+    <integer-array name="intro_images">
+        <item>@drawable/intro1</item>
+        <item>@drawable/intro2</item>
+        <item>@drawable/intro3</item>
+    </integer-array>
+
     <string-array name="campaign_tab_titles">
         <item>@string/spin_wheel</item>
         <item>@string/winnings</item>
