@@ -7,14 +7,12 @@
     tools:context="com.codingblocks.cbonlineapp.auth.onboarding.OnBoardingActivity">
 
 
-    <com.codingblocks.cbonlineapp.util.widgets.ViewPagerCustomDuration
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/viewPager"
-        android:overScrollMode="never"
-        android:layout_weight=".5">
-
-    </com.codingblocks.cbonlineapp.util.widgets.ViewPagerCustomDuration>
+        android:layout_weight=".5"
+        android:overScrollMode="never" />
 
     <LinearLayout
         android:id="@+id/viewPagerCountDots"

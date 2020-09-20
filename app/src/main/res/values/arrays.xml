@@ -32,10 +32,5 @@
         <item>@string/rules</item>
     </string-array>
 
-    <integer-array name="tourslide">
-        <item>@drawable/intro1</item>
-        <item>@drawable/intro2</item>
-        <item>@drawable/intro3</item>
-    </integer-array>
     <string name="misc">More</string>
 </resources>
