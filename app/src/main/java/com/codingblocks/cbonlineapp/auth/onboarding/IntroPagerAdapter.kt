@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.auth.onboarding
 
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,9 +26,12 @@ class IntroPagerAdapter(
     class IntroViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(item: Intro) {
-            itemView.titleTv.text = item.title
-            itemView.descriptionTV.text = item.message
-            itemView.imageView.setImageResource(item.image)
+            with(itemView) {
+                titleTv.text = item.title
+                descriptionTV.text = item.message
+                val bm = BitmapFactory.decodeResource(context.resources, item.image)
+                imageView.setImageBitmap(bm)
+            }
         }
 
         companion object {
