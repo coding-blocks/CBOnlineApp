@@ -22,7 +22,7 @@ class OnBoardingActivity : BaseCBActivity() {
     }
 
     private fun initUi() {
-        setupIntroSlider()
+        setupIntroSlider(buildIntroData())
         browseBtn.setOnClickListener {
             startActivity(DashboardActivity.createDashboardActivityIntent(this, false))
         }
@@ -31,17 +31,18 @@ class OnBoardingActivity : BaseCBActivity() {
         }
     }
 
-    private fun setupIntroSlider() {
-        setUpViewPagerWithDots(getIntroList())
-    }
-
-    private fun setUpViewPagerWithDots(introArray: Array<Intro>) {
+    /**
+     * sets up the intro slider with viewpager 2 and recyclerview adapter
+     * add dots respective to each screen with help of pageChangeCallback.
+     * @param introArray introArray is data to be shown on slider
+     */
+    private fun setupIntroSlider(introArray: Array<Intro>) {
         val dotsCount = introArray.size
         val dots = Array(dotsCount) {
             ImageView(this)
         }
 
-        initDots(dots)
+        setupDotsOnIntroScreen(dots)
         viewPager2.apply {
             adapter = IntroPagerAdapter(introArray)
             currentItem = 0
@@ -56,7 +57,12 @@ class OnBoardingActivity : BaseCBActivity() {
         }
     }
 
-    private fun initDots(dots: Array<ImageView>) {
+
+    /**
+     * adds the dot views for each intro screen
+     * @param dots ecah dot is of ImageView type
+     */
+    private fun setupDotsOnIntroScreen(dots: Array<ImageView>) {
         for (i in dots.indices) {
             dots[i] = ImageView(this)
             dots[i].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.dots))
@@ -68,7 +74,11 @@ class OnBoardingActivity : BaseCBActivity() {
         dots[0].isSelected = true
     }
 
-    private fun getIntroList(): Array<Intro> {
+    /**
+     * Builds intro screen data with help of resources
+     * @return Intro screen array
+     */
+    private fun buildIntroData(): Array<Intro> {
         val introImages = resources.obtainTypedArray(R.array.intro_images)
         val introTitles = resources.obtainTypedArray(R.array.intro_titles)
         val introDescription = resources.obtainTypedArray(R.array.intro_descriptions)
@@ -79,6 +89,10 @@ class OnBoardingActivity : BaseCBActivity() {
                 introImages.getResourceId(it, -1)
             )
         }
+
+        /* Recycles the TypedArray, to be re-used by a later caller.
+         * After calling this function you must not ever touch the typed array again.
+         */
         introImages.recycle()
         introTitles.recycle()
         introDescription.recycle()
