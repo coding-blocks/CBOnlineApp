@@ -9,6 +9,15 @@
     <string name="course_progress">Course Progress : </string>
     <string name="title_activity_settings">Settings</string>
 
+    <!-- String relate to IntroSlide -->
+    <string name="intro_slide_title_1">Learn from the best in\n the industry</string>
+    <string name="intro_slide_title_2">Learn on the go\n anytime, anywhere</string>
+    <string name="intro_slide_title_3">Resolve all your doubts with\n TA’s &amp; Mentors</string>
+
+    <string name="intro_slide_message_1">Experienced, engaging instructors take you\n through course material, step by step, in our\n high-quality video lessons.</string>
+    <string name="intro_slide_message_2">You can learn anytime, anywhere with our all\n new android app. Download and save videos\n offline.</string>
+    <string name="intro_slide_message_3">Get exclusive access to Live Webinars where\n you can interact with mentors for important\n course topics &amp; can solve all your doubts.</string>
+
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
@@ -340,4 +349,5 @@
     <string name="write_a_public_review">Write a public review.</string>
     <string name="submit_feedback">Submit Feedback</string>
     <string name="autoplay">AutoPlay</string>
+    <string name="intro_image">intro screen image</string>
 </resources>
