@@ -10,9 +10,9 @@ import kotlinx.android.synthetic.main.tour_layout.view.*
 
 /**
  * IntroPagerAdapter is an adapter class for IntroScreen ViewPager.
- * transforms introData into views that displays on the screen
+ * It transforms introData into views that displays on the screen
  *
- * @param introData is Array of items that adapter needs to use to show up on UI
+ * @param introData is array of items that adapter needs to use to show up on UI.
  */
 class IntroPagerAdapter(
     private val introData: Array<Intro>
@@ -30,7 +30,7 @@ class IntroPagerAdapter(
     }
 
     /**
-     * IntroViewHolder is responsible to display one item from item's layout
+     * IntroViewHolder is responsible to display one item from item's layout.
      * @param itemView view of the current item
      */
     class IntroViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

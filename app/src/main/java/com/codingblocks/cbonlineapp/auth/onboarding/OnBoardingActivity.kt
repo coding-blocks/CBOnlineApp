@@ -18,10 +18,10 @@ class OnBoardingActivity : BaseCBActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_on_boarding)
 
-        initUi()
+        initializeUI()
     }
 
-    private fun initUi() {
+    private fun initializeUI() {
         setupIntroSlider(buildIntroData())
         browseBtn.setOnClickListener {
             startActivity(DashboardActivity.createDashboardActivityIntent(this, false))
@@ -32,8 +32,7 @@ class OnBoardingActivity : BaseCBActivity() {
     }
 
     /**
-     * sets up the intro slider with viewpager 2 and recyclerview adapter
-     * add dots respective to each screen with help of pageChangeCallback.
+     * Sets up the intro slider with viewpager 2 and recyclerview adapter.
      * @param introArray introArray is data to be shown on slider
      */
     private fun setupIntroSlider(introArray: Array<Intro>) {
@@ -59,8 +58,8 @@ class OnBoardingActivity : BaseCBActivity() {
 
 
     /**
-     * adds the dot views for each intro screen
-     * @param dots ecah dot is of ImageView type
+     * Adds the dot views for each intro screen.
+     * @param dots each dot is of ImageView type
      */
     private fun setupDotsOnIntroScreen(dots: Array<ImageView>) {
         for (i in dots.indices) {
@@ -90,7 +89,8 @@ class OnBoardingActivity : BaseCBActivity() {
             )
         }
 
-        /* Recycles the TypedArray, to be re-used by a later caller.
+        /**
+         * Recycles the TypedArray, to be re-used by a later caller.
          * After calling this function you must not ever touch the typed array again.
          */
         introImages.recycle()
