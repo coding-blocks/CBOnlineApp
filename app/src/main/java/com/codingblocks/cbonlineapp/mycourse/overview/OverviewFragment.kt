@@ -17,7 +17,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.dashboard.home.loadData
 import com.codingblocks.cbonlineapp.dashboard.home.setGradientColor
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
@@ -43,7 +42,11 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     private val viewModel by sharedViewModel<MyCourseViewModel>()
     private val leaderBoardListAdapter = LeaderBoardListAdapter()
     var confirmDialog: AlertDialog? = null
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.fragment_overview, container, false)
     }
 
@@ -55,20 +58,24 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 showPauseDialog(courseAndRun.runAttempt.pauseTimeLeft)
             }
             viewModel.premiumRun = courseAndRun.runAttempt.premium
-            viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
+            viewModel.runStartEnd =
+                Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
             viewModel.runId = (courseAndRun.run.crUid)
             viewModel.courseId = courseAndRun.course.cid
             val progressValue = courseAndRun.getProgress()
             homeProgressTv.text = getString(R.string.progress, progressValue.toInt())
             homeProgressView.setGradientColor(progressValue)
-            certificate_descTv.apply { text = getString(R.string.certificate_desc, courseAndRun.run.completionThreshold) }
+            certificate_descTv.apply {
+                text = getString(R.string.certificate_desc, courseAndRun.run.completionThreshold)
+            }
             progressTv.apply {
                 text = getString(R.string.thresholdcompletion, courseAndRun.run.completionThreshold)
                 isActivated = courseAndRun.run.completionThreshold < progressValue
             }
             mentorApprovalTv.apply {
                 isActivated = courseAndRun.runAttempt.approvalRequested
-                val status = if (courseAndRun.runAttempt.approvalRequested) "Requested" else "Pending"
+                val status =
+                    if (courseAndRun.runAttempt.approvalRequested) "Requested" else "Pending"
                 text = getString(R.string.mentorapproval, status)
             }
             if (progressTv.isActivated && mentorApprovalTv.isActivated && courseAndRun.runAttempt.certificateApproved) {
@@ -78,7 +85,11 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                     setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_share, 0)
                     setOnClickListener {
-                        downloadCertificate(requireContext(), courseAndRun.runAttempt.certificateUrl, "${viewModel.name}.pdf")
+                        downloadCertificate(
+                            requireContext(),
+                            courseAndRun.runAttempt.certificateUrl,
+                            "${viewModel.name}.pdf"
+                        )
                     }
                 }
             } else if (progressTv.isActivated && !mentorApprovalTv.isActivated) {
@@ -89,7 +100,12 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     setOnClickListener {
                         isEnabled = false
                         text = getString(R.string.requested)
-                        setTextColor(ContextCompat.getColor(requireContext(), R.color.brownish_grey))
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.brownish_grey
+                            )
+                        )
                         setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, 0, 0)
                         viewModel.requestMentorApproval()
                     }
@@ -100,11 +116,11 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     setWhatsappCard(it, courseAndRun.runAttempt.premium)
                 }
             }
-
-            if (courseAndRun.run.crStart > "1574985600") {
-                if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium && RUNTIERS.LITE.name != courseAndRun.runAttempt.runTier)
-                    setGoodiesCard(courseAndRun.run.goodiesThreshold, progressValue)
-            }
+            //TODO : Add Goodies Card
+//            if (courseAndRun.run.crStart > "1574985600") {
+//                if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium && RUNTIERS.LITE.name != courseAndRun.runAttempt.runTier)
+//               setGoodiesCard(courseAndRun.run.goodiesThreshold, progressValue)
+//            }
             viewModel.getLeaderboard().observer(thisLifecycleOwner) { leaderboard ->
 
                 val currUserLeaderboard = leaderboard.find { it.id == viewModel.prefs.SP_USER_ID }
@@ -112,7 +128,12 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     it.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
                     if (leaderboard.size > 5) {
                         courseLeaderboardll.isVisible = true
-                        leaderBoardListAdapter.submitList(mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5))
+                        leaderBoardListAdapter.submitList(
+                            mutableListOf(currUserLeaderboard) + leaderboard.subList(
+                                0,
+                                5
+                            )
+                        )
                     }
                 }
             }
@@ -130,7 +151,8 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 if (it != null) {
                     hbRankContainer.isVisible = true
                     currentOverallRank.text = it.currentOverallRank.toString()
-                    currentMonthScore.text = requireContext().getString(R.string.points, it.currentMonthScore)
+                    currentMonthScore.text =
+                        requireContext().getString(R.string.points, it.currentMonthScore)
                     val rankDelta = it.currentOverallRank - it.previousOverallRank
                     val pointsDelta = it.currentMonthScore - it.previousMonthScore
                     previousRank.apply {
@@ -160,7 +182,8 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         if (confirmDialog == null)
             confirmDialog = showConfirmDialog(DIALOG_TYPE.PAUSED) {
                 cancelable = false
-                val time = PrettyTime().format(Date(System.currentTimeMillis() + pauseTimeLeft!!.toLong()))
+                val time =
+                    PrettyTime().format(Date(System.currentTimeMillis() + pauseTimeLeft!!.toLong()))
                 desc.text = getString(R.string.pause_time_left, time)
                 positiveBtnClickListener {
                     viewModel.unPauseCourse().observeOnce {
@@ -175,8 +198,13 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     private fun downloadCertificate(context: Context, certificateUrl: String, name: String) {
         val file = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), name)
         if (file.exists()) {
-            val fileUri = FileProvider.getUriForFile(context, context.packageName + ".provider", file)
-            context.grantUriPermission(requireContext().packageName, fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            val fileUri =
+                FileProvider.getUriForFile(context, context.packageName + ".provider", file)
+            context.grantUriPermission(
+                requireContext().packageName,
+                fileUri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
             val intentShareFile = Intent(Intent.ACTION_SEND)
             intentShareFile.type = "application/pdf"
             intentShareFile.putExtra(Intent.EXTRA_STREAM, fileUri)
@@ -220,7 +248,8 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
                     startActivity(intent)
                 } else {
-                    Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }

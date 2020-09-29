@@ -27,7 +27,13 @@ import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
-import androidx.work.*
+import androidx.work.BackoffPolicy
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
@@ -38,10 +44,22 @@ import com.codingblocks.cbonlineapp.library.EditNoteClickListener
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoBottomSheet.Companion.VideoSheetType
 import com.codingblocks.cbonlineapp.mycourse.content.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.mycourse.content.player.notes.VideoNotesFragment
-import com.codingblocks.cbonlineapp.util.*
+import com.codingblocks.cbonlineapp.util.Animations
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.FileUtils
+import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils.getYoutubeVideoId
 import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
-import com.codingblocks.cbonlineapp.util.extensions.*
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.TITLE
+import com.codingblocks.cbonlineapp.util.VIDEO
+import com.codingblocks.cbonlineapp.util.VIDEO_ID
+import com.codingblocks.cbonlineapp.util.extensions.getPrefs
+import com.codingblocks.cbonlineapp.util.extensions.openChrome
+import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.extensions.showDialog
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.livedata.getDistinct
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
@@ -61,7 +79,11 @@ import com.vdocipher.aegis.player.VdoPlayerSupportFragment
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.my_fab_menu.*
 import kotlinx.android.synthetic.main.vdo_control_view.view.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.excludeFromRecents
@@ -177,7 +199,12 @@ class VideoPlayerActivity :
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         fabMenu.setBackgroundColor(getColor(R.color.black_95))
                     } else {
-                        fabMenu.setBackgroundColor(ContextCompat.getColor(this@VideoPlayerActivity, R.color.black_95))
+                        fabMenu.setBackgroundColor(
+                            ContextCompat.getColor(
+                                this@VideoPlayerActivity,
+                                R.color.black_95
+                            )
+                        )
                     }
                 }
             }
@@ -188,7 +215,9 @@ class VideoPlayerActivity :
                     showDoubtSheet()
                 else {
                     toast("Doubt Support is only available for PREMIUM+ Runs.")
-                    openChrome(BuildConfig.DISCUSS_URL + contentTitle.text.toString().replace(" ", "-"))
+                    openChrome(
+                        BuildConfig.DISCUSS_URL + contentTitle.text.toString().replace(" ", "-")
+                    )
                 }
             }
         }
@@ -406,13 +435,13 @@ class VideoPlayerActivity :
     private fun showSystemUi(show: Boolean) {
         if (show) {
             window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                )
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    )
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         }
@@ -470,7 +499,7 @@ class VideoPlayerActivity :
         override fun onError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
             FirebaseCrashlytics.getInstance().log(
                 "Error Message: ${p1?.errorMsg}," +
-                    " Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}"
+                        " Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}"
             )
         }
 
@@ -616,7 +645,10 @@ class VideoPlayerActivity :
         }
     }
 
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean,
+        newConfig: Configuration?
+    ) {
 
         if (isInPictureInPictureMode) {
             showControls(false)
@@ -750,11 +782,13 @@ class VideoPlayerActivity :
 
     override fun onStop() {
         if (::playerFragment.isInitialized && videoContainer.isVisible) {
-            vm.position = playerFragment.player.currentTime
-            val duration = playerFragment.player.duration
-            val time = playerFragment.player.currentTime
-            if (time < duration * 0.95)
-                vm.savePlayerState(time, true)
+            playerFragment.player?.let { currentPlayer ->
+                vm.position = currentPlayer.currentTime
+                val duration = currentPlayer.duration
+                val time = currentPlayer.currentTime
+                if (time < duration * 0.95)
+                    vm.savePlayerState(time, true)
+            }
         } else if (::youtubePlayer.isInitialized) {
 
             val duration = (tracker.videoDuration * 1000).toLong()
@@ -850,7 +884,12 @@ class VideoPlayerActivity :
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
         } else {
-            fabMenu.setBackgroundColor(ContextCompat.getColor(this@VideoPlayerActivity, R.color.white_transparent))
+            fabMenu.setBackgroundColor(
+                ContextCompat.getColor(
+                    this@VideoPlayerActivity,
+                    R.color.white_transparent
+                )
+            )
         }
     }
 
