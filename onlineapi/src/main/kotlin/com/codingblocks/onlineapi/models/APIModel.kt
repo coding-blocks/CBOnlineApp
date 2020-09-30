@@ -241,6 +241,16 @@ data class Comment(
     val doubt: Doubts? = null
 ) : BaseModel()
 
+@Type("dashboard_banners")
+data class Banner(
+    val mobileImageUrl: String,
+    val imageUrl: String,
+    val altText: String?,
+    val link: String,
+    val order: Int,
+    val hosts: String
+) : BaseModel()
+
 @Type("sections")
 data class Sections(
     var name: String? = null,
@@ -773,4 +783,3 @@ data class SendFeedback(
     val review: String,
     val value: Float
 )
-

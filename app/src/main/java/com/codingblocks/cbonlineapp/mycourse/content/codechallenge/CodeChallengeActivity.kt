@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.observe
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.util.*
@@ -26,11 +27,10 @@ class CodeChallengeActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             vm.contentId = intent.getStringExtra(CONTENT_ID)
             vm.sectionId = intent.getStringExtra(SECTION_ID)
-            vm.contestId = intent.getStringExtra(CONTEST_ID)
-            vm.codeId = intent.getStringExtra(CODE_ID)
         }
         vm.fetchCodeChallenge().observer(this) {
             downloadBtn.isVisible = true
+            codeBookmarkBtn.isVisible = true
             title = it?.content?.name
 
             with(it?.content?.details!!) {
@@ -61,6 +61,26 @@ class CodeChallengeActivity : AppCompatActivity() {
                     AppCrashlyticsWrapper.log(it)
                 }
             }
+        }
+
+        codeBookmarkBtn.setOnClickListener { view ->
+            if (codeBookmarkBtn.isActivated)
+                vm.removeBookmark()
+            else {
+                vm.markBookmark()
+            }
+        }
+
+        vm.getBookmark.observer(this) {
+            codeBookmarkBtn.isActivated = it.bookmarkUid.isNotEmpty()
+        }
+
+        vm.offlineSnackbar.observer(this) {
+            codeLayout.showSnackbar(it, Snackbar.LENGTH_SHORT, action = false)
+        }
+
+        vm.bookmarkLiveData.observe(this) {
+            codeBookmarkBtn.isActivated = it
         }
 
         downloadBtn.setOnClickListener {

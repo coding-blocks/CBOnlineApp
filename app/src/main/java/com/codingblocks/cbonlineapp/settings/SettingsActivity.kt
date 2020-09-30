@@ -6,6 +6,7 @@ import android.os.StatFs
 import android.util.Log
 import android.view.View
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
@@ -23,7 +24,11 @@ class SettingsActivity : BaseCBActivity() {
     private val viewModel by viewModel<SettingsViewModel>()
 
     private val file by lazy {
-        this.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
+        if (getPrefs().SP_SD_CARD && checkExternalDirectory()) {
+            this.getExternalFilesDirs(Environment.getDataDirectory().absolutePath)[1]
+        } else {
+            this.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
+        }
     }
 
     private val stat by lazy { StatFs(Environment.getExternalStorageDirectory().path) }
@@ -67,6 +72,30 @@ class SettingsActivity : BaseCBActivity() {
         pipSwitch.setOnClickListener {
             getPrefs().SP_PIP = pipSwitch.isChecked
         }
+        sdcardSwitch.isChecked = checkExternalDirectory() && getPrefs().SP_SD_CARD
+        sdcardSwitch.setOnClickListener {
+            updateSdCardSwitch()
+        }
+    }
+
+    private fun updateSdCardSwitch() {
+        if (sdcardSwitch.isChecked) {
+            if (checkExternalDirectory()) {
+                getPrefs().SP_SD_CARD = true
+            } else {
+                Toast.makeText(this, "No External SD Card found.", Toast.LENGTH_LONG).show()
+                sdcardSwitch.performClick()
+            }
+        } else {
+            getPrefs().SP_SD_CARD = false
+        }
+    }
+
+    private fun checkExternalDirectory(): Boolean {
+        val directories = applicationContext.getExternalFilesDirs(Environment.getDataDirectory().absolutePath)
+        if (directories.size > 1)
+            return true
+        return false
     }
 
     private fun updateSpaceStats() {

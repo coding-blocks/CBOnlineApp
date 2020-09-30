@@ -144,7 +144,8 @@ class VideoPlayerActivity :
 
         contentRv.setRv(this, sectionItemsAdapter)
         vm.contentList.observer(this) {
-            sectionItemsAdapter.submitList(it.contents.filter { it.contentable == VIDEO || it.contentable == LECTURE }.sortedBy { it.order }, vm.currentContentId!!)
+            sectionItemsAdapter.submitList(it.contents.filter { it.contentable == VIDEO || it.contentable == LECTURE }
+                .sortedBy { it.order }, vm.currentContentId!!)
         }
         sectionItemsAdapter.onItemClick = {
             startActivity(
@@ -184,7 +185,12 @@ class VideoPlayerActivity :
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
                     } else {
-                        fabMenu.setBackgroundColor(ContextCompat.getColor(this@VideoPlayerActivity, R.color.white_transparent))
+                        fabMenu.setBackgroundColor(
+                            ContextCompat.getColor(
+                                this@VideoPlayerActivity,
+                                R.color.white_transparent
+                            )
+                        )
                     }
                 } else {
                     doubtFab.startAnimation(animationUtils.open)
@@ -193,7 +199,12 @@ class VideoPlayerActivity :
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         fabMenu.setBackgroundColor(getColor(R.color.black_95))
                     } else {
-                        fabMenu.setBackgroundColor(ContextCompat.getColor(this@VideoPlayerActivity, R.color.black_95))
+                        fabMenu.setBackgroundColor(
+                            ContextCompat.getColor(
+                                this@VideoPlayerActivity,
+                                R.color.black_95
+                            )
+                        )
                     }
                 }
             }
@@ -204,7 +215,9 @@ class VideoPlayerActivity :
                     showDoubtSheet()
                 else {
                     toast("Doubt Support is only available for PREMIUM+ Runs.")
-                    openChrome(BuildConfig.DISCUSS_URL + contentTitle.text.toString().replace(" ", "-"))
+                    openChrome(
+                        BuildConfig.DISCUSS_URL + contentTitle.text.toString().replace(" ", "-")
+                    )
                 }
             }
         }
@@ -212,9 +225,9 @@ class VideoPlayerActivity :
         noteFab.setOnClickListener {
             val notePos: Double? =
                 if (youtubePlayerView.isVisible)
-                (tracker.currentSecond.div(1000)).toDouble()
+                    (tracker.currentSecond.div(1000)).toDouble()
                 else
-                (videoPlayer.currentTime.div(1000)).toDouble()
+                    (videoPlayer.currentTime.div(1000)).toDouble()
 
             val newNote = NotesModel(
                 duration = notePos ?: 0.0,
@@ -235,9 +248,13 @@ class VideoPlayerActivity :
             else
                 startDownloadWorker()
         }
+        autoPlaySwitch.setOnCheckedChangeListener { compoundButton, b ->
+            getPrefs().SP_AUTO_PLAY = b
+        }
 
         vm.content.getDistinct().observe(this) {
             //            vm.contentLength = it.contentLecture.lectureDuration
+            autoPlaySwitch.isChecked = getPrefs().SP_AUTO_PLAY
             sectionItemsAdapter.updateSelectedItem(it.ccid)
             vm.attemptId.value = it.attempt_id
             sectionTitle.text = getString(R.string.section_name, it.sectionTitle)
@@ -418,13 +435,13 @@ class VideoPlayerActivity :
     private fun showSystemUi(show: Boolean) {
         if (show) {
             window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                )
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    )
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         }
@@ -462,10 +479,7 @@ class VideoPlayerActivity :
         }
 
         override fun onLoadError(p0: VdoPlayer.VdoInitParams, p1: ErrorDescription) {
-            FirebaseCrashlytics.getInstance().log(
-                "Error Message: ${p1.errorMsg}, " +
-                    "Error Code: ${p1.errorCode} , ${p1.httpStatusCode}"
-            )
+            log("Error Message: ${p1.errorMsg}, Error Code: ${p1.errorCode} , ${p1.httpStatusCode}")
             when (p1.errorCode) {
                 5110 -> {
                     rootLayout.snackbar("Seems like your download was corrupted.Please Download Again")
@@ -485,7 +499,7 @@ class VideoPlayerActivity :
         override fun onError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
             FirebaseCrashlytics.getInstance().log(
                 "Error Message: ${p1?.errorMsg}," +
-                    " Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}"
+                        " Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}"
             )
         }
 
@@ -501,6 +515,17 @@ class VideoPlayerActivity :
         }
         /**Remove [PlayerState] After 95%*/
 
+        if (progress >= duration && autoPlaySwitch.isChecked) {
+            if (sectionItemsAdapter.selectedItem < sectionItemsAdapter.currentList.lastIndex) {
+                val nextItem = sectionItemsAdapter.currentList[sectionItemsAdapter.selectedItem + 1]
+                startActivity(
+                    createVideoPlayerActivityIntent(
+                        this, nextItem.ccid,
+                        vm.sectionId ?: ""
+                    )
+                )
+            }
+        }
         val completion = duration * 0.95
         if (progress > completion) {
             vm.deletePlayerState()
@@ -620,7 +645,10 @@ class VideoPlayerActivity :
         }
     }
 
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean,
+        newConfig: Configuration?
+    ) {
 
         if (isInPictureInPictureMode) {
             showControls(false)
@@ -687,7 +715,8 @@ class VideoPlayerActivity :
     }
 
     private fun navToLauncherTask(appContext: Context) {
-        val activityManager: ActivityManager = (appContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
+        val activityManager: ActivityManager =
+            (appContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
         val appTasks: List<ActivityManager.AppTask> = activityManager.appTasks
         for (task in appTasks) {
             val baseIntent: Intent = task.taskInfo.baseIntent
@@ -753,11 +782,13 @@ class VideoPlayerActivity :
 
     override fun onStop() {
         if (::playerFragment.isInitialized && videoContainer.isVisible) {
-            vm.position = playerFragment.player.currentTime
-            val duration = playerFragment.player.duration
-            val time = playerFragment.player.currentTime
-            if (time < duration * 0.95)
-                vm.savePlayerState(time, true)
+            playerFragment.player?.let { currentPlayer ->
+                vm.position = currentPlayer.currentTime
+                val duration = currentPlayer.duration
+                val time = currentPlayer.currentTime
+                if (time < duration * 0.95)
+                    vm.savePlayerState(time, true)
+            }
         } else if (::youtubePlayer.isInitialized) {
 
             val duration = (tracker.videoDuration * 1000).toLong()
@@ -825,23 +856,24 @@ class VideoPlayerActivity :
         }
     }
 
-    private val vdoParamsGenerator: VdoPlayerControls.VdoParamsGenerator = object : VdoPlayerControls.VdoParamsGenerator {
+    private val vdoParamsGenerator: VdoPlayerControls.VdoParamsGenerator =
+        object : VdoPlayerControls.VdoParamsGenerator {
 
-        override fun getNewVdoInitParams(): VdoPlayer.VdoInitParams? {
-            return try {
-                getVdoParams()
-            } catch (e: IOException) {
-                e.printStackTrace()
-                log("Error generating new otp and playbackInfo")
-                null
-            } catch (e: JSONException) {
-                e.printStackTrace()
-                log("Error generating new otp and playbackInfo")
+            override fun getNewVdoInitParams(): VdoPlayer.VdoInitParams? {
+                return try {
+                    getVdoParams()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    log("Error generating new otp and playbackInfo")
+                    null
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                    log("Error generating new otp and playbackInfo")
 
-                null
+                    null
+                }
             }
         }
-    }
 
     fun hideVideoFab() {
         noteFabTv.isVisible = false
@@ -852,13 +884,23 @@ class VideoPlayerActivity :
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
         } else {
-            fabMenu.setBackgroundColor(ContextCompat.getColor(this@VideoPlayerActivity, R.color.white_transparent))
+            fabMenu.setBackgroundColor(
+                ContextCompat.getColor(
+                    this@VideoPlayerActivity,
+                    R.color.white_transparent
+                )
+            )
         }
     }
 
     companion object {
 
-        fun createVideoPlayerActivityIntent(context: Context, contentId: String, sectionId: String, position: Long = 0): Intent {
+        fun createVideoPlayerActivityIntent(
+            context: Context,
+            contentId: String,
+            sectionId: String,
+            position: Long = 0
+        ): Intent {
             return context.intentFor<VideoPlayerActivity>(
                 CONTENT_ID to contentId,
                 VIDEO_POSITION to position,

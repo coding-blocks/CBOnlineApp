@@ -109,16 +109,15 @@ class OnlineJsonApiAuthenticatedTest {
 //    }
 
     @Test
-    fun `POST sendFeedback`(){
-        val sendFeedback = runBlocking { CBOnlineLib.api.sendFeedback("45", SendFeedback("Amazing", "Amazing course",4.9F)) }
-        assertTrue(sendFeedback.code()==200)
+    fun `POST sendFeedback`() {
+        val sendFeedback = runBlocking { CBOnlineLib.api.sendFeedback("45", SendFeedback("Amazing", "Amazing course", 4.9F)) }
+        assertTrue(sendFeedback.code() == 200)
     }
 
     @Test
-    fun `GET getFeedback`(){
+    fun `GET getFeedback`() {
         val getFeedback = runBlocking { CBOnlineLib.api.getFeedback("45") }
         assertNotNull(getFeedback.body())
         assertTrue(getFeedback.body()?.count != null)
     }
-
 }

@@ -22,7 +22,7 @@ interface LibraryDao {
     )
     fun getBookmarks(id: String): LiveData<List<BookmarkModel>>
 
-    @Query("SELECT documentPdfLink, documentName FROM ContentModel WHERE ccid = :contentId")
+    @Query("SELECT documentPdfLink, documentName, attempt_id, title FROM ContentModel WHERE ccid = :contentId")
     suspend fun getPDF(contentId: String): PdfModel
 
     @Query(

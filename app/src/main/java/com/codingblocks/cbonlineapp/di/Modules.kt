@@ -30,6 +30,8 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeRepository
 import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeViewModel
+import com.codingblocks.cbonlineapp.mycourse.content.document.PdfActivityRepository
+import com.codingblocks.cbonlineapp.mycourse.content.document.PdfViewModel
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerRepository
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerViewModel
 import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizRepository
@@ -68,6 +70,7 @@ val viewModelModule = module {
     viewModel { (handle: SavedStateHandle) -> AuthViewModel(handle, get()) }
     viewModel { (handle: SavedStateHandle) -> CodeChallengeViewModel(handle, get()) }
     viewModel { (handle: SavedStateHandle) -> CampaignViewModel(handle, get()) }
+    viewModel { (handle: SavedStateHandle) -> PdfViewModel(handle, get()) }
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
@@ -77,14 +80,15 @@ val viewModelModule = module {
     single { LibraryRepository(get(), get(), get(), get(), get()) }
     single { DashboardHomeRepository(get(), get(), get(), get()) }
     single { VideoPlayerRepository(get(), get(), get(), get(), get(), get()) }
-    single { QuizRepository(get()) }
+    single { QuizRepository(get(), get()) }
     single { JobRepository(get()) }
     single { MyCourseRepository(get(), get(), get(), get(), get(), get(), get(), get()) }
     single { TracksRepository() }
     single { ProfileRepository(get()) }
-    single { CodeChallengeRepository(get()) }
+    single { CodeChallengeRepository(get(), get()) }
     single { AuthRepository(get()) }
     single { CampaignRepository(get()) }
+    single { PdfActivityRepository(get(), get()) }
 }
 val preferencesModule = module {
     single { provideSettingsPreferences(androidApplication()) }

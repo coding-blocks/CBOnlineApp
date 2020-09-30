@@ -41,7 +41,7 @@ class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {
     }
 
     private val courseLogoUrl by lazy {
-        intent.getStringExtra(COURSE_LOGO)!!
+        intent.getStringExtra(COURSE_LOGO)
     }
     private val viewModel by viewModel<TrackViewModel>()
 
@@ -81,7 +81,7 @@ class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {
         )
         if (!courseLogoImage.isNullOrEmpty()) {
             courseLogo.transitionName = courseLogoImage
-            courseLogo.loadImage(courseLogoUrl) {
+            courseLogo.loadImage(courseLogoUrl!!) {
                 supportStartPostponedEnterTransition()
             }
         }

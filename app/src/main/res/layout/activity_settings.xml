@@ -62,6 +62,23 @@
             android:layout_marginBottom="16dp"
             android:background="#eeeeee" />
 
+        <Switch
+            android:id="@+id/sdcardSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="Save downloads to SD Card"
+            android:textSize="18sp"
+            app:theme="@style/ColorSwitchStyle"></Switch>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="#eeeeee" />
+
         <TextView
             android:id="@+id/deleteAllTv"
             android:layout_width="match_parent"

@@ -10,7 +10,7 @@ ext {
     ankoVersion = '0.10.6'
     room_version = "2.2.5"
     koin_version = "2.1.5"
-    markwon_version = "4.4.0"
+    markwon_version = '4.5.1'
     ankoLibs = [
             // commons
             'commons',
@@ -38,13 +38,13 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 101010001
+        versionCode 101010101
         // 1 (versioning scheme)
-        // 00 (major version)
-        // 00 (minor version)
+        // 01 (major version)
+        // 01 (minor version)
         // 01 (patch version)
-        // 01 spare for betas/RCs
-        versionName "1.1.0"
+        // 00 spare for betas/RCs
+        versionName "1.1.1"
         signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
@@ -107,33 +107,33 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // Android Support
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     // Kotlin
     implementation 'androidx.activity:activity-ktx:1.2.0-alpha04'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.5-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.9-native-mt'
 
     implementation 'androidx.browser:browser:1.2.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'com.google.android.play:core:1.7.3'
-    implementation 'androidx.core:core-ktx:1.3.0'
+    implementation 'com.google.android.play:core-ktx:1.8.1'
+    implementation 'androidx.core:core-ktx:1.3.1'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
     implementation "android.arch.work:work-runtime-ktx:1.0.1"
     implementation "androidx.fragment:fragment-ktx:1.2.5"
     implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
-    implementation 'com.google.android.gms:play-services-auth:18.0.0'
+    implementation 'com.google.android.gms:play-services-auth:18.1.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:17.4.0'
-    implementation 'androidx.drawerlayout:drawerlayout:1.1.0'
+    implementation 'androidx.drawerlayout:drawerlayout:1.1.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0'
-    implementation 'com.google.android.material:material:1.3.0-alpha01'
+    implementation 'com.google.android.material:material:1.3.0-alpha02'
 
 
     // 3rd party libs
     implementation 'es.voghdev.pdfviewpager:library:1.0.3'
-    implementation 'com.onesignal:OneSignal:3.15.1'
+    implementation 'com.onesignal:OneSignal:3.15.3'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.5.Final'
     implementation "com.github.skydoves:progressview:1.0.5"
@@ -145,7 +145,7 @@ dependencies {
     implementation "io.noties.markwon:ext-strikethrough:$markwon_version"
     implementation "io.noties.markwon:html:$markwon_version"
     implementation "io.noties.markwon:linkify:$markwon_version"
-    implementation 'com.airbnb.android:lottie:3.4.0'
+    implementation 'com.airbnb.android:lottie:3.4.2'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
@@ -155,7 +155,7 @@ dependencies {
     // Image view libraries
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.caverock:androidsvg-aar:1.4'
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.20'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.21'
 
     //database
     implementation "androidx.room:room-runtime:$room_version"
@@ -165,7 +165,7 @@ dependencies {
 
 
     //VideoCipher library
-    implementation 'com.vdocipher.aegis:vdocipher-android:1.6.0'
+    implementation 'com.vdocipher.aegis:vdocipher-android:1.7.0'
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
 
 
@@ -183,12 +183,13 @@ dependencies {
         implementation "org.jetbrains.anko:anko-$name:$ankoVersion"
     }
     //Firebase
-    implementation 'com.google.firebase:firebase-common-ktx:19.3.0'
-    implementation 'com.google.firebase:firebase-core:17.4.3'
-    implementation 'com.google.firebase:firebase-messaging:20.2.1'
-    implementation 'com.google.firebase:firebase-crashlytics:17.1.0'
-    implementation 'com.google.firebase:firebase-firestore-ktx:21.4.3'
-    implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.7'
+    implementation 'com.google.firebase:firebase-common-ktx:19.3.1'
+    implementation 'com.google.firebase:firebase-core:17.5.0'
+    implementation 'com.google.firebase:firebase-messaging:20.2.4'
+    implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:17.2.1'
+    implementation 'com.google.firebase:firebase-firestore-ktx:21.6.0'
+    implementation 'com.google.firebase:firebase-inappmessaging-display:19.1.1'
     implementation 'com.google.guava:guava:27.0.1-android'
 
 
@@ -198,6 +199,6 @@ dependencies {
 
     // Test Dependencies
     testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }

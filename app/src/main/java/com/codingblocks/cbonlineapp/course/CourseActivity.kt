@@ -72,7 +72,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         intent.getStringExtra(LOGO_TRANSITION_NAME)
     }
     private val courseLogoUrl by lazy {
-        intent.getStringExtra(COURSE_LOGO)!!
+        intent.getStringExtra(COURSE_LOGO)
     }
     val loadingDialog: AlertDialog by lazy {
         getLoadingDialog()
@@ -147,7 +147,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         courseContentRv.setRv(this@CourseActivity, courseSectionListAdapter, true)
         if (!courseLogoImage.isNullOrEmpty()) {
             courseLogo.transitionName = courseLogoImage
-            courseLogo.loadImage(courseLogoUrl) {
+            courseLogo.loadImage(courseLogoUrl!!) {
                 if (it)
                     supportStartPostponedEnterTransition()
                 else {

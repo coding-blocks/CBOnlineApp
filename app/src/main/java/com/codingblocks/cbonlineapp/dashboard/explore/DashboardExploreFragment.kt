@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
@@ -29,8 +30,10 @@ import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.LOGIN
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
+import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.activity_course.courseSuggestedRv
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard_explore.*
@@ -49,6 +52,7 @@ class DashboardExploreFragment : BaseCBFragment() {
     private val courseCardListAdapter = CourseListAdapter()
     private val coursePopularListAdapter = CourseListAdapter("POPULAR")
     private val tracksListAdapter = TracksListAdapter()
+    private lateinit var bannerUrl: String
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -114,8 +118,18 @@ class DashboardExploreFragment : BaseCBFragment() {
 //        campaignView.setOnClickListener {
 //            startActivity(CampaignActivity.createCampaignActivityIntent(requireContext()))
 //        }
-        dashboardPopularRv.setRv(requireContext(), coursePopularListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
-        courseSuggestedRv.setRv(requireContext(), courseCardListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
+        dashboardPopularRv.setRv(
+            requireContext(),
+            coursePopularListAdapter,
+            orientation = RecyclerView.HORIZONTAL,
+            space = 28f
+        )
+        courseSuggestedRv.setRv(
+            requireContext(),
+            courseCardListAdapter,
+            orientation = RecyclerView.HORIZONTAL,
+            space = 28f
+        )
         dashboardTracksRv.setRv(requireContext(), tracksListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
 
         vm.suggestedCourses.observe(thisLifecycleOwner) { courses ->
@@ -141,6 +155,21 @@ class DashboardExploreFragment : BaseCBFragment() {
         }
         vm.snackbar.observe(thisLifecycleOwner) {
             swipeToRefresh.showSnackbar(it, anchorView = activity?.dashboardBottomNav, action = false)
+        }
+
+        vm.fetchBanner().observer(viewLifecycleOwner) {
+            it?.let {
+                bannerUrl = it.link
+                bannerHolder.isVisible = true
+                Glide.with(requireContext()).load(it.mobileImageUrl).into(banner)
+            }
+        }
+
+        bannerCross.setOnClickListener {
+            bannerHolder.isVisible = false
+        }
+        bannerHolder.setOnClickListener {
+            requireContext().openChrome(bannerUrl)
         }
 
         courseCardListAdapter.onItemClick = itemClickListener

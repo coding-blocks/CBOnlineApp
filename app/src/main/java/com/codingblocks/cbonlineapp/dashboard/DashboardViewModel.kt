@@ -270,6 +270,19 @@ class DashboardViewModel(
         emitSource(homeRepo.getRecentlyPlayed())
     }
 
+    fun fetchBanner() = liveData {
+        when (val response = homeRepo.fetchBanner()) {
+            is ResultWrapper.GenericError -> setError(response.error)
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful) {
+                    emit(body()?.firstOrNull())
+                } else {
+                    setError(fetchError(code()))
+                }
+            }
+        }
+    }
+
     /**
      * Doubt Variables and functions
      */

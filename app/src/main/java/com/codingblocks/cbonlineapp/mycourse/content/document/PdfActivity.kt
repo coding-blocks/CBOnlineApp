@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.content
+package com.codingblocks.cbonlineapp.mycourse.content.document
 
 import android.app.DownloadManager
 import android.content.Context
@@ -11,21 +11,20 @@ import android.os.PersistableBundle
 import android.widget.LinearLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
-import com.codingblocks.cbonlineapp.database.LibraryDao
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.receivers.DownloadBroadcastReceiver
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import es.voghdev.pdfviewpager.library.PDFViewPager
 import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter
 import kotlinx.android.synthetic.main.activity_pdf.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.toast
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 import java.io.File
 
 class PdfActivity : BaseCBActivity(), AnkoLogger {
@@ -34,34 +33,45 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
     var fileName: String? = null
     var path: String? = null
     var isDownloaded: Boolean = false
-    val libraryDao: LibraryDao by inject()
     lateinit var receiver: DownloadBroadcastReceiver
     lateinit var intentFilter: IntentFilter
+    private val vm: PdfViewModel by stateViewModel()
     lateinit var contentID: String
     lateinit var sectionId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pdf)
+        setToolbar(toolbarPdfActivity)
         if (savedInstanceState == null) {
-            contentID = intent.getStringExtra(CONTENT_ID)!!
-            sectionId = intent.getStringExtra(SECTION_ID)!!
+            vm.contentId = intent.getStringExtra(CONTENT_ID)
+            vm.sectionId = intent.getStringExtra(SECTION_ID)
         }
 
-        if (!contentID.isNullOrEmpty()) {
-            GlobalScope.launch(Dispatchers.Main) {
-                val pdfModel = libraryDao.getPDF(contentID)
-                if (pdfModel == null) {
-                    toast("Error fetching document")
-                    finish()
-                }
-                url = pdfModel.documentPdfLink
-                fileName = pdfModel.documentName
-                checkFile()
+        vm.getPdf().observer(this) { pdfModel ->
+            url = pdfModel.documentPdfLink
+            fileName = pdfModel.documentName
+            title = pdfModel.title
+            checkFile()
+        }
+
+        pdfBookmarkBtn.setOnClickListener { view ->
+            if (pdfBookmarkBtn.isActivated)
+                vm.removeBookmark()
+            else {
+                vm.markBookmark()
             }
-        } else {
-            toast("Error fetching document")
-            finish()
+        }
+        vm.bookmark.observer(this) {
+            pdfBookmarkBtn.isActivated = !it.bookmarkUid.isNullOrEmpty()
+        }
+
+        vm.bookmarkLiveData.observer(this) {
+            pdfBookmarkBtn.isActivated = it
+        }
+
+        vm.bookmarkSnackbar.observer(this) {
+            pdfBookmarkBtn.showSnackbar(it, Snackbar.LENGTH_SHORT, action = false)
         }
 
         intentFilter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
@@ -133,6 +143,30 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
                 onBackPressed()
             }
         }
+
+        intentFilter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+        val downloadManager =
+            this@PdfActivity.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+
+        receiver = object : DownloadBroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                super.onReceive(context, intent)
+                val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+                val file = File("$path/$fileName")
+
+                downloadManager.addCompletedDownload(
+                    fileName,
+                    " ",
+                    false,
+                    "application/pdf",
+                    path,
+                    file.length(),
+                    true
+                )
+                showpdf(file)
+            }
+        }
+        this@PdfActivity.registerReceiver(receiver, intentFilter)
     }
 
     private fun showpdf(downloadedFile: File) {
