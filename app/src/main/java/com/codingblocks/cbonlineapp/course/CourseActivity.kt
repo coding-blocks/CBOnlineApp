@@ -86,11 +86,12 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     private var youtubePlayer: YouTubePlayer? = null
 
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            toast(getString(R.string.logged_in))
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                toast(getString(R.string.logged_in))
+            }
         }
-    }
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -189,13 +190,13 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                     viewModel.enrollTrial(it.id)
                 }
             }
-            course.getContentRun(RUNTIERS.PREMIUM.name)?.let {
-                it.sections?.let { sectionList -> viewModel.fetchSections(sectionList) }
-                val price = it.price.toInt()
-                if (price < 10) {
-                    goodiesImg.isVisible = false
-                }
-            }
+//            course.getContentRun(RUNTIERS.PREMIUM.name)?.let {
+//                it.sections?.let { sectionList -> viewModel.fetchSections(sectionList) }
+//                val price = it.price.toInt()
+//                if (price < 10) {
+//                    goodiesImg.isVisible = false
+//                }
+//            }
             instructorAdapter.submitList(course.instructors)
         }
 
@@ -312,7 +313,8 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             ) {
                 youtubePlayer = youtubePlayerInstance
                 if (!p2) {
-                    val url = if (youtubeUrl.isNotEmpty()) MediaUtils.getYoutubeVideoId(youtubeUrl) else ""
+                    val url =
+                        if (youtubeUrl.isNotEmpty()) MediaUtils.getYoutubeVideoId(youtubeUrl) else ""
                     youtubePlayerInstance?.cueVideo(url)
                 }
             }
@@ -331,10 +333,10 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         R.id.share -> {
             share(
                 "Check out the course *$title* by Coding Blocks!\n\n" +
-                    shortTv.text + "\n\n" +
-                    "Major topics covered: \n" +
-                    tagsList.joinToString(separator = "\n", limit = 5) + "\n\n" +
-                    "https://online.codingblocks.com/courses/$endLink/"
+                        shortTv.text + "\n\n" +
+                        "Major topics covered: \n" +
+                        tagsList.joinToString(separator = "\n", limit = 5) + "\n\n" +
+                        "https://online.codingblocks.com/courses/$endLink/"
             )
             true
         }
