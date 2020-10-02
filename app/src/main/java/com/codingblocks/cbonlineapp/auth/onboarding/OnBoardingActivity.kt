@@ -11,8 +11,15 @@ import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.livedata.pageChangeCallback
 import kotlinx.android.synthetic.main.activity_on_boarding.*
 import org.jetbrains.anko.intentFor
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 class OnBoardingActivity : BaseCBActivity() {
+
+    companion object {
+        const val VIEWPAGER_SCROLL_DELAY = 1500L
+        const val VIEWPAGER_SCROLL_PERIOD = 1500L
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +47,10 @@ class OnBoardingActivity : BaseCBActivity() {
         val dotsCount = introArray.size
         val dots = Array(dotsCount) {
             ImageView(this)
+        }
+
+        Timer().schedule(VIEWPAGER_SCROLL_DELAY, VIEWPAGER_SCROLL_PERIOD) {
+            viewPager2.currentItem = (viewPager2.currentItem + 1) % dotsCount
         }
 
         setupDotsOnIntroScreen(dots)
