@@ -64,12 +64,13 @@ data class Course(
 ) : BaseModel() {
 
     constructor(id: String) :
-        this(
-            "", "", "", "", 0, "", 0, "", 0f, "",
-            "", "", null, null, null, null, null, null
-        ) {
-            super.id = id
-        }
+            this(
+                "", "", "", "", 0, "", 0, "", 0f, "",
+                "", "", null, null, null, null, null, null
+            ) {
+        super.id = id
+    }
+
     /** Logic to get [Runs] for enrolling into Trial */
     fun getTrialRun(tier: String): Runs? {
         return with(activeRuns ?: runs!!) {
@@ -215,7 +216,16 @@ data class Doubts(
         content: LectureContent?,
         status: String,
         createdAt: String
-    ) : this(title, body, status, discourseTopicId, conversationId, runAttempt, content, createdAt) {
+    ) : this(
+        title,
+        body,
+        status,
+        discourseTopicId,
+        conversationId,
+        runAttempt,
+        content,
+        createdAt
+    ) {
         super.id = id
     }
 
@@ -292,9 +302,9 @@ data class LectureContent(
     val bookmark: Bookmark?
 ) : BaseModel() {
     constructor(id: String) :
-        this("", 0L, "", null, null, null, null, null, null, null, null, null) {
-            super.id = id
-        }
+            this("", 0L, "", null, null, null, null, null, null, null, null, null) {
+        super.id = id
+    }
 }
 
 @Type("instructors")
@@ -318,11 +328,33 @@ data class ContentProgress(
     @Relationship("run_attempt", "run-attempt")
     val runAttempt: RunAttempts? = null,
     @Relationship("content")
-    val content: LectureContent? = null
+    val content: LectureContent? = null,
+    val feedback: VideoFeedback? = null
 ) {
-    constructor(status: String, runAttemptId: RunAttempts, contentId: LectureContent, progressId: String?) :
-        this(status = status, runAttempt = runAttemptId, content = contentId, id = progressId)
+    constructor(
+        status: String,
+        runAttemptId: RunAttempts,
+        contentId: LectureContent,
+        progressId: String?
+    ) : this(status = status, runAttempt = runAttemptId, content = contentId, id = progressId)
+
+
+    constructor(
+        status: String,
+        runAttemptId: RunAttempts,
+        contentId: LectureContent,
+        progressId: String?,
+        feedback: VideoFeedback
+    ) : this(
+        status = status,
+        runAttempt = runAttemptId,
+        content = contentId,
+        id = progressId,
+        feedback = feedback
+    )
 }
+
+class VideoFeedback(val rating: Float, val reason: String = "")
 
 @Type("bookmarks")
 data class Bookmark(
@@ -340,7 +372,7 @@ data class Bookmark(
     val contentId: String? = null
 ) {
     constructor(runAttemptId: RunAttempts, contentId: LectureContent, sectionId: Sections) :
-        this(null, runAttemptId, contentId, sectionId)
+            this(null, runAttemptId, contentId, sectionId)
 }
 
 @Type("quiz-attempts", "quiz_attempts")
@@ -356,12 +388,12 @@ data class QuizAttempt(
     var submission: ArrayList<QuizSubmission>? = null
 ) : BaseModel() {
     constructor(qnaId: ContentQna, runAttemptId: RunAttempts) :
-        this(qna = qnaId, runAttempt = runAttemptId)
+            this(qna = qnaId, runAttempt = runAttemptId)
 
     constructor(id: String, qnaId: ContentQna) :
-        this(qna = qnaId) {
-            super.id = id
-        }
+            this(qna = qnaId) {
+        super.id = id
+    }
 }
 
 @Type("notes")
@@ -375,13 +407,24 @@ data class Note(
     @Relationship("content")
     val content: LectureContent? = null
 ) : BaseModel(), Serializable {
-    constructor(id: String, duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent) :
-        this(duration, null, null, text, runAttemptId, contentId) {
-            super.id = id
-        }
+    constructor(
+        id: String,
+        duration: Double,
+        text: String,
+        runAttemptId: RunAttempts,
+        contentId: LectureContent
+    ) :
+            this(duration, null, null, text, runAttemptId, contentId) {
+        super.id = id
+    }
 
-    constructor(duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent) :
-        this(duration, null, null, text, runAttemptId, contentId)
+    constructor(
+        duration: Double,
+        text: String,
+        runAttemptId: RunAttempts,
+        contentId: LectureContent
+    ) :
+            this(duration, null, null, text, runAttemptId, contentId)
 }
 
 @Type("users", "user")
@@ -402,9 +445,9 @@ data class User(
     val branch: String? = ""
 ) : BaseModel() {
     constructor(id: String) :
-        this("", "", "", "", "", "", "", "", "") {
-            super.id = id
-        }
+            this("", "", "", "", "", "", "", "", "") {
+        super.id = id
+    }
 }
 
 class SectionContent(
@@ -436,9 +479,9 @@ class ContentQna(
     var name: String? = null
 ) : BaseModel() {
     constructor(id: String) :
-        this() {
-            super.id = id
-        }
+            this() {
+        super.id = id
+    }
 }
 
 @Type("csv")

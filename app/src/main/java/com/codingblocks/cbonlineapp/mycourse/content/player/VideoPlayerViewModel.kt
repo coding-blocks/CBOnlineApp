@@ -75,23 +75,26 @@ class VideoPlayerViewModel(
         repo.getBookmark(it)
     }
 
-    val notes = Transformations.distinctUntilChanged(DoubleTrigger(currentContentIdLive, attemptId)).switchMap {
-        if (it.second != null)
-            fetchNotes(it.first)
-        if (it.first != null && it.second != null)
-            repo.getNotes(it)
-        else
-            MutableLiveData(emptyList())
-    }
+    val notes = Transformations.distinctUntilChanged(DoubleTrigger(currentContentIdLive, attemptId))
+        .switchMap {
+            if (it.second != null)
+                fetchNotes(it.first)
+            if (it.first != null && it.second != null)
+                repo.getNotes(it)
+            else
+                MutableLiveData(emptyList())
+        }
 
-    val doubts = Transformations.distinctUntilChanged(DoubleTrigger(currentContentIdLive, attemptId)).switchMap {
-        if (it.second != null)
-            fetchDoubts(it.first)
-        if (it.first != null && it.second != null)
-            repo.getDoubtsByCourseRun(LIVE, it)
-        else
-            MutableLiveData(emptyList())
-    }
+    val doubts =
+        Transformations.distinctUntilChanged(DoubleTrigger(currentContentIdLive, attemptId))
+            .switchMap {
+                if (it.second != null)
+                    fetchDoubts(it.first)
+                if (it.first != null && it.second != null)
+                    repo.getDoubtsByCourseRun(LIVE, it)
+                else
+                    MutableLiveData(emptyList())
+            }
 
     val contentList = Transformations.switchMap(attemptId) { attemptId ->
         sectionId?.let { sectionId -> repo.getContents(attemptId, sectionId) }
@@ -194,7 +197,8 @@ class VideoPlayerViewModel(
     }
 
     private fun startWorkerRequest(noteId: String = "", noteModel: Note? = null) {
-        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+        val constraints =
+            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
         val progressData: Data
         if (noteId.isEmpty()) {
             progressData = workDataOf("NOTE" to noteModel?.serializeToJson())
@@ -215,7 +219,13 @@ class VideoPlayerViewModel(
     }
 
     fun updateNote(note: NotesModel) {
-        val newNote = Note(note.nttUid, note.duration, note.text, RunAttempts(note.runAttemptId), LectureContent(note.contentId))
+        val newNote = Note(
+            note.nttUid,
+            note.duration,
+            note.text,
+            RunAttempts(note.runAttemptId),
+            LectureContent(note.contentId)
+        )
         runIO {
             when (val response = repo.updateNote(newNote)) {
                 is ResultWrapper.GenericError ->
@@ -259,7 +269,7 @@ class VideoPlayerViewModel(
                     sectionId
                         ?: ""
                 )
-            ) {
+                ) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
@@ -316,7 +326,8 @@ class VideoPlayerViewModel(
                     } else {
                         try {
                             val jObjError = JSONObject(response.value.errorBody()?.string()!!)
-                            val msg = (jObjError.getJSONArray("errors")[0] as JSONObject).getString("detail")
+                            val msg =
+                                (jObjError.getJSONArray("errors")[0] as JSONObject).getString("detail")
                             function(msg)
                         } catch (e: Exception) {
                         } finally {
@@ -329,7 +340,8 @@ class VideoPlayerViewModel(
     }
 
     private fun createDoubtOffline(doubtModel: Doubts) {
-        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+        val constraints =
+            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
         val progressData = workDataOf("DOUBT" to doubtModel.serializeToJson())
         offlineSnackbar.postValue("Doubt will be posted once you connect to Network")
         val request: OneTimeWorkRequest =
@@ -344,8 +356,10 @@ class VideoPlayerViewModel(
     }
 
     fun updateProgress() {
-        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val progressData: Data = workDataOf(CONTENT_ID to currentContentId, RUN_ATTEMPT_ID to attemptId.value)
+        val constraints =
+            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+        val progressData: Data =
+            workDataOf(CONTENT_ID to currentContentId, RUN_ATTEMPT_ID to attemptId.value)
         val request: OneTimeWorkRequest =
             OneTimeWorkRequestBuilder<ProgressWorker>()
                 .setConstraints(constraints)
@@ -357,17 +371,27 @@ class VideoPlayerViewModel(
             .enqueue(request)
     }
 
-    fun updateDownload(status: Int, lectureId: String) = runIO { repo.updateDownload(status, lectureId) }
+    fun updateDownload(status: Int, lectureId: String) =
+        runIO { repo.updateDownload(status, lectureId) }
 
     /**
      * Function to save player state if current lecture is incomplete
      */
     fun savePlayerState(currentTime: Long, thumbnail: Boolean) {
         runIO {
-            attemptId.value?.let { repo.savePlayerState(it, sectionId!!, currentContentId!!, currentTime) }
+            attemptId.value?.let {
+                repo.savePlayerState(
+                    it,
+                    sectionId!!,
+                    currentContentId!!,
+                    currentTime
+                )
+            }
             if (thumbnail) {
-                val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-                val thumbnailData: Data = workDataOf(VIDEO_ID to currentVideoId.value, CONTENT_ID to currentContentId)
+                val constraints =
+                    Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+                val thumbnailData: Data =
+                    workDataOf(VIDEO_ID to currentVideoId.value, CONTENT_ID to currentContentId)
                 val request: OneTimeWorkRequest =
                     OneTimeWorkRequestBuilder<ThumbnailWorker>()
                         .setConstraints(constraints)
@@ -384,5 +408,24 @@ class VideoPlayerViewModel(
         runIO {
             attemptId.value?.let { repo.deletePlayerState(it) }
         }
+    }
+
+    fun sendFeedback(rating: Float, text: String) {
+        val constraints =
+            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+        val feedbackData: Data =
+            workDataOf(
+                CONTENT_ID to currentContentId, RUN_ATTEMPT_ID to attemptId.value,
+                "rating" to rating, "reason" to text
+            )
+        val request: OneTimeWorkRequest =
+            OneTimeWorkRequestBuilder<FeedbackWorker>()
+                .setConstraints(constraints)
+                .setInputData(feedbackData)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                .build()
+
+        WorkManager.getInstance()
+            .enqueue(request)
     }
 }

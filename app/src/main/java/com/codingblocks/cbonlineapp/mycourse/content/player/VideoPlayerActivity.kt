@@ -20,13 +20,14 @@ import android.os.Environment
 import android.util.Rational
 import android.view.View
 import android.view.WindowManager
+import android.widget.RadioButton
 import android.widget.RelativeLayout
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.annotation.WorkerThread
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.observe
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.NetworkType
@@ -61,6 +62,7 @@ import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.livedata.getDistinct
+import com.codingblocks.cbonlineapp.util.livedata.observeOnce
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
 import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControls
@@ -77,6 +79,7 @@ import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
 import kotlinx.android.synthetic.main.activity_video_player.*
+import kotlinx.android.synthetic.main.feedback_rating_dialog.view.*
 import kotlinx.android.synthetic.main.my_fab_menu.*
 import kotlinx.android.synthetic.main.vdo_control_view.view.*
 import kotlinx.coroutines.Dispatchers
@@ -136,17 +139,7 @@ class VideoPlayerActivity :
         setupUI()
     }
 
-    private fun setupUI() {
-
-        vm.offlineSnackbar.observer(this) {
-            rootLayout.showSnackbar(it, Snackbar.LENGTH_SHORT, action = false)
-        }
-
-        contentRv.setRv(this, sectionItemsAdapter)
-        vm.contentList.observer(this) {
-            sectionItemsAdapter.submitList(it.contents.filter { it.contentable == VIDEO || it.contentable == LECTURE }
-                .sortedBy { it.order }, vm.currentContentId!!)
-        }
+    private fun registerClickListeners() {
         sectionItemsAdapter.onItemClick = {
             startActivity(
                 createVideoPlayerActivityIntent(
@@ -156,6 +149,20 @@ class VideoPlayerActivity :
                 )
             )
         }
+        addFeedback.setOnClickListener(this)
+    }
+
+    private fun setupUI() {
+        vm.offlineSnackbar.observer(this) {
+            rootLayout.showSnackbar(it, Snackbar.LENGTH_SHORT, action = false)
+        }
+
+        contentRv.setRv(this, sectionItemsAdapter)
+        vm.contentList.observer(this) {
+            sectionItemsAdapter.submitList(it.contents.filter { it.contentable == VIDEO || it.contentable == LECTURE }
+                .sortedBy { it.order }, vm.currentContentId!!)
+        }
+        registerClickListeners()
 
         rootLayout.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -164,95 +171,12 @@ class VideoPlayerActivity :
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
         vm.currentOrientation = resources.configuration.orientation
-        playerControlView.vdo_back.setOnClickListener {
-            onBackPressed()
-        }
-        contentListContainer.setOnClickListener {
-            contentListView.isVisible = !contentListView.isVisible
-            videoFab.isVisible = !contentListView.isVisible
-        }
-
         registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL))
-        videoFab.setOnClickListener {
-            with(noteFabTv.isVisible) {
-                noteFabTv.isVisible = !this
-                doubtFabTv.isVisible = !this
-
-                if (this) {
-                    doubtFab.startAnimation(animationUtils.close)
-                    noteFab.startAnimation(animationUtils.close)
-                    videoFab.startAnimation(animationUtils.anticlock)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
-                    } else {
-                        fabMenu.setBackgroundColor(
-                            ContextCompat.getColor(
-                                this@VideoPlayerActivity,
-                                R.color.white_transparent
-                            )
-                        )
-                    }
-                } else {
-                    doubtFab.startAnimation(animationUtils.open)
-                    noteFab.startAnimation(animationUtils.open)
-                    videoFab.startAnimation(animationUtils.clock)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        fabMenu.setBackgroundColor(getColor(R.color.black_95))
-                    } else {
-                        fabMenu.setBackgroundColor(
-                            ContextCompat.getColor(
-                                this@VideoPlayerActivity,
-                                R.color.black_95
-                            )
-                        )
-                    }
-                }
-            }
-        }
-        doubtFab.setOnClickListener {
-            vm.runAttempts.observer(this) {
-                if (it.premium && RUNTIERS.LITE.name != it.runTier)
-                    showDoubtSheet()
-                else {
-                    toast("Doubt Support is only available for PREMIUM+ Runs.")
-                    openChrome(
-                        BuildConfig.DISCUSS_URL + contentTitle.text.toString().replace(" ", "-")
-                    )
-                }
-            }
-        }
-
-        noteFab.setOnClickListener {
-            val notePos: Double? =
-                if (youtubePlayerView.isVisible)
-                    (tracker.currentSecond.div(1000)).toDouble()
-                else
-                    (videoPlayer.currentTime.div(1000)).toDouble()
-
-            val newNote = NotesModel(
-                duration = notePos ?: 0.0,
-                contentTitle = contentTitle.text.toString()
-            )
-            showNoteSheet(VideoSheetType.NOTE_CREATE, newNote)
-        }
-        bookmarkBtn.setOnClickListener {
-            if (bookmarkBtn.isActivated)
-                vm.removeBookmark()
-            else {
-                vm.markBookmark()
-            }
-        }
-        downloadBtn.setOnClickListener {
-            if (vm.isDownloaded)
-                showDeleteDialog()
-            else
-                startDownloadWorker()
-        }
-        autoPlaySwitch.setOnCheckedChangeListener { compoundButton, b ->
+        autoPlaySwitch.setOnCheckedChangeListener { _, b ->
             getPrefs().SP_AUTO_PLAY = b
         }
 
-        vm.content.getDistinct().observe(this) {
+        vm.content.getDistinct().observe(this, {
             //            vm.contentLength = it.contentLecture.lectureDuration
             autoPlaySwitch.isChecked = getPrefs().SP_AUTO_PLAY
             sectionItemsAdapter.updateSelectedItem(it.ccid)
@@ -287,11 +211,11 @@ class VideoPlayerActivity :
             } else {
                 finish()
             }
-            vm.bookmark.observe(this) {
+            vm.bookmark.observe(this, {
                 // Don't Remove
                 bookmarkBtn.isActivated = if (it == null) false else it.bookmarkUid.isNotEmpty()
-            }
-        }
+            })
+        })
     }
 
     private fun showDeleteDialog() {
@@ -511,10 +435,11 @@ class VideoPlayerActivity :
         val per = duration * 0.9
         if (progress > per && vm.currentContentProgress != "DONE") {
             vm.currentContentProgress = "DONE"
+            showFeedbackModal()
             vm.updateProgress()
         }
-        /**Remove [PlayerState] After 95%*/
 
+        /**Remove [PlayerState] After 95%*/
         if (progress >= duration && autoPlaySwitch.isChecked) {
             if (sectionItemsAdapter.selectedItem < sectionItemsAdapter.currentList.lastIndex) {
                 val nextItem = sectionItemsAdapter.currentList[sectionItemsAdapter.selectedItem + 1]
@@ -530,6 +455,49 @@ class VideoPlayerActivity :
         if (progress > completion) {
             vm.deletePlayerState()
         }
+    }
+
+    private fun showFeedbackModal() {
+        val dialog = AlertDialog.Builder(this).create()
+        val ratingDialog =
+            layoutInflater.inflate(R.layout.feedback_rating_dialog, playerRoot, false)
+        with(ratingDialog) {
+            feedbackRatingBar.setOnRatingBarChangeListener { _, rating, fromUser ->
+                feedbackRadioOptions.isVisible = true
+                feedbackImgView.isVisible = false
+                feedbackRadioOptions.removeAllViews()
+                val options = if (rating > 4.0) {
+                    feedbackDescTv.text = resources.getString(R.string.how_will_you_rate_the_video)
+                    resources.getStringArray(R.array.positive_feedback)
+                } else {
+                    feedbackDescTv.text = resources.getString(R.string.how_will_you_rate_the_video)
+                    resources.getStringArray(R.array.negative_feedback)
+
+                }
+
+                options.forEachIndexed { index, text ->
+                    val radioButton =
+                        RadioButton(this@VideoPlayerActivity, null, R.attr.radioButtonStyle)
+                    radioButton.text = text
+                    radioButton.id = index
+                    feedbackRadioOptions.addView(radioButton)
+                }
+                feedbackRadioOptions.setOnCheckedChangeListener { radioGroup, i ->
+                    val checkedRadioButtonId: Int = radioGroup.checkedRadioButtonId
+                    val radioBtn = findViewById<View>(checkedRadioButtonId) as RadioButton
+                    vm.sendFeedback(rating, radioBtn.text.toString())
+                    dialog.dismiss()
+                }
+            }
+        }
+
+        with(dialog) {
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            setView(ratingDialog)
+            setCancelable(true)
+            show()
+        }
+
     }
 
     private fun deleteFolder(contentId: String) {
@@ -596,8 +564,7 @@ class VideoPlayerActivity :
                 return
             }
 
-            val controlType = intent.getIntExtra(EXTRA_CONTROL_TYPE, 0)
-            when (controlType) {
+            when (intent.getIntExtra(EXTRA_CONTROL_TYPE, 0)) {
                 CONTROL_TYPE_PLAY -> playVideo()
                 CONTROL_TYPE_PAUSE -> pauseVideo()
             }
@@ -620,7 +587,6 @@ class VideoPlayerActivity :
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun pauseVideo() {
         if (contentable == LECTURE) {
             videoPlayer.playWhenReady = false
@@ -630,10 +596,12 @@ class VideoPlayerActivity :
             else
                 return
         }
-        updatePictureInPictureActions(
-            R.drawable.ic_play, "Play",
-            CONTROL_TYPE_PLAY, REQUEST_PLAY
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            updatePictureInPictureActions(
+                R.drawable.ic_play, "Play",
+                CONTROL_TYPE_PLAY, REQUEST_PLAY
+            )
+        }
     }
 
     override fun onUserLeaveHint() {
@@ -917,5 +885,102 @@ class VideoPlayerActivity :
     }
 
     override fun onClick(v: View) {
+        when (v.id) {
+            R.id.addFeedback -> showFeedbackModal()
+            R.id.vdo_back -> onBackPressed()
+            R.id.contentListContainer -> {
+                contentListView.isVisible = !contentListView.isVisible
+                videoFab.isVisible = !contentListView.isVisible
+            }
+            R.id.videoFab -> showHideExtendedFab()
+            R.id.doubtFab -> fetchDoubtSupport()
+            R.id.noteFab -> fetchPosAndShowSheet()
+            R.id.bookmarkBtn -> toggleBookmark()
+            R.id.downloadBtn -> downloadOrDelete()
+        }
+    }
+
+    private fun downloadOrDelete() {
+        downloadBtn.setOnClickListener {
+            if (vm.isDownloaded)
+                showDeleteDialog()
+            else
+                startDownloadWorker()
+        }
+    }
+
+    private fun toggleBookmark() {
+        if (bookmarkBtn.isActivated)
+            vm.removeBookmark()
+        else {
+            vm.markBookmark()
+        }
+    }
+
+    private fun fetchPosAndShowSheet() {
+        val notePos: Double? =
+            if (youtubePlayerView.isVisible)
+                (tracker.currentSecond.div(1000)).toDouble()
+            else
+                (videoPlayer.currentTime.div(1000)).toDouble()
+
+        val newNote = NotesModel(
+            duration = notePos ?: 0.0,
+            contentTitle = contentTitle.text.toString()
+        )
+        showNoteSheet(VideoSheetType.NOTE_CREATE, newNote)
+    }
+
+    /** Function which fetches current doubt support based upon [RUNTIERS].*/
+    private fun fetchDoubtSupport() {
+        vm.runAttempts.observeOnce {
+            if (it.premium && RUNTIERS.LITE.name != it.runTier)
+                showDoubtSheet()
+            else {
+                toast("Doubt Support is only available for PREMIUM+ Runs.")
+                openChrome(
+                    BuildConfig.DISCUSS_URL + contentTitle.text.toString().replace(" ", "-")
+                )
+            }
+        }
+    }
+
+    /** Function to show hide contents of custom extended fab.*/
+    private fun showHideExtendedFab() {
+        with(noteFabTv.isVisible) {
+            noteFabTv.isVisible = !this
+            doubtFabTv.isVisible = !this
+
+            if (this) {
+                doubtFab.startAnimation(animationUtils.close)
+                noteFab.startAnimation(animationUtils.close)
+                videoFab.startAnimation(animationUtils.anticlock)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
+                } else {
+                    fabMenu.setBackgroundColor(
+                        ContextCompat.getColor(
+                            this@VideoPlayerActivity,
+                            R.color.white_transparent
+                        )
+                    )
+                }
+            } else {
+                doubtFab.startAnimation(animationUtils.open)
+                noteFab.startAnimation(animationUtils.open)
+                videoFab.startAnimation(animationUtils.clock)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    fabMenu.setBackgroundColor(getColor(R.color.black_95))
+                } else {
+                    fabMenu.setBackgroundColor(
+                        ContextCompat.getColor(
+                            this@VideoPlayerActivity,
+                            R.color.black_95
+                        )
+                    )
+                }
+            }
+        }
+
     }
 }

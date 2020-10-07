@@ -1,0 +1,79 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.card.MaterialCardView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#2A2E37"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/margin_extra_large"
+            android:orientation="vertical"
+            android:paddingVertical="16dp">
+
+            <ImageView
+                android:id="@+id/feedbackImgView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/feedback_img" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="24dp"
+                android:fontFamily="@font/gilroy_bold"
+                android:lineSpacingExtra="2sp"
+                android:text="@string/how_will_you_rate_the_video"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <com.codingblocks.cbonlineapp.util.widgets.SvgRatingBar
+                android:id="@+id/feedbackRatingBar"
+                style="@style/CustomRatingBar.Big"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin_small"
+                android:isIndicator="false"
+                android:minHeight="32dp"
+                android:numStars="5"
+                android:stepSize="0.01" />
+
+            <TextView
+                android:id="@+id/feedbackDescTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="24dp"
+                android:fontFamily="@font/gilroy_bold"
+                android:lineSpacingExtra="2sp"
+                android:text="@string/your_feedback_helps_us_improve_learning_experience_for_you_and_your_peers"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <RadioGroup
+                android:id="@+id/feedbackRadioOptions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </RadioGroup>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</RelativeLayout>

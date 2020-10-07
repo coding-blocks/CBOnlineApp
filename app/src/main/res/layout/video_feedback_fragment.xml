@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/rounded_dialog_dark"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/pauseTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:fontFamily="@font/gilroy_bold"
+        android:text="@string/how_will_you_rate_the_video"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:numStars="5"
+        android:saveEnabled="true"
+        android:stepSize="0.01" />
+
+    <LinearLayout
+        android:id="@+id/additionalFeedbackView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="What went wrong?"
+            android:textColor="@color/white"
+
+            android:textSize="18sp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layoutDirection="rtl"
+            android:weightSum="1">
+
+            <RadioButton
+                android:id="@+id/radioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:checked="false"
+                android:text="Male"
+                android:textSize="25dp" />
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.13"
+                android:checked="false"
+                android:text="Female"
+                android:textSize="25dp" />
+        </RadioGroup>
+    </LinearLayout>
+</LinearLayout>

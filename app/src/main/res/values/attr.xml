@@ -8,6 +8,5 @@
     <declare-styleable name="GradientTextView">
         <attr name="startColor" format="reference|color" />
         <attr name="endColor" format="reference|color" />
-
     </declare-styleable>
 </resources>

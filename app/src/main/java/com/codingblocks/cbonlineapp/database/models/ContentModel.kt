@@ -36,7 +36,9 @@ data class ContentModel(
     var contentCode: ContentCodeChallenge = ContentCodeChallenge(),
     @Embedded
     @Nullable
-    var contentCsv: ContentCsvModel = ContentCsvModel()
+    var contentCsv: ContentCsvModel = ContentCsvModel(),
+    var feedbackRating: Float?  = null,
+    var feedbackReason: String? = null
 ) : ListObject() {
     @Ignore
     override fun getType(): Int = TYPE_CONTENT

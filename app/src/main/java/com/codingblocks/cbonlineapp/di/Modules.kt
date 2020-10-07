@@ -21,6 +21,7 @@ import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.home.WishlistViewModel
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
 import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.MIGRATION_32_33
 import com.codingblocks.cbonlineapp.jobs.JobsViewModel
 import com.codingblocks.cbonlineapp.jobs.jobdetails.JobDetailViewModel
 import com.codingblocks.cbonlineapp.jobs.jobdetails.JobRepository
@@ -107,7 +108,7 @@ val databaseModule = module {
             androidApplication(),
             AppDatabase::class.java, "online-app-database"
         )
-            .fallbackToDestructiveMigration()
+            .addMigrations(MIGRATION_32_33)
             .build()
     }
 

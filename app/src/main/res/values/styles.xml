@@ -235,9 +235,17 @@
         <item name="android:maxHeight">13dp</item>
     </style>
 
+    <style name="CustomRatingBar.Big" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/custom_rating_big</item>
+    </style>
+
     <style name="MyRadioButtonStyle" parent="@android:style/Widget.CompoundButton.RadioButton">
         <item name="android:button">@drawable/custom_btn_radio</item>
-        <item name="android:padding">4dp</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:layout_weight">1</item>
+
+        <item name="android:fontFamily">@font/gilroy_medium</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="ButtonStyleChipSmall" parent="ButtonStyleChip">

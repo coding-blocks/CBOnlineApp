@@ -15,37 +15,61 @@
         android:fitsSystemWindows="true"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/videoContainer"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
+            android:layout_height="wrap_content">
 
-            <fragment
-                android:id="@+id/videoView"
-                android:name="com.vdocipher.aegis.player.VdoPlayerSupportFragment"
+            <RelativeLayout
+                android:id="@+id/videoContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:keepScreenOn="true" />
+                android:visibility="gone">
 
-            <com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControls
-                android:id="@+id/playerControlView"
+                <fragment
+                    android:id="@+id/videoView"
+                    android:name="com.vdocipher.aegis.player.VdoPlayerSupportFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:keepScreenOn="true" />
+
+                <com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControls
+                    android:id="@+id/playerControlView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/videoView"
+                    android:layout_alignTop="@id/videoView"
+                    android:layout_alignEnd="@id/videoView"
+                    android:layout_alignBottom="@id/videoView" />
+            </RelativeLayout>
+
+            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                android:id="@+id/youtubePlayerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@id/videoView"
-                android:layout_alignTop="@id/videoView"
-                android:layout_alignEnd="@id/videoView"
-                android:layout_alignBottom="@id/videoView" />
-        </RelativeLayout>
+                android:visibility="gone"
+                app:handleNetworkEvents="false"
+                app:showYouTubeButton="false" />
 
-        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-            android:id="@+id/youtubePlayerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:handleNetworkEvents="false"
-            app:showYouTubeButton="false" />
+            <com.codingblocks.cbonlineapp.util.widgets.VerticalTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/addFeedback"
+                android:clickable="true"
+                android:layout_gravity="end|center_vertical"
+                android:background="@drawable/rounded_dialog_dark"
+                android:drawableStart="@drawable/ic_star_filled"
+                android:drawableRight="@drawable/ic_star_filled"
+                android:drawableBottom="@drawable/ic_star_filled"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/gilroy_bold"
+                android:padding="10dp"
+                android:text="Give Feedback"
+                android:textColor="@color/white"
+                app:drawableEndCompat="@drawable/ic_star_filled"
+                android:focusable="true" />
+
+        </FrameLayout>
 
         <FrameLayout
             android:id="@+id/videoContentContainer"
@@ -80,7 +104,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/gilroy_bold"
-                            android:text="Section "
                             android:textSize="16sp"
                             tools:text="Section 1.4 - Catalan Number" />
                     </LinearLayout>
@@ -156,8 +179,6 @@
                     android:id="@+id/sectionTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_dropdown"
-                    android:drawableTint="@color/white"
                     android:fontFamily="@font/gilroy_medium"
                     android:paddingStart="@dimen/margin_large"
                     android:paddingTop="20dp"
@@ -165,6 +186,8 @@
                     android:paddingBottom="20dp"
                     android:textColor="@color/white"
                     android:textSize="14sp"
+                    app:drawableEndCompat="@drawable/ic_dropdown"
+                    app:drawableTint="@color/white"
                     tools:text="Introduction to Python" />
 
                 <LinearLayout
@@ -174,20 +197,20 @@
                     android:orientation="vertical"
                     android:visibility="gone">
 
-                    <Switch
+                    <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/autoPlaySwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/ripple"
-                        android:fontFamily="@font/gilroy_bold"
                         android:layout_gravity="end"
-                        android:switchPadding="15dp"
-                        android:textColor="@color/white"
-                        android:text="@string/autoplay"
-                        android:textSize="18sp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="@dimen/margin_large"
                         android:layout_marginBottom="@dimen/margin_small"
+                        android:background="@drawable/ripple"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:switchPadding="15dp"
+                        android:text="@string/autoplay"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
                         app:theme="@style/ColorSwitchStyle" />
 
                     <View

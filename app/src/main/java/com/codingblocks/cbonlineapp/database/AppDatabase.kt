@@ -3,6 +3,8 @@ package com.codingblocks.cbonlineapp.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.codingblocks.cbonlineapp.database.converters.CourseIdList
 import com.codingblocks.cbonlineapp.database.converters.ProgressItemConverter
 import com.codingblocks.cbonlineapp.database.converters.TimestampConverter
@@ -25,6 +27,7 @@ import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 
+
 @Database(
     entities = [
         CourseModel::class, SectionModel::class, ContentModel::class, InstructorModel::class, Notification::class,
@@ -32,7 +35,7 @@ import com.codingblocks.cbonlineapp.database.models.SectionModel
         JobsModel::class, SectionContentHolder.SectionWithContent::class, BookmarkModel::class,
         CommentModel::class, RunAttemptModel::class, RunPerformance::class, PlayerState::class, CodeChallengeModel::class, HBRankModel::class
     ],
-    exportSchema = true, version = 32
+    exportSchema = true, version = 33
 )
 @TypeConverters(TimestampConverter::class, CourseIdList::class, ProgressItemConverter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -76,4 +79,17 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun codeChallengeDao(): CodeChallengeDao
 
     abstract fun hbRankDao(): HBRankDao
+}
+
+val MIGRATION_32_33: Migration = object : Migration(32, 33) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+            "ALTER TABLE ContentModel "
+                    + " ADD COLUMN feedbackReason TEXT default null"
+        )
+        database.execSQL(
+            "ALTER TABLE ContentModel "
+                    + " ADD COLUMN feedbackRating REAL default null"
+        )
+    }
 }

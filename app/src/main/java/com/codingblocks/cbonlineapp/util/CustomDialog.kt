@@ -60,7 +60,8 @@ object CustomDialog {
             "reset" -> {
                 updateView.dialogPositiveBtn.text = "Yes"
                 updateView.dialogNegativeBtn.text = "No"
-                updateView.dialogDescTv.text = "You will lose all your course progress.\nAre you sure you want to reset ?"
+                updateView.dialogDescTv.text =
+                    "You will lose all your course progress.\nAre you sure you want to reset ?"
             }
             "quiz" -> {
                 updateView.dialogPositiveBtn.text = "Yes"
@@ -89,7 +90,9 @@ object CustomDialog {
         updateView.dialogPositiveBtn.setOnClickListener {
             confirmDialog.dismiss()
             when (type) {
-                "trial" -> context.startActivity(context.intentFor<DashboardActivity>("courseRun" to "mycourses").singleTop())
+                "trial" -> context.startActivity(
+                    context.intentFor<DashboardActivity>("courseRun" to "mycourses").singleTop()
+                )
                 "verify" -> {
                     context.openChrome("https://account.codingblocks.com/users/me")
                 }

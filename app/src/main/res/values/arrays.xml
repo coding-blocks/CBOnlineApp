@@ -51,4 +51,21 @@
     </string-array>
 
     <string name="misc">More</string>
+
+    <!--    Feedback Options for rating above 4.0-->
+    <string-array name="positive_feedback">
+        <item>Great examples used.</item>
+        <item>Simple Explanation for Complex Concept.</item>
+        <item>Flawless Audio/Visual Experience.</item>
+        <item>Useful code snippets shared.</item>
+    </string-array>
+
+<!--    Feedback Options for rating below 4.0-->
+    <string-array name="negative_feedback">
+        <item>Could not understand topic.</item>
+        <item>Audio was not clear.</item>
+        <item>Concept was covered too fast.</item>
+        <item>Concept was covered too slow.</item>
+        <item>Prerequisites were not covered.</item>
+    </string-array>
 </resources>

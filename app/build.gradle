@@ -78,7 +78,7 @@ android {
             minifyEnabled false
             versionNameSuffix '-debug-version'
             applicationIdSuffix = '.debug'
-            buildConfigField "String", "BASE_URL", '"api-online.codingblocks.xyz"'
+            buildConfigField "String", "BASE_URL", '"online-api.codingblocks.com"'
 
         }
         release {

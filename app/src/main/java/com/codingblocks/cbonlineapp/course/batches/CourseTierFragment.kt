@@ -92,12 +92,10 @@ class CourseTierFragment : BottomSheetDialogFragment() {
     @NonNull
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog: Dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setOnShowListener(
-            DialogInterface.OnShowListener { dialogInterface ->
-                val bottomSheetDialog = dialogInterface as BottomSheetDialog
-                setupFullHeight(bottomSheetDialog)
-            }
-        )
+        dialog.setOnShowListener { dialogInterface ->
+            val bottomSheetDialog = dialogInterface as BottomSheetDialog
+            setupFullHeight(bottomSheetDialog)
+        }
         return dialog
     }
 
