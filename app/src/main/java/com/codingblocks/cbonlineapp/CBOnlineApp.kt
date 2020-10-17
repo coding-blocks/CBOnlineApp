@@ -63,6 +63,9 @@ class CBOnlineApp : Application() {
             override var baseUrl: String
                 get() = BuildConfig.BASE_URL
                 set(value) {}
+            override var appVersion: Int
+                get() = BuildConfig.VERSION_CODE
+                set(value) {}
         })
 
         if (BuildConfig.DEBUG) {
