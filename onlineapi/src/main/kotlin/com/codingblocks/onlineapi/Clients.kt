@@ -55,7 +55,9 @@ import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.ConnectionPool
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -154,12 +156,7 @@ class Clients internal constructor(
         .readTimeout(READ_TIMEOUT.toLong(), TimeUnit.SECONDS)
         .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
         .addInterceptor(logging)
-        .addInterceptor { chain ->
-            chain.proceed(
-                chain.request().newBuilder()
-                    .addHeader("x-app-version", communicator.appVersion.toString()).build()
-            )
-        }
+        .addInterceptor(DeviceInfoInterceptor(communicator))
         .addInterceptor { chain ->
             if (communicator.authJwt.isEmpty())
                 chain.proceed(chain.request())
@@ -200,4 +197,14 @@ class Clients internal constructor(
     val api: OnlineRestApi = retrofit.create(OnlineRestApi::class.java)
 
     val hackapi: OnlineRestApi = hackRetrofit.create(OnlineRestApi::class.java)
+}
+
+/* Custom Interceptor to get app/device specific info passed in headers. */
+class DeviceInfoInterceptor(val communicator: CBOnlineCommunicator) : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        return chain.proceed(
+            chain.request().newBuilder()
+                .addHeader("x-app-version", communicator.appVersion.toString()).build()
+        )
+    }
 }
