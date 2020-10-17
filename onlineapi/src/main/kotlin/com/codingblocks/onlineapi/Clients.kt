@@ -2,7 +2,47 @@ package com.codingblocks.onlineapi
 
 import com.codingblocks.onlineapi.api.OnlineJsonApi
 import com.codingblocks.onlineapi.api.OnlineRestApi
-import com.codingblocks.onlineapi.models.*
+import com.codingblocks.onlineapi.models.Announcement
+import com.codingblocks.onlineapi.models.ApplicationId
+import com.codingblocks.onlineapi.models.Applications
+import com.codingblocks.onlineapi.models.Banner
+import com.codingblocks.onlineapi.models.Bookmark
+import com.codingblocks.onlineapi.models.CareerTracks
+import com.codingblocks.onlineapi.models.CarouselCards
+import com.codingblocks.onlineapi.models.Choice
+import com.codingblocks.onlineapi.models.CodeChallenge
+import com.codingblocks.onlineapi.models.Comment
+import com.codingblocks.onlineapi.models.Company
+import com.codingblocks.onlineapi.models.ContentCodeChallenge
+import com.codingblocks.onlineapi.models.ContentCsv
+import com.codingblocks.onlineapi.models.ContentDocumentType
+import com.codingblocks.onlineapi.models.ContentLectureType
+import com.codingblocks.onlineapi.models.ContentProgress
+import com.codingblocks.onlineapi.models.ContentQna
+import com.codingblocks.onlineapi.models.ContentVideoType
+import com.codingblocks.onlineapi.models.Course
+import com.codingblocks.onlineapi.models.DoubtLeaderBoard
+import com.codingblocks.onlineapi.models.Doubts
+import com.codingblocks.onlineapi.models.Instructor
+import com.codingblocks.onlineapi.models.JobId
+import com.codingblocks.onlineapi.models.Jobs
+import com.codingblocks.onlineapi.models.LectureContent
+import com.codingblocks.onlineapi.models.Note
+import com.codingblocks.onlineapi.models.Player
+import com.codingblocks.onlineapi.models.Professions
+import com.codingblocks.onlineapi.models.Project
+import com.codingblocks.onlineapi.models.Question
+import com.codingblocks.onlineapi.models.QuizAttempt
+import com.codingblocks.onlineapi.models.Quizzes
+import com.codingblocks.onlineapi.models.Rating
+import com.codingblocks.onlineapi.models.RunAttempts
+import com.codingblocks.onlineapi.models.Runs
+import com.codingblocks.onlineapi.models.Sections
+import com.codingblocks.onlineapi.models.SpinPrize
+import com.codingblocks.onlineapi.models.Spins
+import com.codingblocks.onlineapi.models.Tags
+import com.codingblocks.onlineapi.models.User
+import com.codingblocks.onlineapi.models.Wishlist
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonSetter
 import com.fasterxml.jackson.annotation.Nulls
@@ -114,6 +154,12 @@ class Clients internal constructor(
         .readTimeout(READ_TIMEOUT.toLong(), TimeUnit.SECONDS)
         .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
         .addInterceptor(logging)
+        .addInterceptor { chain ->
+            chain.proceed(
+                chain.request().newBuilder()
+                    .addHeader("x-app-version", communicator.appVersion.toString()).build()
+            )
+        }
         .addInterceptor { chain ->
             if (communicator.authJwt.isEmpty())
                 chain.proceed(chain.request())
