@@ -15,6 +15,8 @@ import java.io.InputStream
 
 const val FILE_THRESHOLD = 256000
 const val GB_TO_KB = 1024 * 1024
+const val JSON_TYPE_OBJECT = "obj"
+const val JSON_TYPE_ARRAY = "array"
 
 object FileUtils {
 
@@ -87,10 +89,10 @@ object FileUtils {
         return File(getCommonPath(context), "/$lectureId").exists() && File(getCommonPath(context), "/$lectureId").totalSpace > 100000
     }
 
-    fun loadJsonObjectFromAsset(context: Context, assetName: String, jsonType: String = "array"): Any? {
+    fun loadJsonObjectFromAsset(context: Context, assetName: String, jsonType: String = JSON_TYPE_ARRAY): Any? {
         try {
             val json = loadStringFromAsset(context, assetName)
-            return if (jsonType == "array")
+            return if (jsonType == JSON_TYPE_ARRAY)
                 JSONArray(json)
             else
                 JSONObject(json!!)
