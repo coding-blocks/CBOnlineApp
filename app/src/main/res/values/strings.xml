@@ -350,4 +350,17 @@
     <string name="submit_feedback">Submit Feedback</string>
     <string name="autoplay">AutoPlay</string>
     <string name="intro_image">intro screen image</string>
+    <string name="explore_now">Explore Now</string>
+    <string name="do_you_want_to_exit">Do you want to exit?</string>
+    <string name="okay">Okay</string>
+    <string name="Ok">Ok</string>
+    <string name="expired_popup_desc">This section is unavailable as your course has been expired.Please buy an extension to watch your videos</string>
+    <string name="login_popup_desc">Please login to use this feature.</string>
+    <string name="unauthorized_popup_desc">You have been logged out of this account.Please login again to Continue</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="logout_message">Are you sure you want to logout?</string>
+    <string name="submit_quiz_message">Are you sure to submit the quiz?</string>
+    <string name="enable">Enable</string>
+    <string name="disabled_wifi_message">WIFI is disabled in your device. Would you like to enable it?</string>
 </resources>

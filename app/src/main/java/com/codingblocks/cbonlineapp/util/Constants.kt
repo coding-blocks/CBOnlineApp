@@ -111,3 +111,20 @@ const val CODE_ID = "codeId"
 const val DELETE_DOWNLOADED_VIDEO = "deleteDownloadedVideo"
 
 const val TAB_POS: String = "tabPosition"
+
+
+// popup-types
+const val VERIFY = "verify"
+const val TRIAL = "trial"
+const val EXIT = "exit"
+const val LEAVE = "leave"
+
+const val WIFI = "wifi"
+const val UNAVAILABLE = "unavailable"
+const val EXPIRED = "expired"
+
+const val LOGOUT = "logout"
+const val RESET = "reset"
+
+const val FILE = "file"
+const val QUIZ = "quiz"
