@@ -76,12 +76,10 @@ class CourseSearchFragment : BottomSheetDialogFragment() {
     @NonNull
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog: Dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setOnShowListener(
-            OnShowListener { dialogInterface ->
-                val bottomSheetDialog = dialogInterface as BottomSheetDialog
-                setupFullHeight(bottomSheetDialog)
-            }
-        )
+        dialog.setOnShowListener { dialogInterface ->
+            val bottomSheetDialog = dialogInterface as BottomSheetDialog
+            setupFullHeight(bottomSheetDialog)
+        }
         return dialog
     }
 

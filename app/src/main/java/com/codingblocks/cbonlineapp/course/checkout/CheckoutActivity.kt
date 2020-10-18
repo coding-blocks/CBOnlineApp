@@ -121,7 +121,7 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener, AnkoLo
                     isVisible = false
                     cancelAnimation()
                 }
-                toast("Oops, something went wrong")
+                toast(getString(R.string.oops_something_went_wrong))
                 replaceFragmentSafely(
                     CheckoutFailedFragment(),
                     containerViewId = R.id.checkoutContainer,

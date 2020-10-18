@@ -19,6 +19,7 @@ import android.view.animation.OvershootInterpolator
 import android.view.animation.TranslateAnimation
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.annotation.AnimRes
 import androidx.annotation.AnimatorRes
 import androidx.annotation.ColorInt
@@ -544,5 +545,14 @@ fun View.slideDown() {
         ) // toYDelta
         animate.duration = 500
         startAnimation(animate)
+    }
+}
+
+fun TextView.setTextWithVisibliy(t: String?) {
+    if(t?.isNullOrEmpty() == true) {
+        visibility = View.GONE
+    }else {
+        visibility = View.VISIBLE
+        text = t
     }
 }

@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/gilroy_medium"
-                android:text="Final Amount "
+                android:text="@string/final_amount"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -184,7 +184,7 @@
                 android:elevation="1dp"
                 android:focusable="true"
                 android:fontFamily="@font/gilroy_medium"
-                android:text="Remove Coupon"
+                android:text="@string/remove_coupon"
                 android:textColor="@color/brownish_grey"
                 android:visibility="visible" />
 
@@ -227,7 +227,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/gilroy_medium"
-                android:text="Coupon Discount"
+                android:text="@string/coupon_discount"
                 android:textColor="@color/brownish_grey"
                 android:textSize="16sp" />
 
@@ -266,7 +266,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/gilroy_medium"
-                android:text="Final Amount"
+                android:text="@string/final_amount"
                 android:textColor="@color/orangish"
                 android:textSize="16sp" />
 

@@ -363,4 +363,15 @@
     <string name="submit_quiz_message">Are you sure to submit the quiz?</string>
     <string name="enable">Enable</string>
     <string name="disabled_wifi_message">WIFI is disabled in your device. Would you like to enable it?</string>
+    <string name="last_name_cannot_be_empty">Last Name Cannot Be Empty</string>
+    <string name="username_cannot_be_empty">Username Cannot Be Empty</string>
+    <string name="email_is_not_valid">Email is not valid</string>
+    <string name="free_caps">FREE</string>
+    <string name="oops_something_went_wrong">Oops, something went wrong</string>
+    <string name="items_removed">Items Removed</string>
+    <string name="remove_wallet_balance">Remove Wallet Balance</string>
+    <string name="use_wallet_balance">Use Wallet Balance</string>
+    <string name="remove_coupon">Remove Coupon</string>
+    <string name="coupon_discount">Coupon Discount</string>
+    <string name="final_amount">Final Amount</string>
 </resources>

@@ -15,6 +15,7 @@ import com.codingblocks.cbonlineapp.util.extensions.getDateForTime
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.models.Runs
 import kotlinx.android.synthetic.main.item_run.view.*
+import java.util.*
 
 class RunListAdapter : ListAdapter<Runs, RunListAdapter.RunsViewHolder>(DiffCallback()) {
 
@@ -44,15 +45,15 @@ class RunListAdapter : ListAdapter<Runs, RunListAdapter.RunsViewHolder>(DiffCall
 
     inner class RunsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: Runs, isActivated: Boolean = false) = with(itemView) {
-            priceTv.text = if (item.price == "0") "FREE" else context.getString(R.string.rupee_price, item.price)
+            priceTv.text = if (item.price == "0") context.getString(R.string.free_caps) else context.getString(R.string.rupee_price, item.price)
             deadlineTv.text = context.getString(R.string.batch_starting, getDateForTime(item.start))
 
             mrpTv.apply {
                 text = context.getString(R.string.rupee_price, item.mrp)
                 paintFlags = mrpTv.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
             }
-            titleTv.text = item.tier ?: "PREMIUM"
-            when (RUNTIERS.valueOf(item.tier ?: "PREMIUM")) {
+            titleTv.text = item.tier ?: context.getString(R.string.premium).toUpperCase(Locale.getDefault())
+            when (RUNTIERS.valueOf(item.tier ?: context.getString(R.string.premium).toUpperCase(Locale.getDefault()))) {
                 RUNTIERS.LITE -> {
                     titleTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lite, 0, 0, 0)
                 }

@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
+import com.codingblocks.cbonlineapp.util.extensions.setTextWithVisibliy
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.dialog_coupon.view.*
 import kotlinx.android.synthetic.main.fragment_checkout_payment.*
@@ -80,12 +81,12 @@ class CheckoutPaymentFragment : BaseCBFragment() {
                     if (!vm.creditsApplied)
                         rootPayment.snackbar("Credits Applied Successfully")
                     vm.creditsApplied = true
-                    useBalance.text = "Remove Wallet Balance"
+                    useBalance.setTextWithVisibliy(getString(R.string.remove_wallet_balance))
                 } else {
                     if (vm.creditsApplied)
                         rootPayment.snackbar("Credits Removed")
                     vm.creditsApplied = false
-                    useBalance.text = "Use Wallet Balance"
+                    useBalance.setTextWithVisibliy(getString(R.string.use_wallet_balance))
                 }
                 get("coupon_code")?.let {
                     numberLayout.editText?.setText(it.asString)
@@ -95,7 +96,7 @@ class CheckoutPaymentFragment : BaseCBFragment() {
                     couponDiscount.text = "- $discountPrice"
                     errorDrawableTv.apply {
                         isVisible = true
-                        text = "Remove Coupon"
+                        text = context.getString(R.string.remove_coupon)
                     }
                 } ?: run {
                     couponDiscount.text = "- ${getString(R.string.rupee_price, "0")}"

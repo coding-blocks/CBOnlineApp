@@ -37,7 +37,7 @@ class LoginEmailBottomSheet : BottomSheetDialogFragment() {
                     vm.findUser(hashMapOf("verifiedemail" to email))
                 }
             } else {
-                emailLayout.error = "Email is not valid"
+                emailLayout.error = getString(R.string.email_is_not_valid)
             }
         }
 

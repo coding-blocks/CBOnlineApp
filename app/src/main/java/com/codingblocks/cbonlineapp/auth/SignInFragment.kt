@@ -15,6 +15,10 @@ class SignInFragment : BaseCBFragment() {
 
     val vm: AuthViewModel by sharedViewModel()
 
+    companion object {
+        const val TAG = "SocialSignIn"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -23,7 +27,17 @@ class SignInFragment : BaseCBFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpListeners()
+        setUpObservers()
+    }
 
+    private fun setUpObservers() {
+        vm.errorLiveData.observer(thisLifecycleOwner) {
+            proceedBtn.isEnabled = true
+        }
+    }
+
+    private fun setUpListeners() {
         proceedBtn.setOnClickListener {
             validateEmailPassWord()
         }
@@ -35,15 +49,12 @@ class SignInFragment : BaseCBFragment() {
         fbBtn.setOnClickListener {
             showWebView()
         }
-        vm.errorLiveData.observer(thisLifecycleOwner) {
-            proceedBtn.isEnabled = true
-        }
     }
 
     private fun showWebView() {
         replaceFragmentSafely(
             SocialLoginFragment(),
-            tag = "SocialSignIn",
+            tag = TAG,
             containerViewId = R.id.loginContainer
         )
     }

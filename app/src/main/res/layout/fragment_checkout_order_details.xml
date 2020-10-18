@@ -280,7 +280,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/gilroy_medium"
-                android:text="Final Amount"
+                android:text="@string/final_amount"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 

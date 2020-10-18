@@ -20,6 +20,10 @@ class CheckoutPersonalDetailsFragment : BaseCBFragment(), AnkoLogger {
 
     val vm by sharedViewModel<CheckoutViewModel>()
 
+    companion object {
+        const val TAG = "Personal"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,6 +38,18 @@ class CheckoutPersonalDetailsFragment : BaseCBFragment(), AnkoLogger {
         vm.cart.observer(thisLifecycleOwner) {
             finalPriceTv.text = "${getString(R.string.rupee_sign)} ${it["totalAmount"].asString}"
         }
+        setUpStateAutoCompleteView()
+        checkoutBtn.setOnClickListener {
+            replaceFragmentSafely(
+                CheckoutPaymentFragment(),
+                tag = TAG,
+                containerViewId = R.id.checkoutContainer,
+                addToStack = true
+            )
+        }
+    }
+
+    private fun setUpStateAutoCompleteView() {
         val json = loadJsonObjectFromAsset(requireContext(), "csvjson.json") as JSONArray?
 
         val refList: MutableList<String> = ArrayList()
@@ -59,14 +75,6 @@ class CheckoutPersonalDetailsFragment : BaseCBFragment(), AnkoLogger {
             }
             checkoutBtn.isEnabled = true
             vm.updateCart()
-        }
-        checkoutBtn.setOnClickListener {
-            replaceFragmentSafely(
-                CheckoutPaymentFragment(),
-                tag = "Personal",
-                containerViewId = R.id.checkoutContainer,
-                addToStack = true
-            )
         }
     }
 }

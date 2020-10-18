@@ -35,14 +35,14 @@ class SignUpFragment : BaseCBFragment() {
         mobileLayout.editText?.setText("${vm.dialCode}-${vm.mobile}")
         proceedBtn.setOnClickListener {
 
-            val name = nameLayout.editText?.text.toString().split(" ")
+            val name = nameLayout.editText?.text?.toString()?.trim()?.split(" ") ?: emptyList()
             val username = userNameLayout.editText?.text.toString()
             when {
                 name.size < 2 -> {
-                    signUpRoot.showSnackbar("Last Name Cannot Be Empty", Snackbar.LENGTH_SHORT)
+                    signUpRoot.showSnackbar(getString(R.string.last_name_cannot_be_empty), Snackbar.LENGTH_SHORT)
                 }
                 username.isEmpty() -> {
-                    signUpRoot.showSnackbar("Username Cannot Be Empty", Snackbar.LENGTH_SHORT)
+                    signUpRoot.showSnackbar(getString(R.string.username_cannot_be_empty), Snackbar.LENGTH_SHORT)
                 }
                 else -> {
                     proceedBtn.isEnabled = false
