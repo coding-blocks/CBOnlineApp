@@ -47,32 +47,23 @@ class SettingsActivity : BaseCBActivity() {
         }
         updateSpaceStats()
         deleteAllTv.setOnClickListener {
-            showDialog(
-                type = "Delete",
-                image = R.drawable.ic_info,
-                cancelable = false,
-                primaryText = R.string.confirmation,
-                secondaryText = R.string.delete_video_desc,
-                primaryButtonText = R.string.confirm,
-                secondaryButtonText = R.string.cancel,
-                callback = { confirmed ->
-                    if (confirmed) {
-                        lifecycleScope.launch {
-                            val files = viewModel.getDownloads()
-                            files.forEach { content ->
-
-                                val folderFile = File(file, "/${content.contentLecture.lectureId}")
-
-                                withContext(Dispatchers.IO) {
-                                    FileUtils.deleteRecursive(folderFile)
-                                }
-                                runOnUiThread { updateSpaceStats() }
-                            }
-                        }
-                    }
-                }
-            )
+            setUpDialog()
         }
+
+        setUpSeekbar()
+
+        pipSwitch.isChecked = getPrefs().SP_PIP
+        pipSwitch.setOnClickListener {
+            getPrefs().SP_PIP = pipSwitch.isChecked
+        }
+
+        sdcardSwitch.isChecked = checkExternalDirectory() && getPrefs().SP_SD_CARD
+        sdcardSwitch.setOnClickListener {
+            updateSdCardSwitch()
+        }
+    }
+
+    private fun setUpSeekbar() {
         setSeekbarMaxValue()
         seekbarLimit.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -88,16 +79,34 @@ class SettingsActivity : BaseCBActivity() {
         })
         seekbarLimit.progress = getPrefs().SP_DATA_LIMIT.minus(1).times(100).toInt()
         setSeekbarProgress(seekbarLimit.progress)
+    }
 
-        pipSwitch.isChecked = getPrefs().SP_PIP
+    private fun setUpDialog() {
+        showDialog(
+            type = "Delete",
+            image = R.drawable.ic_info,
+            cancelable = false,
+            primaryText = R.string.confirmation,
+            secondaryText = R.string.delete_video_desc,
+            primaryButtonText = R.string.confirm,
+            secondaryButtonText = R.string.cancel,
+            callback = { confirmed ->
+                if (confirmed) {
+                    lifecycleScope.launch {
+                        val files = viewModel.getDownloads()
+                        files.forEach { content ->
 
-        pipSwitch.setOnClickListener {
-            getPrefs().SP_PIP = pipSwitch.isChecked
-        }
-        sdcardSwitch.isChecked = checkExternalDirectory() && getPrefs().SP_SD_CARD
-        sdcardSwitch.setOnClickListener {
-            updateSdCardSwitch()
-        }
+                            val folderFile = File(file, "/${content.contentLecture.lectureId}")
+
+                            withContext(Dispatchers.IO) {
+                                FileUtils.deleteRecursive(folderFile)
+                            }
+                            runOnUiThread { updateSpaceStats() }
+                        }
+                    }
+                }
+            }
+        )
     }
 
     private fun updateSdCardSwitch() {

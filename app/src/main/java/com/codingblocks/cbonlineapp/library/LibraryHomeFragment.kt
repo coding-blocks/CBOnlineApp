@@ -13,6 +13,10 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class LibraryHomeFragment : BaseCBFragment(), View.OnClickListener {
 
+    companion object {
+        const val TAG = "LibraryView"
+    }
+
     private val vm by sharedViewModel<LibraryViewModel>()
 
     override fun onCreateView(
@@ -37,7 +41,7 @@ class LibraryHomeFragment : BaseCBFragment(), View.OnClickListener {
                 vm.type = getString(R.string.notes)
                 replaceFragmentSafely(
                     LibraryViewFragment(),
-                    "LibraryView",
+                    TAG,
                     containerViewId = R.id.libraryContainer,
                     addToStack = true
                 )
@@ -46,7 +50,7 @@ class LibraryHomeFragment : BaseCBFragment(), View.OnClickListener {
                 vm.type = getString(R.string.bookmarks)
                 replaceFragmentSafely(
                     LibraryViewFragment(),
-                    "LibraryView",
+                    TAG,
                     containerViewId = R.id.libraryContainer,
                     addToStack = true
                 )
@@ -55,14 +59,14 @@ class LibraryHomeFragment : BaseCBFragment(), View.OnClickListener {
                 vm.type = getString(R.string.downloads)
                 replaceFragmentSafely(
                     LibraryViewFragment(),
-                    "LibraryView",
+                    TAG,
                     containerViewId = R.id.libraryContainer,
                     addToStack = true
                 )
             }
 
             R.id.announcementsBtn -> {
-                toast("Will be added Soon!")
+                toast(getString(R.string.will_be_added_soon))
                 vm.type = getString(R.string.announcements)
             }
         }

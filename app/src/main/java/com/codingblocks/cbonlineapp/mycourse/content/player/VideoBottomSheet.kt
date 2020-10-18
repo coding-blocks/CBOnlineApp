@@ -95,7 +95,7 @@ class VideoBottomSheet : RoundedBottomSheetDialogFragment(), View.OnClickListene
                     "Save" -> {
                         val desc = bottoSheetDescTv.text.toString()
                         if (desc.isEmpty()) {
-                            toast("Note cannot be empty!!")
+                            toast(getString(R.string.notes_cannot_be_empty))
                         } else {
                             val note = Note(
                                 notes!!.duration,

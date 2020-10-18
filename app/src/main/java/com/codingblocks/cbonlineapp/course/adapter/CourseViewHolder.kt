@@ -41,14 +41,14 @@ class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 item.id, item.logo, courseLogo
             )
         }
-        if (type != "LIST" && type != "TRACKS") {
+        if (type != CourseListAdapter.TYPE_LIST && type != CourseListAdapter.TYPE_TRACKS) {
             course_card_like.setOnClickListener {
                 wishlistListener?.onWishListClickListener(item.id)
             }
         }
-        if (type == "WISHLIST")
+        if (type == CourseListAdapter.TYPE_WISHLIST)
             ratingBar.rating = item.rating
-        if (type == "TRACKS") {
+        if (type == CourseListAdapter.TYPE_TRACKS) {
             item.projects?.take(5)?.forEach {
                 projectTitle.isVisible = true
                 val chip = LayoutInflater.from(context).inflate(R.layout.single_chip_layout, tagsChips, false) as Chip
@@ -80,10 +80,10 @@ class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 else -> "Beginner"
             }
 
-            if (type != "LIST") {
+            if (type != CourseListAdapter.TYPE_LIST) {
                 courseCover.loadImage(item.coverImage ?: "")
             }
-            if (type != "POPULAR" && type != "WISHLIST") {
+            if (type != CourseListAdapter.TYPE_POPULAR && type != CourseListAdapter.TYPE_WISHLIST) {
                 if (!item.instructors.isNullOrEmpty()) {
                     courseCardInstructorsTv.text = getSpannableStringSecondBold(
                         "",
@@ -124,7 +124,7 @@ class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 courseCardMrpTv.paintFlags = courseCardPriceTv.paintFlags or
                     Paint.STRIKE_THRU_TEXT_FLAG
             } else {
-                if (type != "LIST") {
+                if (type != CourseListAdapter.TYPE_LIST) {
                     course_card_share.setOnClickListener {
                         context.share("https://online.codingblocks.com/app/courses/" + item.slug.toString())
                     }

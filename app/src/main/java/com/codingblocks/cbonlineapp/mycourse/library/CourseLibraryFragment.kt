@@ -55,7 +55,7 @@ class CourseLibraryFragment : BaseCBFragment(), View.OnClickListener {
             }
 
             R.id.announcementsBtn -> {
-                toast("Will be added Soon!")
+                toast(getString(R.string.will_be_added_soon))
                 intent.putExtra(TYPE, getString(R.string.announcements))
             }
         }

@@ -21,8 +21,6 @@ class URLRouterActivity : BaseCBActivity() {
         }
     }
 
-    private val sharedPrefs: PreferenceHelper by inject()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         intent?.data?.let { uri ->
@@ -38,10 +36,7 @@ class URLRouterActivity : BaseCBActivity() {
             }
 
             when (pathSegments[0]) {
-                "classroom" -> openRouter(uri)
-                "courses" -> openRouter(uri)
-                "player" -> openRouter(uri)
-                "app" -> openRouter(uri)
+                "classroom", "courses", "player", "app" -> openRouter(uri)
                 else -> fallBack(uri, true)
             }
             finish()

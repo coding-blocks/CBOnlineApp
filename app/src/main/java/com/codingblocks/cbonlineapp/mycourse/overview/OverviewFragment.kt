@@ -225,7 +225,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 getString(R.string.goodiedesclocked, goodiesThreshold)
         }
         goodiesContainer.setOnClickListener {
-            toast("Will be added soon")
+            toast(getString(R.string.will_be_added_soon))
 
 //            if (canRequest) {
 //                showGoodiesForm()

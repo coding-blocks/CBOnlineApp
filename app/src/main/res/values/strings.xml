@@ -363,4 +363,7 @@
     <string name="submit_quiz_message">Are you sure to submit the quiz?</string>
     <string name="enable">Enable</string>
     <string name="disabled_wifi_message">WIFI is disabled in your device. Would you like to enable it?</string>
+    <string name="will_be_added_soon">Will be added Soon!</string>
+    <string name="notes_cannot_be_empty">Note cannot be empty!!</string>
+    <string name="same_note_cannot_be_added">Same note cannot be added.</string>
 </resources>

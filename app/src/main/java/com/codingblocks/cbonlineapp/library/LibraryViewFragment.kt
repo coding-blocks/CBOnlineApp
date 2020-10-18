@@ -279,10 +279,10 @@ class LibraryViewFragment : BaseCBFragment() {
                 val desc = sheetDialog.bottoSheetDescTv.text.toString()
                 when {
                     desc.isEmpty() -> {
-                        toast("Note cannot be empty!!")
+                        toast(context.getString(R.string.notes_cannot_be_empty))
                     }
                     desc == item.text -> {
-                        toast("Same note cannot be added.")
+                        toast(context.getString(R.string.same_note_cannot_be_added))
                     }
                     else -> {
                         vm.updateNote(item.apply { text = sheetDialog.bottoSheetDescTv.text.toString() })
