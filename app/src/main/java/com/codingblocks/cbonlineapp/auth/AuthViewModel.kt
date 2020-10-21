@@ -85,9 +85,9 @@ class AuthViewModel(
         }
     }
 
-    fun loginWithEmail(name: String, password: String) {
+    fun loginWithEmail(name: String, password: String, userResponseToken: String) {
         runIO {
-            when (val response = repo.loginWithEmail(name, password)) {
+            when (val response = repo.loginWithEmail(name, password, userResponseToken)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
@@ -187,7 +187,8 @@ class AuthViewModel(
 
     fun createUser(name: List<String>, username: String) {
         runIO {
-            when (val response = repo.createUser(name, username, "$dialCode-$mobile", email!!, uniqueId!!)) {
+            when (val response =
+                repo.createUser(name, username, "$dialCode-$mobile", email!!, uniqueId!!)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)

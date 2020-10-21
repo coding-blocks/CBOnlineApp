@@ -32,6 +32,10 @@ def DISCUSS_URL = System.getenv('DISCUSS_URL') ?: "https://discuss.codingblocks.
 // Include signing configs
 apply from: './signingconfigs.gradle'
 
+def apikeyPropertiesFile = rootProject.file("apikey.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
 android {
     compileSdkVersion 30
     defaultConfig {
@@ -57,6 +61,7 @@ android {
         buildConfigField "String", "OAUTH_URL", '"' + OAUTH_URL + '"'
         buildConfigField "String", "REDIRECT_URI", '"' + REDIRECT_URI + '"'
         buildConfigField "String", "DISCUSS_URL", '"' + DISCUSS_URL + '"'
+        buildConfigField("String", "RECAPTCHA_KEY", apikeyProperties['RECAPTCHA_KEY'])
 
         kapt {
             arguments {
@@ -129,7 +134,7 @@ dependencies {
     implementation 'androidx.drawerlayout:drawerlayout:1.1.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0'
     implementation 'com.google.android.material:material:1.3.0-alpha02'
-
+    implementation 'com.google.android.gms:play-services-safetynet:17.0.0'
 
     // 3rd party libs
     implementation 'es.voghdev.pdfviewpager:library:1.0.3'
@@ -191,7 +196,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx:21.6.0'
     implementation 'com.google.firebase:firebase-inappmessaging-display:19.1.1'
     implementation 'com.google.guava:guava:27.0.1-android'
-
 
 
     implementation project(':onlineapi')

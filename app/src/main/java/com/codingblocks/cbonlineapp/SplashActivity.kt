@@ -15,6 +15,7 @@ class SplashActivity : BaseCBActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val key = sharedPrefs.SP_JWT_TOKEN_KEY
+
         if (key.isNotEmpty() && !JWTUtils.isExpired(key)) {
             startActivity(DashboardActivity.createDashboardActivityIntent(this, true))
         } else {

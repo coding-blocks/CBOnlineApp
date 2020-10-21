@@ -27,6 +27,9 @@ class OnlineJsonApiAuthenticatedTest {
             override var baseUrl: String
                 get() = "api-online.codingblocks.xyz"
                 set(value) {}
+            override var appVersion: Int
+                get() = 1
+                set(value) {}
         })
     }
 

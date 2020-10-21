@@ -5,7 +5,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.util.Log
 import cn.campusapp.router.Router
-import cn.campusapp.router.router.IActivityRouteTableInitializer
 import com.codingblocks.cbonlineapp.campaign.CampaignActivity
 import com.codingblocks.cbonlineapp.course.CourseActivity
 import com.codingblocks.cbonlineapp.course.SearchCourseActivity
@@ -30,8 +29,13 @@ import com.codingblocks.cbonlineapp.util.receivers.NotificationOpenedHandler
 import com.codingblocks.cbonlineapp.util.receivers.NotificationReceivedHandler
 import com.codingblocks.onlineapi.CBOnlineCommunicator
 import com.codingblocks.onlineapi.CBOnlineLib
+import com.codingblocks.onlineapi.parseError
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.onesignal.OneSignal
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.notificationManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -47,6 +51,7 @@ class CBOnlineApp : Application() {
         super.onCreate()
         mInstance = this
         val prefs = PreferenceHelper.getPrefs(this)
+        fetchAppBlocker(prefs)
 
         CBOnlineLib.initialize(object : CBOnlineCommunicator {
 
@@ -114,7 +119,7 @@ class CBOnlineApp : Application() {
         try {
             Router.initActivityRouter(
                 applicationContext,
-                IActivityRouteTableInitializer { router ->
+                { router ->
                     router["activity://courseRun/https://online.codingblocks.com/app/classroom/course/:s{$COURSE_ID}/run/:s{$RUN_ID}"] =
                         MyCourseActivity::class.java
                     router["activity://courseRun/https://online.codingblocks.com/courses/:s{courseId}"] =
@@ -133,6 +138,20 @@ class CBOnlineApp : Application() {
             )
         } catch (e: ConcurrentModificationException) {
             FirebaseCrashlytics.getInstance().log("Router not working : ${e.localizedMessage}")
+        }
+    }
+
+    private fun fetchAppBlocker(prefs: PreferenceHelper) {
+        GlobalScope.launch {
+            val response = withContext(Dispatchers.IO) { CBOnlineLib.api.getBlocker() }
+            if (response.code() == 406) {
+                val blocker = response.errorBody()?.let { parseError(it) }?.get("blocker")?.asJsonObject
+                blocker?.keySet()?.forEach { key ->
+                    prefs.SP_SAVE_BLOCKER(key, blocker[key].asBoolean)
+                }
+            } else {
+
+            }
         }
     }
 }

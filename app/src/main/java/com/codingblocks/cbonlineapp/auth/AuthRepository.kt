@@ -16,9 +16,15 @@ class AuthRepository(
     }
 
     suspend fun verifyOtp(otp: Int, uniqueId: String) =
-        safeApiCall { CBOnlineLib.api.verifyOtp(uniqueId, hashMapOf("otp" to otp, "client" to "android")) }
+        safeApiCall {
+            CBOnlineLib.api.verifyOtp(
+                uniqueId,
+                hashMapOf("otp" to otp, "client" to "android")
+            )
+        }
 
-    suspend fun findUser(userMap: HashMap<String, String>) = safeApiCall { CBOnlineLib.api.findUser(userMap) }
+    suspend fun findUser(userMap: HashMap<String, String>) =
+        safeApiCall { CBOnlineLib.api.findUser(userMap) }
 
     fun saveKeys(it: JsonObject) {
         with(it["jwt"].asString) {
@@ -29,22 +35,30 @@ class AuthRepository(
         }
     }
 
-    suspend fun loginWithEmail(email: String, password: String) = safeApiCall {
+    suspend fun loginWithEmail(email: String, password: String, userToken: String) = safeApiCall {
         CBOnlineLib.api.getJwtWithEmail(
             hashMapOf(
                 "username" to email,
                 "password" to password,
                 "client" to "android"
-            )
+            ),
+            token = userToken
         )
     }
 
-    suspend fun loginWithClaim(uniqueId: String) = safeApiCall { CBOnlineLib.api.getJwtWithClaim(uniqueId) }
+    suspend fun loginWithClaim(uniqueId: String) =
+        safeApiCall { CBOnlineLib.api.getJwtWithClaim(uniqueId) }
 
     suspend fun verifyMobileUsingClaim(uniqueId: String) =
         safeApiCall { CBOnlineLib.api.verifyMobile(hashMapOf("claimId" to uniqueId)) }
 
-    suspend fun createUser(name: List<String>, username: String, mobile: String, email: String, uniqueId: String) =
+    suspend fun createUser(
+        name: List<String>,
+        username: String,
+        mobile: String,
+        email: String,
+        uniqueId: String
+    ) =
         safeApiCall {
             CBOnlineLib.api.createUser(
                 hashMapOf(

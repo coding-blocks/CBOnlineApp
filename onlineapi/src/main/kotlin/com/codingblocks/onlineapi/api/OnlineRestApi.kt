@@ -11,6 +11,7 @@ import com.codingblocks.onlineapi.models.RatingModel
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 import com.codingblocks.onlineapi.models.SendFeedback
 import com.codingblocks.onlineapi.models.SpinResponse
+import com.fasterxml.jackson.databind.util.JSONPObject
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
@@ -21,6 +22,8 @@ import retrofit2.http.Field
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -108,7 +111,10 @@ interface OnlineRestApi {
     suspend fun findUser(@FieldMap params: HashMap<String, String>): Response<JsonArray>
 
     @POST("jwt/otp/v2/{id}/verify")
-    suspend fun verifyOtp(@Path("id") uniqueId: String, @Body params: HashMap<String, Any>): Response<JsonObject>
+    suspend fun verifyOtp(
+        @Path("id") uniqueId: String,
+        @Body params: HashMap<String, Any>
+    ): Response<JsonObject>
 
     @PATCH("users/verifymobile")
     suspend fun verifyMobile(@Body params: Map<String, String>): Response<JsonObject>
@@ -125,7 +131,10 @@ interface OnlineRestApi {
 
     @POST("jwt/login")
     @FormUrlEncoded
-    suspend fun getJwtWithEmail(@FieldMap params: Map<String, String>): Response<JsonObject>
+    suspend fun getJwtWithEmail(
+        @FieldMap params: Map<String, String>,
+        @Header("recaptcha-response") token: String
+    ): Response<JsonObject>
 
     @POST("jwt/otp/v2/{id}/login")
     @FormUrlEncoded
@@ -166,4 +175,9 @@ interface OnlineRestApi {
 
     @GET("dashboard-banners")
     suspend fun getBanner(): Response<List<Banner>>
+
+    /*To block the app from being used if it's version is too old*/
+    @Headers("Cache-Control: max-age=3600")
+    @GET("v2/blocker")
+    suspend fun getBlocker(): Response<JsonObject>
 }

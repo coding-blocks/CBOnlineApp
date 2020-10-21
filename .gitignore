@@ -96,3 +96,6 @@ Thumbs.db
 .project
 .cproject
 .settings/
+
+# Environment Keys
+apikey.properties

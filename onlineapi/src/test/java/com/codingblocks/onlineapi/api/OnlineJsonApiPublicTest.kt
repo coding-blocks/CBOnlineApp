@@ -2,6 +2,7 @@ package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.CBOnlineCommunicator
 import com.codingblocks.onlineapi.CBOnlineLib
+import com.codingblocks.onlineapi.parseError
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
@@ -10,6 +11,7 @@ import org.junit.Test
 class OnlineJsonApiPublicTest {
     lateinit var api: OnlineJsonApi
     lateinit var hackApi: OnlineRestApi
+    lateinit var restApi: OnlineRestApi
 
     @Before
     fun `SET JWT`() {
@@ -27,9 +29,13 @@ class OnlineJsonApiPublicTest {
             override var baseUrl: String
                 get() = "api-online.codingblocks.xyz"
                 set(value) {}
+            override var appVersion: Int
+                get() = 1
+                set(value) {}
         })
         api = CBOnlineLib.onlineV2JsonApi
         hackApi = CBOnlineLib.hackapi
+        restApi = CBOnlineLib.api
     }
 
     @Test
@@ -72,5 +78,11 @@ class OnlineJsonApiPublicTest {
     fun `GET fetchBanners`() = runBlocking {
         val banners = hackApi.getBanner().body()
         Assert.assertNotNull(banners)
+    }
+
+    @Test
+    fun `GET getBlocker`() = runBlocking {
+        val blockers = restApi.getBlocker().errorBody()?.let { parseError(it) }
+        Assert.assertNotNull(blockers)
     }
 }

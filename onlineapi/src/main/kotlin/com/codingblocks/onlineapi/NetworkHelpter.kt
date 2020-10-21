@@ -1,12 +1,16 @@
 package com.codingblocks.onlineapi
 
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.ResponseBody
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+
 
 suspend fun <T> safeApiCall(
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
@@ -18,7 +22,10 @@ suspend fun <T> safeApiCall(
         } catch (throwable: Throwable) {
             when (throwable) {
                 is IOException -> ResultWrapper.GenericError(103, "Not Connected To Internet")
-                is UnknownHostException -> ResultWrapper.GenericError(101, ErrorStatus.NO_CONNECTION)
+                is UnknownHostException -> ResultWrapper.GenericError(
+                    101,
+                    ErrorStatus.NO_CONNECTION
+                )
                 is SocketTimeoutException -> ResultWrapper.GenericError(102, ErrorStatus.TIMEOUT)
                 is HttpException -> ResultWrapper.GenericError(throwable.code(), "HttpException")
                 else -> {
@@ -34,6 +41,10 @@ fun fetchError(code: Int): String {
         return ErrorStatus.UNAUTHORIZED
     }
     return ErrorStatus.NOT_DEFINED
+}
+
+fun parseError(errorBody: ResponseBody): JsonObject {
+    return Gson().fromJson(errorBody.string(), JsonObject::class.java)
 }
 
 @Suppress("UNCHECKED_CAST")

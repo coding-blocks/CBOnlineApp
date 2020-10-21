@@ -114,6 +114,14 @@ class PreferenceHelper private constructor() {
             prefs?.save("SD_CARD", value)
         }
 
+    fun SP_GET_BLOCKER(key: String): Boolean {
+        return prefs?.getBoolean("key", false) ?: false
+    }
+
+    fun SP_SAVE_BLOCKER(key: String, value: Boolean) {
+        prefs?.save("key", value)
+    }
+
     fun clearPrefs() {
         prefs?.edit()?.clear()?.apply()
     }
