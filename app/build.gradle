@@ -135,7 +135,7 @@ dependencies {
     implementation 'es.voghdev.pdfviewpager:library:1.0.3'
     implementation 'com.onesignal:OneSignal:3.15.3'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
-    implementation 'org.ocpsoft.prettytime:prettytime:4.0.5.Final'
+    implementation 'org.ocpsoft.prettytime:prettytime:5.0.0.Final'
     implementation "com.github.skydoves:progressview:1.0.5"
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.razorpay:checkout:1.5.15'
