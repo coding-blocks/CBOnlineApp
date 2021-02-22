@@ -15,7 +15,7 @@ buildscript {
         classpath 'com.android.tools.build.jetifier:jetifier-processor:1.0.0-beta10'
         classpath 'com.google.gms:google-services:4.3.3'
         classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:0.12.8'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.2.1'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.0'
     }
 }
 
