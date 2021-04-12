@@ -190,7 +190,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx:17.2.1'
     implementation 'com.google.firebase:firebase-firestore-ktx:21.6.0'
     implementation 'com.google.firebase:firebase-inappmessaging-display:19.1.1'
-    implementation 'com.google.guava:guava:27.0.1-android'
+    implementation 'com.google.guava:guava:30.1.1-android'
 
 
 
