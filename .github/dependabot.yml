@@ -1,0 +1,71 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "23:30"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: com.onesignal:OneSignal
+    versions:
+    - 4.3.0
+  - dependency-name: com.hbb20:ccp
+    versions:
+    - 2.4.7
+    - 2.5.0
+  - dependency-name: com.google.firebase:firebase-crashlytics-ktx
+    versions:
+    - 17.3.1
+    - 17.4.0
+  - dependency-name: com.google.firebase:firebase-firestore-ktx
+    versions:
+    - 22.0.2
+    - 22.1.0
+    - 22.1.1
+  - dependency-name: com.google.firebase:firebase-crashlytics-gradle
+    versions:
+    - 2.5.0
+    - 2.5.1
+  - dependency-name: com.google.android.material:material
+    versions:
+    - 1.3.0
+    - 1.3.0-rc01
+    - 1.4.0-alpha01
+  - dependency-name: com.airbnb.android:lottie
+    versions:
+    - 3.6.0
+    - 3.6.1
+  - dependency-name: org.jetbrains.kotlin:kotlin-stdlib
+    versions:
+    - 1.4.30
+  - dependency-name: org.jetbrains.kotlin:kotlin-stdlib-jdk7
+    versions:
+    - 1.4.30
+  - dependency-name: org.jetbrains.kotlin:kotlin-gradle-plugin
+    versions:
+    - 1.4.30
+  - dependency-name: com.squareup.okhttp3:logging-interceptor
+    versions:
+    - 4.9.1
+  - dependency-name: com.google.firebase:firebase-inappmessaging-display
+    versions:
+    - 19.1.4
+  - dependency-name: com.android.tools.build:gradle
+    versions:
+    - 4.1.2
+  - dependency-name: org.ocpsoft.prettytime:prettytime
+    versions:
+    - 5.0.0.Final
+  - dependency-name: com.google.firebase:firebase-messaging
+    versions:
+    - 21.0.1
+  - dependency-name: com.google.guava:guava
+    versions:
+    - 30.1-android
+  - dependency-name: gradle.plugin.com.onesignal:onesignal-gradle-plugin
+    versions:
+    - 0.12.10
+  - dependency-name: org.jetbrains.kotlinx:kotlinx-coroutines-core
+    versions:
+    - 1.4.2-native-mt
